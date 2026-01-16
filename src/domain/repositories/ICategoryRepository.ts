@@ -1,4 +1,5 @@
 import type { Category } from '../entities/Category';
+import type { TransactionType } from '../entities/Transaction';
 
 /**
  * Repository Interface: ICategoryRepository
@@ -7,7 +8,7 @@ import type { Category } from '../entities/Category';
 export interface ICategoryRepository {
     getAll(userId: string): Promise<Category[]>;
     getById(id: string): Promise<Category | null>;
-    getByType(userId: string, type: 'personal' | 'office'): Promise<Category[]>;
+    getByType(userId: string, type: TransactionType): Promise<Category[]>;
     create(category: Omit<Category, 'id' | 'createdAt'>): Promise<Category>;
     update(id: string, category: Partial<Category>): Promise<Category>;
     delete(id: string): Promise<void>;

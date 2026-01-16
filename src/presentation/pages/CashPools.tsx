@@ -5,6 +5,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useCashPools } from '../hooks/useCashPools';
 import { CashPoolCard } from '../components/CashPoolCard';
 import { CreatePoolModal } from '../components/CreatePoolModal';
+import { ArgentLoader } from '../components/ArgentLoader';
 
 /**
  * Cash Pools Page
@@ -75,8 +76,8 @@ export default function CashPools() {
 
     if (isLoading) {
         return (
-            <div style={{ padding: 'var(--spacing-xl)', color: 'var(--color-text-primary)' }}>
-                {t('common:states.loading')}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}>
+                <ArgentLoader size={120} />
             </div>
         );
     }
@@ -120,7 +121,8 @@ export default function CashPools() {
                     style={{
                         padding: 'var(--spacing-sm) var(--spacing-lg)',
                         fontSize: 'var(--font-size-base)',
-                        fontFamily: 'var(--font-mono)',
+                        fontFamily: 'var(--font-sans)',
+                        fontWeight: 500,
                         backgroundColor: 'var(--color-text-primary)',
                         border: 'none',
                         borderRadius: 'var(--radius)',
@@ -168,7 +170,8 @@ export default function CashPools() {
                         style={{
                             padding: 'var(--spacing-sm) var(--spacing-lg)',
                             fontSize: 'var(--font-size-base)',
-                            fontFamily: 'var(--font-mono)',
+                            fontFamily: 'var(--font-sans)',
+                            fontWeight: 500,
                             backgroundColor: 'var(--color-text-primary)',
                             border: 'none',
                             borderRadius: 'var(--radius)',

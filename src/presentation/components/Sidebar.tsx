@@ -9,9 +9,11 @@ import {
     Sun,
     Menu,
     X,
+    LogOut,
 } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import { useUIStore } from '../state/uiStore';
+import { useAuth } from '../contexts/AuthContext';
 import { ArgentLogo } from './ArgentLogo';
 
 interface SidebarProps {
@@ -26,9 +28,11 @@ interface SidebarProps {
 export function Sidebar({ className }: SidebarProps) {
     const { t } = useTranslation(['common']);
     const { theme, toggleTheme } = useUIStore();
+    const { user, signOut } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
     const [isMobileOpen, setIsMobileOpen] = useState(false);
+    const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
     const navItems = [
         { icon: LayoutGrid, label: t('common:app.name'), href: '/dashboard', title: 'Dashboard' },
@@ -108,7 +112,7 @@ export function Sidebar({ className }: SidebarProps) {
                         letterSpacing: '-0.02em',
                         color: 'var(--color-text-primary)'
                     }}>
-                        ACRU
+                        A₹GENT
                     </span>
                 </div>
 
@@ -173,6 +177,176 @@ export function Sidebar({ className }: SidebarProps) {
                         </>
                     )}
                 </button>
+
+                {/* User Profile Section */}
+                {user && (
+                    <div style={{ position: 'relative', marginTop: 'var(--spacing-sm)' }}>
+                        <button
+                            onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 'var(--spacing-sm)',
+                                padding: 'var(--spacing-sm)',
+                                borderRadius: 'var(--radius)',
+                                backgroundColor: isUserMenuOpen ? 'var(--color-background-accent)' : 'transparent',
+                                border: 'none',
+                                cursor: 'pointer',
+                                width: '100%',
+                                transition: 'background-color 0.2s',
+                            }}
+                        >
+                            {/* Avatar */}
+                            <div
+                                style={{
+                                    width: '32px',
+                                    height: '32px',
+                                    borderRadius: '50%',
+                                    overflow: 'hidden',
+                                    border: '2px solid var(--color-border)',
+                                    flexShrink: 0,
+                                }}
+                            >
+                                {user.photoURL ? (
+                                    <img
+                                        src={user.photoURL}
+                                        alt={user.displayName || 'User'}
+                                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                    />
+                                ) : (
+                                    <div
+                                        style={{
+                                            width: '100%',
+                                            height: '100%',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            backgroundColor: 'var(--color-primary-500)',
+                                            color: 'white',
+                                            fontSize: 'var(--font-size-sm)',
+                                            fontWeight: 600,
+                                        }}
+                                    >
+                                        {user.displayName?.charAt(0) || user.email?.charAt(0) || 'U'}
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* User Info */}
+                            <div style={{ flex: 1, textAlign: 'left', minWidth: 0 }}>
+                                <p
+                                    style={{
+                                        fontSize: 'var(--font-size-sm)',
+                                        fontWeight: 600,
+                                        color: 'var(--color-text-primary)',
+                                        whiteSpace: 'nowrap',
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                    }}
+                                >
+                                    {user.displayName || user.email?.split('@')[0]}
+                                </p>
+                            </div>
+                        </button>
+
+                        {/* Dropdown Menu */}
+                        {isUserMenuOpen && (
+                            <>
+                                {/* Overlay */}
+                                <div
+                                    style={{
+                                        position: 'fixed',
+                                        inset: 0,
+                                        zIndex: 40,
+                                    }}
+                                    onClick={() => setIsUserMenuOpen(false)}
+                                />
+                                {/* Menu */}
+                                <div
+                                    style={{
+                                        position: 'absolute',
+                                        bottom: '100%',
+                                        left: 0,
+                                        right: 0,
+                                        marginBottom: 'var(--spacing-xs)',
+                                        backgroundColor: 'var(--color-surface)',
+                                        border: '1px solid var(--color-border)',
+                                        borderRadius: 'var(--radius)',
+                                        boxShadow: 'var(--shadow-lg)',
+                                        padding: 'var(--spacing-xs)',
+                                        zIndex: 50,
+                                    }}
+                                >
+                                    {/* User Info Header */}
+                                    <div
+                                        style={{
+                                            padding: 'var(--spacing-sm)',
+                                            borderBottom: '1px solid var(--color-border)',
+                                            marginBottom: 'var(--spacing-xs)',
+                                        }}
+                                    >
+                                        <p
+                                            style={{
+                                                fontSize: 'var(--font-size-sm)',
+                                                fontWeight: 600,
+                                                color: 'var(--color-text-primary)',
+                                                marginBottom: '2px',
+                                            }}
+                                        >
+                                            {user.displayName || 'User'}
+                                        </p>
+                                        <p
+                                            style={{
+                                                fontSize: 'var(--font-size-xs)',
+                                                color: 'var(--color-text-muted)',
+                                            }}
+                                        >
+                                            {user.email}
+                                        </p>
+                                    </div>
+
+                                    {/* Logout Button */}
+                                    <button
+                                        onClick={async () => {
+                                            try {
+                                                await signOut();
+                                                setIsUserMenuOpen(false);
+                                                navigate('/');
+                                            } catch (err) {
+                                                console.error('Logout failed:', err);
+                                            }
+                                        }}
+                                        style={{
+                                            width: '100%',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: 'var(--spacing-sm)',
+                                            padding: 'var(--spacing-sm)',
+                                            backgroundColor: 'transparent',
+                                            border: 'none',
+                                            borderRadius: 'var(--radius-sm)',
+                                            color: 'var(--color-status-expense)',
+                                            fontSize: 'var(--font-size-sm)',
+                                            fontWeight: 500,
+                                            cursor: 'pointer',
+                                            textAlign: 'left',
+                                            transition: 'background-color 0.2s',
+                                        }}
+                                        onMouseEnter={(e) =>
+                                            (e.currentTarget.style.backgroundColor = 'var(--color-background-accent)')
+                                        }
+                                        onMouseLeave={(e) =>
+                                            (e.currentTarget.style.backgroundColor = 'transparent')
+                                        }
+                                    >
+                                        <LogOut size={16} />
+                                        <span>Logout</span>
+                                    </button>
+                                </div>
+                            </>
+                        )}
+                    </div>
+                )}
             </aside>
         </>
     );

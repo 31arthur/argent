@@ -3,6 +3,7 @@
     "invalidEmail": "Invalid email address",
     "invalidAmount": "Invalid amount",
     "amountTooLow": "Amount must be greater than 0",
+    "amountPositive": "Amount must be a positive number",
     "amountTooHigh": "Amount is too high",
     "invalidDate": "Invalid date",
     "futureDateNotAllowed": "Future dates are not allowed",

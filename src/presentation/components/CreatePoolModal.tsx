@@ -108,13 +108,13 @@ export function CreatePoolModal({ isOpen, onClose, onSubmit, isLoading }: Create
                 className="bg-[var(--color-background-secondary)] border border-[var(--color-border)] rounded-[var(--radius)] w-full max-w-[500px] max-h-[90vh] overflow-y-auto"
                 style={{
                     padding: 'var(--spacing-xl)',
-                    fontFamily: 'var(--font-mono)',
+                    fontFamily: 'var(--font-sans)',
                 }}
                 onClick={(e) => e.stopPropagation()}
             >
                 <h2
                     style={{
-                        fontSize: 'var(--font-size-lg)',
+                        fontSize: 'var(--font-size-xl)',
                         fontWeight: 600,
                         marginBottom: 'var(--spacing-lg)',
                         color: 'var(--color-text-primary)',
@@ -130,6 +130,7 @@ export function CreatePoolModal({ isOpen, onClose, onSubmit, isLoading }: Create
                             style={{
                                 display: 'block',
                                 fontSize: 'var(--font-size-sm)',
+                                fontWeight: 500,
                                 color: 'var(--color-text-secondary)',
                                 marginBottom: 'var(--spacing-xs)',
                             }}
@@ -145,7 +146,7 @@ export function CreatePoolModal({ isOpen, onClose, onSubmit, isLoading }: Create
                             style={{
                                 padding: 'var(--spacing-sm)',
                                 fontSize: 'var(--font-size-base)',
-                                fontFamily: 'var(--font-mono)',
+                                fontFamily: 'var(--font-sans)',
                                 backgroundColor: 'var(--color-background)',
                                 border: '1px solid var(--color-border)',
                                 borderRadius: 'var(--radius)',
@@ -161,6 +162,7 @@ export function CreatePoolModal({ isOpen, onClose, onSubmit, isLoading }: Create
                             style={{
                                 display: 'block',
                                 fontSize: 'var(--font-size-sm)',
+                                fontWeight: 500,
                                 color: 'var(--color-text-secondary)',
                                 marginBottom: 'var(--spacing-xs)',
                             }}
@@ -179,7 +181,7 @@ export function CreatePoolModal({ isOpen, onClose, onSubmit, isLoading }: Create
                             style={{
                                 padding: 'var(--spacing-sm)',
                                 fontSize: 'var(--font-size-base)',
-                                fontFamily: 'var(--font-mono)',
+                                fontFamily: 'var(--font-sans)',
                                 backgroundColor: 'var(--color-background)',
                                 border: '1px solid var(--color-border)',
                                 borderRadius: 'var(--radius)',
@@ -207,6 +209,7 @@ export function CreatePoolModal({ isOpen, onClose, onSubmit, isLoading }: Create
                                     style={{
                                         display: 'block',
                                         fontSize: 'var(--font-size-sm)',
+                                        fontWeight: 500,
                                         color: 'var(--color-text-secondary)',
                                         marginBottom: 'var(--spacing-xs)',
                                     }}
@@ -220,7 +223,7 @@ export function CreatePoolModal({ isOpen, onClose, onSubmit, isLoading }: Create
                                     style={{
                                         padding: 'var(--spacing-sm)',
                                         fontSize: 'var(--font-size-base)',
-                                        fontFamily: 'var(--font-mono)',
+                                        fontFamily: 'var(--font-sans)',
                                         backgroundColor: 'var(--color-background)',
                                         border: '1px solid var(--color-border)',
                                         borderRadius: 'var(--radius)',
@@ -248,6 +251,7 @@ export function CreatePoolModal({ isOpen, onClose, onSubmit, isLoading }: Create
                                     style={{
                                         display: 'block',
                                         fontSize: 'var(--font-size-sm)',
+                                        fontWeight: 500,
                                         color: 'var(--color-text-secondary)',
                                         marginBottom: 'var(--spacing-xs)',
                                     }}
@@ -268,7 +272,7 @@ export function CreatePoolModal({ isOpen, onClose, onSubmit, isLoading }: Create
                                     style={{
                                         padding: 'var(--spacing-sm)',
                                         fontSize: 'var(--font-size-base)',
-                                        fontFamily: 'var(--font-mono)',
+                                        fontFamily: 'var(--font-sans)',
                                         backgroundColor: 'var(--color-background)',
                                         border: '1px solid var(--color-border)',
                                         borderRadius: 'var(--radius)',
@@ -296,6 +300,7 @@ export function CreatePoolModal({ isOpen, onClose, onSubmit, isLoading }: Create
                             style={{
                                 display: 'block',
                                 fontSize: 'var(--font-size-sm)',
+                                fontWeight: 500,
                                 color: 'var(--color-text-secondary)',
                                 marginBottom: 'var(--spacing-xs)',
                             }}
@@ -313,7 +318,7 @@ export function CreatePoolModal({ isOpen, onClose, onSubmit, isLoading }: Create
                             style={{
                                 padding: 'var(--spacing-sm)',
                                 fontSize: 'var(--font-size-base)',
-                                fontFamily: 'var(--font-mono)',
+                                fontFamily: 'var(--font-sans)',
                                 backgroundColor: 'var(--color-background)',
                                 border: '1px solid var(--color-border)',
                                 borderRadius: 'var(--radius)',
@@ -349,7 +354,8 @@ export function CreatePoolModal({ isOpen, onClose, onSubmit, isLoading }: Create
                             style={{
                                 padding: 'var(--spacing-sm) var(--spacing-lg)',
                                 fontSize: 'var(--font-size-base)',
-                                fontFamily: 'var(--font-mono)',
+                                fontWeight: 500,
+                                fontFamily: 'var(--font-sans)',
                                 backgroundColor: 'transparent',
                                 border: '1px solid var(--color-border)',
                                 borderRadius: 'var(--radius)',
@@ -367,7 +373,8 @@ export function CreatePoolModal({ isOpen, onClose, onSubmit, isLoading }: Create
                             style={{
                                 padding: 'var(--spacing-sm) var(--spacing-lg)',
                                 fontSize: 'var(--font-size-base)',
-                                fontFamily: 'var(--font-mono)',
+                                fontWeight: 500,
+                                fontFamily: 'var(--font-sans)',
                                 backgroundColor: 'var(--color-text-primary)',
                                 border: 'none',
                                 borderRadius: 'var(--radius)',

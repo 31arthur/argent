@@ -24,7 +24,7 @@ interface AddTransactionModalProps {
 
 /**
  * Add Transaction Modal
- * Form for creating a new transaction
+ * Modern, responsive form for creating Income or Expense transactions
  */
 export function AddTransactionModal({
     isOpen,
@@ -35,16 +35,28 @@ export function AddTransactionModal({
     isLoading,
 }: AddTransactionModalProps) {
     const { t } = useTranslation(['transactions', 'common', 'validation', 'categories']);
-    const [poolId, setPoolId] = useState('');
+
+    // Form state
+    const [type, setType] = useState<TransactionType>('EXPENSE');
     const [amount, setAmount] = useState('');
-    const [type, setType] = useState<TransactionType>('personal');
+    const [poolId, setPoolId] = useState('');
     const [categoryId, setCategoryId] = useState('');
     const [purpose, setPurpose] = useState('');
     const [notes, setNotes] = useState('');
     const [error, setError] = useState('');
 
+    // Adaptive pool label based on transaction type
+    const poolLabel = type === 'EXPENSE'
+        ? t('transactions:form.pool.labelExpense')
+        : t('transactions:form.pool.labelIncome');
+
     // Filter categories by type
     const filteredCategories = categories.filter((c) => c.type === type);
+
+    const handleTypeChange = (newType: TransactionType) => {
+        setType(newType);
+        setCategoryId(''); // Reset category when type changes
+    };
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -57,7 +69,7 @@ export function AddTransactionModal({
 
         const amountNum = parseFloat(amount);
         if (isNaN(amountNum) || amountNum <= 0) {
-            setError(t('validation:amountTooLow'));
+            setError(t('validation:amountPositive'));
             return;
         }
 
@@ -83,9 +95,9 @@ export function AddTransactionModal({
     };
 
     const resetForm = () => {
-        setPoolId('');
+        setType('EXPENSE');
         setAmount('');
-        setType('personal');
+        setPoolId('');
         setCategoryId('');
         setPurpose('');
         setNotes('');
@@ -101,37 +113,20 @@ export function AddTransactionModal({
 
     return (
         <div
-            style={{
-                position: 'fixed',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                zIndex: 1000,
-            }}
+            className="fixed inset-0 bg-black bg-opacity-50 z-[1000] flex items-center justify-center p-4"
             onClick={handleClose}
         >
             <div
+                className="bg-[var(--color-background-secondary)] border border-[var(--color-border)] rounded-[var(--radius)] w-full max-w-[500px] max-h-[90vh] overflow-y-auto"
                 style={{
-                    backgroundColor: 'var(--color-background-secondary)',
-                    border: '1px solid var(--color-border)',
-                    borderRadius: 'var(--radius)',
                     padding: 'var(--spacing-xl)',
-                    width: '100%',
-                    maxWidth: '600px',
-                    maxHeight: '90vh',
-                    overflow: 'auto',
-                    fontFamily: 'var(--font-mono)',
+                    fontFamily: 'var(--font-sans)',
                 }}
                 onClick={(e) => e.stopPropagation()}
             >
                 <h2
                     style={{
-                        fontSize: 'var(--font-size-lg)',
+                        fontSize: 'var(--font-size-xl)',
                         fontWeight: 600,
                         marginBottom: 'var(--spacing-lg)',
                         color: 'var(--color-text-primary)',
@@ -141,30 +136,176 @@ export function AddTransactionModal({
                 </h2>
 
                 <form onSubmit={handleSubmit}>
-                    {/* Cash Pool */}
+                    {/* 1. Transaction Type */}
                     <div style={{ marginBottom: 'var(--spacing-md)' }}>
                         <label
                             style={{
                                 display: 'block',
                                 fontSize: 'var(--font-size-sm)',
+                                fontWeight: 500,
                                 color: 'var(--color-text-secondary)',
                                 marginBottom: 'var(--spacing-xs)',
                             }}
                         >
-                            {t('transactions:form.pool.label')}
+                            {t('transactions:form.type.label')}
+                        </label>
+
+                        <div
+                            style={{
+                                display: 'flex',
+                                gap: 'var(--spacing-xs)',
+                                padding: '4px',
+                                backgroundColor: 'var(--color-background)',
+                                borderRadius: 'var(--radius)',
+                                border: '1px solid var(--color-border)',
+                            }}
+                        >
+                            <button
+                                type="button"
+                                onClick={() => handleTypeChange('EXPENSE')}
+                                style={{
+                                    flex: 1,
+                                    padding: 'var(--spacing-sm) var(--spacing-md)',
+                                    fontSize: 'var(--font-size-base)',
+                                    fontWeight: 500,
+                                    fontFamily: 'var(--font-sans)',
+                                    backgroundColor: type === 'EXPENSE'
+                                        ? 'var(--color-text-primary)'
+                                        : 'transparent',
+                                    color: type === 'EXPENSE'
+                                        ? 'var(--color-text-inverse)'
+                                        : 'var(--color-text-primary)',
+                                    border: 'none',
+                                    borderRadius: 'var(--radius-sm)',
+                                    cursor: 'pointer',
+                                    transition: 'all 0.2s ease',
+                                    minHeight: '40px',
+                                }}
+                            >
+                                {t('transactions:types.expense')}
+                            </button>
+
+                            <button
+                                type="button"
+                                onClick={() => handleTypeChange('INCOME')}
+                                style={{
+                                    flex: 1,
+                                    padding: 'var(--spacing-sm) var(--spacing-md)',
+                                    fontSize: 'var(--font-size-base)',
+                                    fontWeight: 500,
+                                    fontFamily: 'var(--font-sans)',
+                                    backgroundColor: type === 'INCOME'
+                                        ? 'var(--color-text-primary)'
+                                        : 'transparent',
+                                    color: type === 'INCOME'
+                                        ? 'var(--color-text-inverse)'
+                                        : 'var(--color-text-primary)',
+                                    border: 'none',
+                                    borderRadius: 'var(--radius-sm)',
+                                    cursor: 'pointer',
+                                    transition: 'all 0.2s ease',
+                                    minHeight: '40px',
+                                }}
+                            >
+                                {t('transactions:types.income')}
+                            </button>
+                        </div>
+
+                        <p
+                            style={{
+                                fontSize: 'var(--font-size-xs)',
+                                color: 'var(--color-text-muted)',
+                                marginTop: 'var(--spacing-xs)',
+                            }}
+                        >
+                            {t('transactions:form.type.helper')}
+                        </p>
+                    </div>
+
+                    {/* 2. Amount */}
+                    <div style={{ marginBottom: 'var(--spacing-md)' }}>
+                        <label
+                            style={{
+                                display: 'block',
+                                fontSize: 'var(--font-size-sm)',
+                                fontWeight: 500,
+                                color: 'var(--color-text-secondary)',
+                                marginBottom: 'var(--spacing-xs)',
+                            }}
+                        >
+                            {t('transactions:form.amount.label')}
+                        </label>
+                        <div style={{ position: 'relative' }}>
+                            <span
+                                style={{
+                                    position: 'absolute',
+                                    left: 'var(--spacing-sm)',
+                                    top: '50%',
+                                    transform: 'translateY(-50%)',
+                                    fontSize: 'var(--font-size-base)',
+                                    color: 'var(--color-text-muted)',
+                                }}
+                            >
+                                ₹
+                            </span>
+                            <input
+                                type="number"
+                                value={amount}
+                                onChange={(e) => setAmount(e.target.value)}
+                                placeholder={t('transactions:form.amount.placeholder')}
+                                step="0.01"
+                                min="0"
+                                className="w-full"
+                                style={{
+                                    padding: 'var(--spacing-sm)',
+                                    paddingLeft: 'calc(var(--spacing-sm) + 20px)',
+                                    fontSize: 'var(--font-size-base)',
+                                    fontFamily: 'var(--font-sans)',
+                                    backgroundColor: 'var(--color-background)',
+                                    border: '1px solid var(--color-border)',
+                                    borderRadius: 'var(--radius)',
+                                    color: 'var(--color-text-primary)',
+                                    minHeight: '44px',
+                                }}
+                            />
+                        </div>
+                        <p
+                            style={{
+                                fontSize: 'var(--font-size-xs)',
+                                color: 'var(--color-text-muted)',
+                                marginTop: 'var(--spacing-xs)',
+                            }}
+                        >
+                            {t('transactions:form.amount.helper')}
+                        </p>
+                    </div>
+
+                    {/* 3. Cash Pool */}
+                    <div style={{ marginBottom: 'var(--spacing-md)' }}>
+                        <label
+                            style={{
+                                display: 'block',
+                                fontSize: 'var(--font-size-sm)',
+                                fontWeight: 500,
+                                color: 'var(--color-text-secondary)',
+                                marginBottom: 'var(--spacing-xs)',
+                            }}
+                        >
+                            {poolLabel}
                         </label>
                         <select
                             value={poolId}
                             onChange={(e) => setPoolId(e.target.value)}
+                            className="w-full"
                             style={{
-                                width: '100%',
                                 padding: 'var(--spacing-sm)',
                                 fontSize: 'var(--font-size-base)',
-                                fontFamily: 'var(--font-mono)',
+                                fontFamily: 'var(--font-sans)',
                                 backgroundColor: 'var(--color-background)',
                                 border: '1px solid var(--color-border)',
                                 borderRadius: 'var(--radius)',
                                 color: 'var(--color-text-primary)',
+                                minHeight: '44px',
                             }}
                         >
                             <option value="">{t('transactions:form.pool.placeholder')}</option>
@@ -176,78 +317,13 @@ export function AddTransactionModal({
                         </select>
                     </div>
 
-                    {/* Amount */}
+                    {/* 4. Category */}
                     <div style={{ marginBottom: 'var(--spacing-md)' }}>
                         <label
                             style={{
                                 display: 'block',
                                 fontSize: 'var(--font-size-sm)',
-                                color: 'var(--color-text-secondary)',
-                                marginBottom: 'var(--spacing-xs)',
-                            }}
-                        >
-                            {t('transactions:form.amount.label')}
-                        </label>
-                        <input
-                            type="number"
-                            value={amount}
-                            onChange={(e) => setAmount(e.target.value)}
-                            placeholder={t('transactions:form.amount.placeholder')}
-                            step="0.01"
-                            min="0"
-                            style={{
-                                width: '100%',
-                                padding: 'var(--spacing-sm)',
-                                fontSize: 'var(--font-size-base)',
-                                fontFamily: 'var(--font-mono)',
-                                backgroundColor: 'var(--color-background)',
-                                border: '1px solid var(--color-border)',
-                                borderRadius: 'var(--radius)',
-                                color: 'var(--color-text-primary)',
-                            }}
-                        />
-                    </div>
-
-                    {/* Type */}
-                    <div style={{ marginBottom: 'var(--spacing-md)' }}>
-                        <label
-                            style={{
-                                display: 'block',
-                                fontSize: 'var(--font-size-sm)',
-                                color: 'var(--color-text-secondary)',
-                                marginBottom: 'var(--spacing-xs)',
-                            }}
-                        >
-                            {t('transactions:form.type.label')}
-                        </label>
-                        <select
-                            value={type}
-                            onChange={(e) => {
-                                setType(e.target.value as TransactionType);
-                                setCategoryId(''); // Reset category when type changes
-                            }}
-                            style={{
-                                width: '100%',
-                                padding: 'var(--spacing-sm)',
-                                fontSize: 'var(--font-size-base)',
-                                fontFamily: 'var(--font-mono)',
-                                backgroundColor: 'var(--color-background)',
-                                border: '1px solid var(--color-border)',
-                                borderRadius: 'var(--radius)',
-                                color: 'var(--color-text-primary)',
-                            }}
-                        >
-                            <option value="personal">{t('transactions:types.personal')}</option>
-                            <option value="office">{t('transactions:types.office')}</option>
-                        </select>
-                    </div>
-
-                    {/* Category */}
-                    <div style={{ marginBottom: 'var(--spacing-md)' }}>
-                        <label
-                            style={{
-                                display: 'block',
-                                fontSize: 'var(--font-size-sm)',
+                                fontWeight: 500,
                                 color: 'var(--color-text-secondary)',
                                 marginBottom: 'var(--spacing-xs)',
                             }}
@@ -257,20 +333,20 @@ export function AddTransactionModal({
                         <select
                             value={categoryId}
                             onChange={(e) => setCategoryId(e.target.value)}
+                            className="w-full"
                             style={{
-                                width: '100%',
                                 padding: 'var(--spacing-sm)',
                                 fontSize: 'var(--font-size-base)',
-                                fontFamily: 'var(--font-mono)',
+                                fontFamily: 'var(--font-sans)',
                                 backgroundColor: 'var(--color-background)',
                                 border: '1px solid var(--color-border)',
                                 borderRadius: 'var(--radius)',
                                 color: 'var(--color-text-primary)',
+                                minHeight: '44px',
                             }}
                         >
                             <option value="">{t('transactions:form.category.placeholder')}</option>
                             {filteredCategories.map((cat) => {
-                                // Extract key without 'categories.' prefix
                                 const translationKey = cat.name.replace('categories.', '');
                                 return (
                                     <option key={cat.id} value={cat.id}>
@@ -281,12 +357,13 @@ export function AddTransactionModal({
                         </select>
                     </div>
 
-                    {/* Purpose */}
+                    {/* 5. Purpose */}
                     <div style={{ marginBottom: 'var(--spacing-md)' }}>
                         <label
                             style={{
                                 display: 'block',
                                 fontSize: 'var(--font-size-sm)',
+                                fontWeight: 500,
                                 color: 'var(--color-text-secondary)',
                                 marginBottom: 'var(--spacing-xs)',
                             }}
@@ -298,25 +375,27 @@ export function AddTransactionModal({
                             value={purpose}
                             onChange={(e) => setPurpose(e.target.value)}
                             placeholder={t('transactions:form.purpose.placeholder')}
+                            className="w-full"
                             style={{
-                                width: '100%',
                                 padding: 'var(--spacing-sm)',
                                 fontSize: 'var(--font-size-base)',
-                                fontFamily: 'var(--font-mono)',
+                                fontFamily: 'var(--font-sans)',
                                 backgroundColor: 'var(--color-background)',
                                 border: '1px solid var(--color-border)',
                                 borderRadius: 'var(--radius)',
                                 color: 'var(--color-text-primary)',
+                                minHeight: '44px',
                             }}
                         />
                     </div>
 
-                    {/* Notes */}
+                    {/* 6. Notes */}
                     <div style={{ marginBottom: 'var(--spacing-lg)' }}>
                         <label
                             style={{
                                 display: 'block',
                                 fontSize: 'var(--font-size-sm)',
+                                fontWeight: 500,
                                 color: 'var(--color-text-secondary)',
                                 marginBottom: 'var(--spacing-xs)',
                             }}
@@ -328,16 +407,17 @@ export function AddTransactionModal({
                             onChange={(e) => setNotes(e.target.value)}
                             placeholder={t('transactions:form.notes.placeholder')}
                             rows={3}
+                            className="w-full"
                             style={{
-                                width: '100%',
                                 padding: 'var(--spacing-sm)',
                                 fontSize: 'var(--font-size-base)',
-                                fontFamily: 'var(--font-mono)',
+                                fontFamily: 'var(--font-sans)',
                                 backgroundColor: 'var(--color-background)',
                                 border: '1px solid var(--color-border)',
                                 borderRadius: 'var(--radius)',
                                 color: 'var(--color-text-primary)',
                                 resize: 'vertical',
+                                minHeight: '80px',
                             }}
                         />
                     </div>
@@ -347,27 +427,33 @@ export function AddTransactionModal({
                             style={{
                                 marginBottom: 'var(--spacing-md)',
                                 fontSize: 'var(--font-size-sm)',
-                                color: 'var(--color-status-latest)',
+                                color: 'var(--color-status-expense)',
                             }}
                         >
                             {error}
                         </p>
                     )}
 
-                    <div style={{ display: 'flex', gap: 'var(--spacing-sm)', justifyContent: 'flex-end' }}>
+                    <div
+                        className="flex gap-[var(--spacing-sm)] justify-end flex-col sm:flex-row"
+                        style={{ gap: 'var(--spacing-sm)' }}
+                    >
                         <button
                             type="button"
                             onClick={handleClose}
                             disabled={isLoading}
+                            className="w-full sm:w-auto"
                             style={{
                                 padding: 'var(--spacing-sm) var(--spacing-lg)',
                                 fontSize: 'var(--font-size-base)',
-                                fontFamily: 'var(--font-mono)',
+                                fontWeight: 500,
+                                fontFamily: 'var(--font-sans)',
                                 backgroundColor: 'transparent',
                                 border: '1px solid var(--color-border)',
                                 borderRadius: 'var(--radius)',
                                 color: 'var(--color-text-primary)',
                                 cursor: isLoading ? 'not-allowed' : 'pointer',
+                                minHeight: '44px',
                             }}
                         >
                             {t('common:actions.cancel')}
@@ -375,16 +461,19 @@ export function AddTransactionModal({
                         <button
                             type="submit"
                             disabled={isLoading}
+                            className="w-full sm:w-auto"
                             style={{
                                 padding: 'var(--spacing-sm) var(--spacing-lg)',
                                 fontSize: 'var(--font-size-base)',
-                                fontFamily: 'var(--font-mono)',
+                                fontWeight: 500,
+                                fontFamily: 'var(--font-sans)',
                                 backgroundColor: 'var(--color-text-primary)',
                                 border: 'none',
                                 borderRadius: 'var(--radius)',
                                 color: 'var(--color-text-inverse)',
                                 cursor: isLoading ? 'not-allowed' : 'pointer',
                                 opacity: isLoading ? 0.6 : 1,
+                                minHeight: '44px',
                             }}
                         >
                             {isLoading ? t('common:states.loading') : t('common:actions.save')}

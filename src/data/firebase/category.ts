@@ -60,23 +60,27 @@ export class FirebaseCategoryDataSource {
      */
     async initializeDefaultCategories(userId: string): Promise<void> {
         const defaultCategories = [
-            // Personal categories
-            { name: 'categories.personal.food', icon: '🍽️', color: '#ff6b6b', type: 'personal' as const },
-            { name: 'categories.personal.transport', icon: '🚗', color: '#4ecdc4', type: 'personal' as const },
-            { name: 'categories.personal.shopping', icon: '🛍️', color: '#95e1d3', type: 'personal' as const },
-            { name: 'categories.personal.entertainment', icon: '🎬', color: '#f38181', type: 'personal' as const },
-            { name: 'categories.personal.health', icon: '💊', color: '#aa96da', type: 'personal' as const },
-            { name: 'categories.personal.education', icon: '📚', color: '#fcbad3', type: 'personal' as const },
-            { name: 'categories.personal.utilities', icon: '⚡', color: '#ffffd2', type: 'personal' as const },
-            { name: 'categories.personal.other', icon: '📦', color: '#a8dadc', type: 'personal' as const },
+            // Expense categories
+            { name: 'categories.expense.food', icon: '🍔', color: '#ff6b6b', type: 'EXPENSE' as const },
+            { name: 'categories.expense.transport', icon: '🚗', color: '#4ecdc4', type: 'EXPENSE' as const },
+            { name: 'categories.expense.shopping', icon: '🛍️', color: '#95e1d3', type: 'EXPENSE' as const },
+            { name: 'categories.expense.entertainment', icon: '🎬', color: '#f38181', type: 'EXPENSE' as const },
+            { name: 'categories.expense.health', icon: '🏥', color: '#aa96da', type: 'EXPENSE' as const },
+            { name: 'categories.expense.education', icon: '📚', color: '#fcbad3', type: 'EXPENSE' as const },
+            { name: 'categories.expense.utilities', icon: '💡', color: '#ffd93d', type: 'EXPENSE' as const },
+            { name: 'categories.expense.rent', icon: '🏠', color: '#6bcf7f', type: 'EXPENSE' as const },
+            { name: 'categories.expense.office', icon: '🖊️', color: '#457b9d', type: 'EXPENSE' as const },
+            { name: 'categories.expense.travel', icon: '✈️', color: '#1d3557', type: 'EXPENSE' as const },
+            { name: 'categories.expense.other', icon: '📦', color: '#a8dadc', type: 'EXPENSE' as const },
 
-            // Office categories
-            { name: 'categories.office.supplies', icon: '📎', color: '#457b9d', type: 'office' as const },
-            { name: 'categories.office.travel', icon: '✈️', color: '#1d3557', type: 'office' as const },
-            { name: 'categories.office.meals', icon: '☕', color: '#e63946', type: 'office' as const },
-            { name: 'categories.office.software', icon: '💻', color: '#f1faee', type: 'office' as const },
-            { name: 'categories.office.equipment', icon: '🖨️', color: '#a8dadc', type: 'office' as const },
-            { name: 'categories.office.other', icon: '📋', color: '#457b9d', type: 'office' as const },
+            // Income categories
+            { name: 'categories.income.salary', icon: '💼', color: '#10b981', type: 'INCOME' as const },
+            { name: 'categories.income.freelance', icon: '💻', color: '#059669', type: 'INCOME' as const },
+            { name: 'categories.income.refund', icon: '🔄', color: '#34d399', type: 'INCOME' as const },
+            { name: 'categories.income.interest', icon: '📈', color: '#6ee7b7', type: 'INCOME' as const },
+            { name: 'categories.income.gift', icon: '🎁', color: '#a7f3d0', type: 'INCOME' as const },
+            { name: 'categories.income.investment', icon: '💰', color: '#047857', type: 'INCOME' as const },
+            { name: 'categories.income.other', icon: '📱', color: '#86efac', type: 'INCOME' as const },
         ];
 
         const promises = defaultCategories.map((cat) =>

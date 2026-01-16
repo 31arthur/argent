@@ -1,5 +1,5 @@
 {
-    "personal": {
+    "expense": {
         "food": "Food & Dining",
         "transport": "Transportation",
         "shopping": "Shopping",
@@ -7,14 +7,18 @@
         "health": "Healthcare",
         "education": "Education",
         "utilities": "Utilities",
+        "rent": "Rent",
+        "office": "Office Supplies",
+        "travel": "Travel",
         "other": "Other"
     },
-    "office": {
-        "supplies": "Office Supplies",
-        "travel": "Business Travel",
-        "meals": "Business Meals",
-        "software": "Software & Tools",
-        "equipment": "Equipment",
+    "income": {
+        "salary": "Salary",
+        "freelance": "Freelance",
+        "refund": "Refund",
+        "interest": "Interest",
+        "gift": "Gift",
+        "investment": "Investment",
         "other": "Other"
     }
 }

@@ -8,6 +8,7 @@ import {
     TableRow,
 } from '@/shared/ui/Table';
 import { useSales } from '../hooks/useSales';
+import { ArgentLoader } from '../components/ArgentLoader';
 
 /**
  * Sales Page
@@ -39,8 +40,10 @@ export function Sales() {
                     <TableBody>
                         {isLoading && (
                             <TableRow>
-                                <TableCell colSpan={8} className="text-center text-text-muted">
-                                    Loading sales...
+                                <TableCell colSpan={8} className="text-center">
+                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 'var(--spacing-3xl)' }}>
+                                        <ArgentLoader size={60} />
+                                    </div>
                                 </TableCell>
                             </TableRow>
                         )}

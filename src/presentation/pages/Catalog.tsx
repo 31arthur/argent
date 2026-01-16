@@ -1,6 +1,7 @@
 import { PageLayout } from '../layouts/PageLayout';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/shared/ui/Tabs';
 import { useArtworks } from '../hooks/useArtworks';
+import { ArgentLoader } from '../components/ArgentLoader';
 
 /**
  * Catalog Page
@@ -23,7 +24,11 @@ export function Catalog() {
 
                 <TabsContent value="list">
                     <div className="space-y-sm">
-                        {isLoading && <div className="text-text-muted">Loading...</div>}
+                        {isLoading && (
+                            <div style={{ display: 'flex', justifyContent: 'center', padding: 'var(--spacing-xl)' }}>
+                                <ArgentLoader size={80} />
+                            </div>
+                        )}
                         {artworks?.map((artwork) => (
                             <div key={artwork.id} className="list-item bg-background-secondary p-md rounded">
                                 <div className="list-item-thumbnail">
@@ -43,7 +48,11 @@ export function Catalog() {
 
                 <TabsContent value="raster">
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-lg">
-                        {isLoading && <div className="text-text-muted">Loading...</div>}
+                        {isLoading && (
+                            <div style={{ display: 'flex', justifyContent: 'center', padding: 'var(--spacing-xl)' }}>
+                                <ArgentLoader size={80} />
+                            </div>
+                        )}
                         {artworks?.map((artwork) => (
                             <div key={artwork.id} className="bg-background-secondary rounded overflow-hidden">
                                 <div className="aspect-square bg-gradient-to-br from-gray-300 to-gray-500" />

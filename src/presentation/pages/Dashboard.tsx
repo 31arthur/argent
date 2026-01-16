@@ -7,6 +7,7 @@ import { useCashPools } from '../hooks/useCashPools';
 import { useCategories } from '../hooks/useCategories';
 import { TransactionItem } from '../components/TransactionItem';
 import { AddTransactionModal } from '../components/AddTransactionModal';
+import { ArgentLoader } from '../components/ArgentLoader';
 import { useTransactions } from '../hooks/useTransactions';
 import { Money } from '@/domain/value-objects/Money';
 
@@ -15,7 +16,7 @@ import { Money } from '@/domain/value-objects/Money';
  * Main dashboard with spending analytics
  */
 export default function Dashboard() {
-    const { t } = useTranslation(['dashboard', 'common']);
+    const { t } = useTranslation(['dashboard', 'common', 'categories']);
     const { user } = useAuth();
     const navigate = useNavigate();
     const { monthlySpending, dailySpending, recentTransactions, categoryBreakdown, isLoading } =
@@ -47,8 +48,8 @@ export default function Dashboard() {
 
     if (isLoading) {
         return (
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--color-text-primary)' }}>
-                {t('common:states.loading')}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}>
+                <ArgentLoader size={120} />
             </div>
         );
     }

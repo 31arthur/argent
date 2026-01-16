@@ -1,25 +1,29 @@
 {
     "title": "Transactions",
-    "subtitle": "Track your spending",
+    "subtitle": "Track your money flow",
     "types": {
-        "personal": "Personal",
-        "office": "Office"
+        "income": "Income",
+        "expense": "Expense"
     },
     "form": {
+        "type": {
+            "label": "Transaction Type",
+            "helper": "Choose whether money is coming in or going out"
+        },
         "amount": {
             "label": "Amount",
-            "placeholder": "0.00"
+            "placeholder": "0.00",
+            "helper": "Enter a positive number"
         },
         "pool": {
             "label": "Cash Pool",
+            "labelExpense": "Spent from",
+            "labelIncome": "Received into",
             "placeholder": "Select pool"
         },
         "category": {
             "label": "Category",
             "placeholder": "Select category"
-        },
-        "type": {
-            "label": "Type"
         },
         "purpose": {
             "label": "Purpose",
@@ -53,6 +57,9 @@
         "reset": "Reset"
     },
     "summary": {
+        "totalIncome": "Total Income",
+        "totalExpense": "Total Expense",
+        "netFlow": "Net Flow",
         "total": "Total Spent",
         "today": "Today",
         "thisWeek": "This Week",

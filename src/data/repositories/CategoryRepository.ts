@@ -1,5 +1,6 @@
 import type { Category } from '@/domain/entities/Category';
 import type { ICategoryRepository } from '@/domain/repositories/ICategoryRepository';
+import type { TransactionType } from '@/domain/entities/Transaction';
 import { FirebaseCategoryDataSource } from '../firebase/category';
 
 /**
@@ -22,7 +23,7 @@ export class CategoryRepository implements ICategoryRepository {
         throw new Error('Not implemented');
     }
 
-    async getByType(userId: string, type: 'personal' | 'office'): Promise<Category[]> {
+    async getByType(userId: string, type: TransactionType): Promise<Category[]> {
         return await this.dataSource.getByType(userId, type);
     }
 

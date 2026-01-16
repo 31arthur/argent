@@ -4,6 +4,7 @@ import { Badge } from '@/shared/ui/Badge';
 import { Button } from '@/shared/ui/Button';
 import { ScrollArea } from '@/shared/ui/ScrollArea';
 import { useArtworks } from '../hooks/useArtworks';
+import { ArgentLoader } from '../components/ArgentLoader';
 
 /**
  * Catalog Widget
@@ -28,7 +29,9 @@ export function CatalogWidget() {
             <CardContent className="p-0">
                 <ScrollArea maxHeight="300px">
                     {isLoading && (
-                        <div className="p-md text-text-muted text-sm">Loading artworks...</div>
+                        <div style={{ display: 'flex', justifyContent: 'center', padding: 'var(--spacing-md)' }}>
+                            <ArgentLoader size={50} />
+                        </div>
                     )}
                     {error && (
                         <div className="p-md text-status-latest text-sm">Error loading artworks</div>

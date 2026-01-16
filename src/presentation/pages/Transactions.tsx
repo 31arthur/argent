@@ -6,6 +6,7 @@ import { useCashPools } from '../hooks/useCashPools';
 import { useCategories } from '../hooks/useCategories';
 import { TransactionItem } from '../components/TransactionItem';
 import { AddTransactionModal } from '../components/AddTransactionModal';
+import { ArgentLoader } from '../components/ArgentLoader';
 
 /**
  * Transactions Page
@@ -48,8 +49,8 @@ export default function Transactions() {
 
     if (isLoading) {
         return (
-            <div style={{ padding: 'var(--spacing-xl)', color: 'var(--color-text-primary)' }}>
-                {t('common:states.loading')}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}>
+                <ArgentLoader size={120} />
             </div>
         );
     }
@@ -93,7 +94,8 @@ export default function Transactions() {
                     style={{
                         padding: 'var(--spacing-sm) var(--spacing-lg)',
                         fontSize: 'var(--font-size-base)',
-                        fontFamily: 'var(--font-mono)',
+                        fontFamily: 'var(--font-sans)',
+                        fontWeight: 500,
                         backgroundColor: pools.length === 0 ? 'var(--color-background-accent)' : 'var(--color-text-primary)',
                         border: 'none',
                         borderRadius: 'var(--radius)',
@@ -141,7 +143,8 @@ export default function Transactions() {
                             style={{
                                 padding: 'var(--spacing-sm) var(--spacing-lg)',
                                 fontSize: 'var(--font-size-base)',
-                                fontFamily: 'var(--font-mono)',
+                                fontFamily: 'var(--font-sans)',
+                                fontWeight: 500,
                                 backgroundColor: 'var(--color-text-primary)',
                                 border: 'none',
                                 borderRadius: 'var(--radius)',

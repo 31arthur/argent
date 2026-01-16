@@ -4,6 +4,7 @@ import { Badge } from '@/shared/ui/Badge';
 import { Button } from '@/shared/ui/Button';
 import { ScrollArea } from '@/shared/ui/ScrollArea';
 import { useSales } from '../hooks/useSales';
+import { ArgentLoader } from '../components/ArgentLoader';
 
 /**
  * Sales Widget
@@ -29,7 +30,9 @@ export function SalesWidget() {
             <CardContent className="p-0">
                 <ScrollArea maxHeight="250px">
                     {isLoading && (
-                        <div className="p-md text-text-muted text-sm">Loading sales...</div>
+                        <div style={{ display: 'flex', justifyContent: 'center', padding: 'var(--spacing-md)' }}>
+                            <ArgentLoader size={50} />
+                        </div>
                     )}
                     {sales?.map((sale) => (
                         <div key={sale.id} className="list-item px-md">

@@ -15,11 +15,19 @@ interface TransactionItemProps {
 /**
  * Transaction Item Component
  * Displays a single transaction in a list
+ * Visually distinguishes between income and expense
  */
 export function TransactionItem({ transaction, pool, category, onDelete }: TransactionItemProps) {
     const { t } = useTranslation(['transactions', 'common']);
 
     const amount = new Money(transaction.amount, pool?.currency || 'INR');
+
+    // Determine display based on transaction type
+    const isIncome = transaction.type === 'INCOME';
+    const amountColor = isIncome
+        ? 'var(--color-status-income)'
+        : 'var(--color-status-expense)';
+    const amountPrefix = isIncome ? '+' : '-';
 
     return (
         <div
@@ -54,14 +62,14 @@ export function TransactionItem({ transaction, pool, category, onDelete }: Trans
             ) : (
                 <div
                     style={{
-                        width: '24px',
-                        height: '24px',
-                        borderRadius: 'var(--radius-sm)',
+                        width: '48px',
+                        height: '48px',
+                        borderRadius: '16px',
                         backgroundColor: 'var(--color-background-accent)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        fontSize: 'var(--font-size-icon)',
+                        fontSize: '20px',
                         flexShrink: 0,
                     }}
                 ></div>
@@ -69,7 +77,12 @@ export function TransactionItem({ transaction, pool, category, onDelete }: Trans
 
             {/* Transaction Details */}
             <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginBottom: '4px'
+                }}>
                     <p
                         style={{
                             fontSize: 'var(--font-size-base)',
@@ -87,14 +100,20 @@ export function TransactionItem({ transaction, pool, category, onDelete }: Trans
                         style={{
                             fontSize: 'var(--font-size-base)',
                             fontWeight: 600,
-                            color: 'var(--color-status-expense)',
+                            color: amountColor,
+                            marginLeft: 'var(--spacing-md)',
+                            flexShrink: 0,
                         }}
                     >
-                        -{amount.format()}
+                        {amountPrefix}{amount.format()}
                     </p>
                 </div>
 
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center'
+                }}>
                     <p
                         style={{
                             fontSize: 'var(--font-size-sm)',
@@ -109,13 +128,35 @@ export function TransactionItem({ transaction, pool, category, onDelete }: Trans
                         <span>•</span>
                         <span>{pool?.name}</span>
                     </p>
+
+                    {/* Transaction type label for accessibility */}
+                    <span
+                        style={{
+                            fontSize: 'var(--font-size-xs)',
+                            color: 'var(--color-text-muted)',
+                            textTransform: 'capitalize',
+                        }}
+                    >
+                        {t(`transactions:types.${transaction.type.toLowerCase()}`)}
+                    </span>
                 </div>
 
                 {/* Tags (optional, small) */}
                 {transaction.tags && transaction.tags.length > 0 && (
                     <div style={{ display: 'flex', gap: '4px', marginTop: '6px' }}>
                         {transaction.tags.map(tag => (
-                            <span key={tag} style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-text-muted)', background: 'var(--color-background-accent)', padding: 'var(--spacing-xs) var(--spacing-sm)', borderRadius: 'var(--radius-sm)' }}>#{tag}</span>
+                            <span
+                                key={tag}
+                                style={{
+                                    fontSize: 'var(--font-size-xs)',
+                                    color: 'var(--color-text-muted)',
+                                    background: 'var(--color-background-accent)',
+                                    padding: 'var(--spacing-xs) var(--spacing-sm)',
+                                    borderRadius: 'var(--radius-sm)'
+                                }}
+                            >
+                                #{tag}
+                            </span>
                         ))}
                     </div>
                 )}
@@ -133,6 +174,7 @@ export function TransactionItem({ transaction, pool, category, onDelete }: Trans
                         cursor: 'pointer',
                         padding: '8px',
                         borderRadius: '50%',
+                        flexShrink: 0,
                     }}
                     onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-status-expense)'}
                     onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-text-muted)'}

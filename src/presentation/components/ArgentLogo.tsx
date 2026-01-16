@@ -12,10 +12,9 @@ interface ArgentLogoProps {
  */
 export function ArgentLogo({ size = 32, className = '' }: ArgentLogoProps) {
     const { theme } = useUIStore();
-    // Inverted for sidebar contrast:
-    // Light theme = dark sidebar, so logo should be white
-    // Dark theme = white sidebar, so logo should be dark
-    const fillColor = theme === 'light' ? '#ffffff' : '#1a1a1a';
+    // Light mode: dark logo for visibility on light background
+    // Dark mode: light logo for visibility on dark background
+    const fillColor = theme === 'light' ? '#1a1a1a' : '#e8e8e8';
 
     return (
         <svg

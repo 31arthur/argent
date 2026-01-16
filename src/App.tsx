@@ -5,6 +5,7 @@ import { AuthProvider } from './presentation/contexts/AuthContext';
 import './presentation/i18n'; // Initialize i18n
 import './index.css';
 import { ArgentLoader } from './presentation/components/ArgentLoader';
+import { ProtectedRoute } from './presentation/components/ProtectedRoute';
 import { AppLayout } from './presentation/layouts/AppLayout';
 
 // Lazy load pages
@@ -50,8 +51,11 @@ function App() {
         <Router>
           <Suspense fallback={<LoadingFallback />}>
             <Routes>
+              {/* Public Route */}
               <Route path="/" element={<Landing />} />
-              <Route element={<AppLayout />}>
+
+              {/* Protected Routes */}
+              <Route element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/pools" element={<CashPools />} />
                 <Route path="/transactions" element={<Transactions />} />
