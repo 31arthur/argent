@@ -1,18 +1,22 @@
 import type { TransactionType } from './Transaction';
 
 /**
- * Domain Entity: Category
- * Represents a transaction category
- * Categories are filtered by transaction type (INCOME or EXPENSE)
- * Note: name is a translation key, not literal text
+ * Category Entity
+ * Represents a spending/income category
+ * 
+ * Invariants:
+ * - Categories are filtered by type (INCOME or EXPENSE)
+ * - Each category has a unique key within its type
+ * - The 'key' is used to construct the i18n path: categories.{type}.{key}
+ * - Display names come from i18n files, not the database
  */
 export interface Category {
     id: string;
     userId: string;
-    name: string; // Translation key (e.g., "categories.expense.food")
-    icon: string; // Icon name or emoji
-    color: string; // Hex color
+    key: string; // Category key (e.g., "food", "transport") - used for i18n lookup
+    icon: string;
+    color: string;
     type: TransactionType; // INCOME or EXPENSE
-    isDefault: boolean; // System-provided categories
-    createdAt: Date;
+    isDefault?: boolean; // System-provided categories
+    createdAt?: Date;
 }

@@ -61,32 +61,32 @@ export class FirebaseCategoryDataSource {
     async initializeDefaultCategories(userId: string): Promise<void> {
         const defaultCategories = [
             // Expense categories
-            { name: 'categories.expense.food', icon: '🍔', color: '#ff6b6b', type: 'EXPENSE' as const },
-            { name: 'categories.expense.transport', icon: '🚗', color: '#4ecdc4', type: 'EXPENSE' as const },
-            { name: 'categories.expense.shopping', icon: '🛍️', color: '#95e1d3', type: 'EXPENSE' as const },
-            { name: 'categories.expense.entertainment', icon: '🎬', color: '#f38181', type: 'EXPENSE' as const },
-            { name: 'categories.expense.health', icon: '🏥', color: '#aa96da', type: 'EXPENSE' as const },
-            { name: 'categories.expense.education', icon: '📚', color: '#fcbad3', type: 'EXPENSE' as const },
-            { name: 'categories.expense.utilities', icon: '💡', color: '#ffd93d', type: 'EXPENSE' as const },
-            { name: 'categories.expense.rent', icon: '🏠', color: '#6bcf7f', type: 'EXPENSE' as const },
-            { name: 'categories.expense.office', icon: '🖊️', color: '#457b9d', type: 'EXPENSE' as const },
-            { name: 'categories.expense.travel', icon: '✈️', color: '#1d3557', type: 'EXPENSE' as const },
-            { name: 'categories.expense.other', icon: '📦', color: '#a8dadc', type: 'EXPENSE' as const },
+            { key: 'food', icon: '🍔', color: '#ff6b6b', type: 'EXPENSE' as const },
+            { key: 'transport', icon: '🚗', color: '#4ecdc4', type: 'EXPENSE' as const },
+            { key: 'shopping', icon: '🛍️', color: '#95e1d3', type: 'EXPENSE' as const },
+            { key: 'entertainment', icon: '🎬', color: '#f38181', type: 'EXPENSE' as const },
+            { key: 'health', icon: '🏥', color: '#aa96da', type: 'EXPENSE' as const },
+            { key: 'education', icon: '📚', color: '#fcbad3', type: 'EXPENSE' as const },
+            { key: 'utilities', icon: '💡', color: '#ffd93d', type: 'EXPENSE' as const },
+            { key: 'rent', icon: '🏠', color: '#6bcf7f', type: 'EXPENSE' as const },
+            { key: 'office', icon: '🖊️', color: '#457b9d', type: 'EXPENSE' as const },
+            { key: 'travel', icon: '✈️', color: '#1d3557', type: 'EXPENSE' as const },
+            { key: 'other', icon: '📦', color: '#a8dadc', type: 'EXPENSE' as const },
 
             // Income categories
-            { name: 'categories.income.salary', icon: '💼', color: '#10b981', type: 'INCOME' as const },
-            { name: 'categories.income.freelance', icon: '💻', color: '#059669', type: 'INCOME' as const },
-            { name: 'categories.income.refund', icon: '🔄', color: '#34d399', type: 'INCOME' as const },
-            { name: 'categories.income.interest', icon: '📈', color: '#6ee7b7', type: 'INCOME' as const },
-            { name: 'categories.income.gift', icon: '🎁', color: '#a7f3d0', type: 'INCOME' as const },
-            { name: 'categories.income.investment', icon: '💰', color: '#047857', type: 'INCOME' as const },
-            { name: 'categories.income.other', icon: '📱', color: '#86efac', type: 'INCOME' as const },
+            { key: 'salary', icon: '💼', color: '#10b981', type: 'INCOME' as const },
+            { key: 'freelance', icon: '💻', color: '#059669', type: 'INCOME' as const },
+            { key: 'refund', icon: '🔄', color: '#34d399', type: 'INCOME' as const },
+            { key: 'interest', icon: '📈', color: '#6ee7b7', type: 'INCOME' as const },
+            { key: 'gift', icon: '🎁', color: '#a7f3d0', type: 'INCOME' as const },
+            { key: 'investment', icon: '💰', color: '#047857', type: 'INCOME' as const },
+            { key: 'other', icon: '📱', color: '#86efac', type: 'INCOME' as const },
         ];
 
         const promises = defaultCategories.map((cat) =>
             this.create({
                 userId,
-                name: cat.name,
+                key: cat.key,
                 icon: cat.icon,
                 color: cat.color,
                 type: cat.type,
@@ -99,12 +99,21 @@ export class FirebaseCategoryDataSource {
 
     /**
      * Convert Firestore document to domain model
+     * Handles migration from old 'name' field to new 'key' field
      */
-    private toDomainModel(id: string, data: DocumentData): Category {
+    private toDomainModel(id: string, data: any): Category {
+        // Migration: Extract key from old 'name' field if 'key' doesn't exist
+        let key = data.key;
+        if (!key && data.name) {
+            // Old format: "categories.expense.food" → "food"
+            const parts = data.name.split('.');
+            key = parts[parts.length - 1];
+        }
+
         return {
             id,
             userId: data.userId,
-            name: data.name,
+            key: key || 'other', // Fallback to 'other' if no key found
             icon: data.icon,
             color: data.color,
             type: data.type,

@@ -1,9 +1,11 @@
 import type { ITransactionRepository } from '@/domain/repositories/ITransactionRepository';
 import type { ICategoryRepository } from '@/domain/repositories/ICategoryRepository';
+import type { TransactionType } from '@/domain/entities/Transaction';
 
 interface CategorySpending {
     categoryId: string;
-    categoryName: string;
+    categoryKey: string;      // Category key (e.g., "food")
+    categoryType: TransactionType;  // INCOME or EXPENSE
     icon: string;
     color: string;
     amount: number;
@@ -49,7 +51,8 @@ export class GetCategoryBreakdown {
             if (category) {
                 result.push({
                     categoryId,
-                    categoryName: category.name,
+                    categoryKey: category.key,
+                    categoryType: category.type,
                     icon: category.icon,
                     color: category.color,
                     amount,

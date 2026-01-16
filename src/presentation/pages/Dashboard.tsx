@@ -10,6 +10,7 @@ import { AddTransactionModal } from '../components/AddTransactionModal';
 import { ArgentLoader } from '../components/ArgentLoader';
 import { useTransactions } from '../hooks/useTransactions';
 import { Money } from '@/domain/value-objects/Money';
+import { getCategoryName } from '../utils/categoryHelpers';
 
 /**
  * Dashboard Page
@@ -303,7 +304,7 @@ export default function Dashboard() {
                                                     color: 'var(--color-text-primary)',
                                                 }}
                                             >
-                                                {t(item.categoryName)}
+                                                {getCategoryName(t, item.categoryKey, item.categoryType)}
                                             </p>
                                             <p
                                                 style={{
