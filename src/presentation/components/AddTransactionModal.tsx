@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { PoolType } from '@/domain/entities/CashPool';
 import type { TransactionType } from '@/domain/entities/Transaction';
 import type { Category } from '@/domain/entities/Category';
 import type { CashPool } from '@/domain/entities/CashPool';

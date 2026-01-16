@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import type { CashPool } from '@/domain/entities/CashPool';
 import { Money } from '@/domain/value-objects/Money';

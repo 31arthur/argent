@@ -51,7 +51,7 @@ export class TransactionRepository implements ITransactionRepository {
         await this.dataSource.softDelete(id);
     }
 
-    async permanentDelete(id: string): Promise<void> {
+    async permanentDelete(_id: string): Promise<void> {
         // For now, we only support soft delete
         throw new Error('Permanent delete not implemented');
     }

@@ -20,7 +20,6 @@ export function TransactionItem({ transaction, pool, category, onDelete }: Trans
     const { t } = useTranslation(['transactions', 'common']);
 
     const amount = new Money(transaction.amount, pool?.currency || 'INR');
-    const typeLabel = t(`transactions:types.${transaction.type}`);
 
     return (
         <div
@@ -88,10 +87,10 @@ export function TransactionItem({ transaction, pool, category, onDelete }: Trans
                         style={{
                             fontSize: 'var(--font-size-base)',
                             fontWeight: 600,
-                            color: transaction.type === 'expense' ? 'var(--color-status-expense)' : 'var(--color-status-income)',
+                            color: 'var(--color-status-expense)',
                         }}
                     >
-                        {transaction.type === 'expense' ? '-' : '+'}{amount.format()}
+                        -{amount.format()}
                     </p>
                 </div>
 

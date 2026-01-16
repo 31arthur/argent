@@ -3,7 +3,6 @@ import type { User } from '@/domain/entities/User';
 import { UserRepository } from '@/data/repositories/UserRepository';
 import { SignInWithGoogle } from '@/domain/usecases/auth/SignInWithGoogle';
 import { SignOut } from '@/domain/usecases/auth/SignOut';
-import { GetCurrentUser } from '@/domain/usecases/auth/GetCurrentUser';
 
 interface AuthContextType {
     user: User | null;
@@ -17,7 +16,6 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 const userRepository = new UserRepository();
 const signInWithGoogleUseCase = new SignInWithGoogle(userRepository);
 const signOutUseCase = new SignOut(userRepository);
-const getCurrentUserUseCase = new GetCurrentUser(userRepository);
 
 /**
  * Auth Provider

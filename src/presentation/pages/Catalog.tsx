@@ -1,4 +1,3 @@
-import React from 'react';
 import { PageLayout } from '../layouts/PageLayout';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/shared/ui/Tabs';
 import { useArtworks } from '../hooks/useArtworks';

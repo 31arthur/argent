@@ -17,7 +17,7 @@ export class CategoryRepository implements ICategoryRepository {
         return await this.dataSource.getAll(userId);
     }
 
-    async getById(id: string): Promise<Category | null> {
+    async getById(_id: string): Promise<Category | null> {
         // Not implemented for now
         throw new Error('Not implemented');
     }
@@ -30,12 +30,12 @@ export class CategoryRepository implements ICategoryRepository {
         return await this.dataSource.create(category);
     }
 
-    async update(id: string, category: Partial<Category>): Promise<Category> {
+    async update(_id: string, _category: Partial<Category>): Promise<Category> {
         // Not implemented for now
         throw new Error('Not implemented');
     }
 
-    async delete(id: string): Promise<void> {
+    async delete(_id: string): Promise<void> {
         // Not implemented for now
         throw new Error('Not implemented');
     }

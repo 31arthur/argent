@@ -1,4 +1,3 @@
-import type { Transaction } from '@/domain/entities/Transaction';
 import type { ITransactionRepository } from '@/domain/repositories/ITransactionRepository';
 import { startOfMonth, endOfMonth } from 'date-fns';
 

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Plus } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/shared/ui/Card';
 import { Badge } from '@/shared/ui/Badge';

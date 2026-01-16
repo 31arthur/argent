@@ -1,5 +1,4 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import type { Transaction } from '@/domain/entities/Transaction';
 import { TransactionRepository } from '@/data/repositories/TransactionRepository';
 import { CashPoolRepository } from '@/data/repositories/CashPoolRepository';
 import { GetAllTransactions } from '@/domain/usecases/transactions/GetAllTransactions';
