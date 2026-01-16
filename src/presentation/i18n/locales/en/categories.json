@@ -1,0 +1,20 @@
+{
+    "personal": {
+        "food": "Food & Dining",
+        "transport": "Transportation",
+        "shopping": "Shopping",
+        "entertainment": "Entertainment",
+        "health": "Healthcare",
+        "education": "Education",
+        "utilities": "Utilities",
+        "other": "Other"
+    },
+    "office": {
+        "supplies": "Office Supplies",
+        "travel": "Business Travel",
+        "meals": "Business Meals",
+        "software": "Software & Tools",
+        "equipment": "Equipment",
+        "other": "Other"
+    }
+}

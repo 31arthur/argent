@@ -1,0 +1,257 @@
+/* Import Google Fonts - Inter for modern, readable design */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+@import "tailwindcss";
+
+/* Custom theme configuration */
+@theme {
+  /* =========================================
+     NAVY BLUE PRIMARY PALETTE - #022859
+     Light Mode: 50 (lightest) to 900 (darkest)
+     ========================================= */
+  --color-primary-50: #E6EBF3;
+  --color-primary-100: #CCD7E7;
+  --color-primary-200: #99AFCF;
+  --color-primary-300: #6687B7;
+  --color-primary-400: #335F9F;
+  --color-primary-500: #022859;
+  /* Base color */
+  --color-primary-600: #022047;
+  --color-primary-700: #011835;
+  --color-primary-800: #011023;
+  --color-primary-900: #000811;
+
+  /* =========================================
+     LIGHT THEME (Default)
+     ========================================= */
+  --color-background: #FAFBFC;
+  --color-background-secondary: #F3F4F6;
+  --color-background-sidebar: #FFFFFF;
+  --color-background-accent: var(--color-primary-50);
+
+  --color-surface: #FFFFFF;
+  --color-surface-hover: var(--color-primary-50);
+
+  /* Text Colors */
+  --color-text-primary: #1F2937;
+  --color-text-secondary: #6B7280;
+  --color-text-muted: #9CA3AF;
+  --color-text-inverse: #FFFFFF;
+  --color-text-accent: var(--color-primary-500);
+
+  /* Borders & Dividers */
+  --color-border: #E5E7EB;
+  --color-border-subtle: #F3F4F6;
+  --color-border-active: var(--color-primary-400);
+
+  /* Status Colors */
+  --color-status-net: var(--color-primary-500);
+  --color-status-income: #10B981;
+  /* Emerald green */
+  --color-status-expense: #EF4444;
+  /* Red */
+  --color-status-warning: #F59E0B;
+  /* Amber */
+  --color-status-info: var(--color-primary-500);
+
+  /* Chart Colors */
+  --color-chart-1: var(--color-primary-500);
+  --color-chart-2: var(--color-primary-300);
+  --color-chart-3: var(--color-primary-700);
+  --color-chart-4: var(--color-primary-200);
+
+  /* =========================================
+     TYPOGRAPHY
+     ========================================= */
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+
+  /* Normal readable sizes - no scaling */
+  --font-size-xs: 10px;
+  /* Labels, captions, tags */
+  --font-size-sm: 12px;
+  /* Small text, metadata */
+  --font-size-base: 14px;
+  /* Body text, buttons */
+  --font-size-lg: 16px;
+  /* Subheadings, card subtitles */
+  --font-size-xl: 20px;
+  /* Card titles, section headers */
+  --font-size-2xl: 24px;
+  /* Page titles */
+  --font-size-3xl: 28px;
+  /* Hero text, large numbers */
+  --font-size-display: 32px;
+  /* Display numbers */
+
+  /* Line heights for readability */
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
+
+  /* =========================================
+     SPACING & SHAPE
+     ========================================= */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 24px;
+  --spacing-2xl: 32px;
+  --spacing-3xl: 48px;
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  /* Layout */
+  --width-sidebar: 170px;
+
+  /* Shadows - Lighter and more subtle */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* =========================================
+   DARK THEME OVERRIDES
+   Dark Mode: Inverted palette optimized for visibility
+   ========================================= */
+.dark {
+  /* Dark mode primary palette - lighter shades for visibility */
+  --color-primary-50: #1A2942;
+  --color-primary-100: #233A5C;
+  --color-primary-200: #2D4B76;
+  --color-primary-300: #4A6B9E;
+  --color-primary-400: #6B8DC0;
+  --color-primary-500: #8FAED9;
+  /* Base - lighter for dark bg */
+  --color-primary-600: #A8C2E5;
+  --color-primary-700: #C1D6F1;
+  --color-primary-800: #DAEAFC;
+  --color-primary-900: #F0F7FF;
+
+  --color-background: #0F1419;
+  --color-background-secondary: #1A1F2E;
+  --color-background-sidebar: #0F1419;
+  --color-background-accent: var(--color-primary-50);
+
+  --color-surface: #1A1F2E;
+  --color-surface-hover: #233A5C;
+
+  --color-text-primary: #F9FAFB;
+  --color-text-secondary: #9CA3AF;
+  --color-text-muted: #6B7280;
+  --color-text-inverse: #0F1419;
+  --color-text-accent: var(--color-primary-500);
+
+  --color-border: #374151;
+  --color-border-subtle: #1F2937;
+  --color-border-active: var(--color-primary-500);
+
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Transitions */
+* {
+  transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+}
+
+/* Custom scrollbar styles */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-border);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-text-muted);
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+}
+
+/* Widget/Card Base Styles */
+.widget-card {
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  box-shadow: var(--shadow-card);
+  border: none;
+}
+
+.widget-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-lg);
+}
+
+.widget-title {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* Buttons */
+.btn-icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  color: var(--color-text-secondary);
+}
+
+.btn-icon:hover {
+  background-color: var(--color-background-accent);
+  color: var(--color-text-accent);
+  transform: translateY(-1px);
+}
+
+/* Helper Utilities */
+.text-gradient-blue {
+  background: linear-gradient(135deg, var(--color-primary-600), var(--color-primary-400));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

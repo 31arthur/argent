@@ -1,0 +1,32 @@
+{
+    "bankSelector": {
+        "label": "Bank Name",
+        "placeholder": "Select your bank",
+        "search": "Search banks..."
+    },
+    "accountIdentifier": {
+        "label": "Account Identifier",
+        "placeholder": "Last 4 digits",
+        "helper": "Enter the last 4 digits of your account number to distinguish between multiple accounts",
+        "validation": {
+            "required": "Account identifier is required for bank accounts",
+            "exactLength": "Must be exactly 4 digits",
+            "numericOnly": "Only numbers are allowed"
+        }
+    },
+    "banks": {
+        "sbi": "State Bank of India",
+        "hdfc": "HDFC Bank",
+        "icici": "ICICI Bank",
+        "axis": "Axis Bank",
+        "bob": "Bank of Baroda",
+        "pnb": "Punjab National Bank",
+        "canara": "Canara Bank",
+        "union": "Union Bank of India",
+        "kotak": "Kotak Mahindra Bank",
+        "indusind": "IndusInd Bank",
+        "yes": "YES Bank",
+        "idbi": "IDBI Bank",
+        "other": "Other Bank"
+    }
+}

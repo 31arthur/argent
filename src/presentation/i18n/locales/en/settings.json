@@ -1,0 +1,26 @@
+{
+    "title": "Settings",
+    "language": {
+        "title": "Language",
+        "description": "Choose your preferred language"
+    },
+    "theme": {
+        "title": "Theme",
+        "description": "Choose light or dark mode",
+        "light": "Light",
+        "dark": "Dark"
+    },
+    "defaultPool": {
+        "title": "Default Cash Pool",
+        "description": "Select default pool for quick transactions"
+    },
+    "categories": {
+        "title": "Manage Categories",
+        "description": "Customize your expense categories"
+    },
+    "account": {
+        "title": "Account",
+        "signOut": "Sign Out",
+        "deleteAccount": "Delete Account"
+    }
+}

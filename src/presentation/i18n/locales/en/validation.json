@@ -1,0 +1,13 @@
+{
+    "required": "This field is required",
+    "invalidEmail": "Invalid email address",
+    "invalidAmount": "Invalid amount",
+    "amountTooLow": "Amount must be greater than 0",
+    "amountTooHigh": "Amount is too high",
+    "invalidDate": "Invalid date",
+    "futureDateNotAllowed": "Future dates are not allowed",
+    "poolNameTooShort": "Pool name must be at least 2 characters",
+    "poolNameTooLong": "Pool name must be less than 50 characters",
+    "purposeTooShort": "Purpose must be at least 3 characters",
+    "purposeTooLong": "Purpose must be less than 100 characters"
+}

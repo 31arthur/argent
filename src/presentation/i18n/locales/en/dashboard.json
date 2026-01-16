@@ -1,0 +1,20 @@
+{
+    "title": "Dashboard",
+    "welcome": "Welcome back, {{name}}",
+    "summary": {
+        "title": "Summary",
+        "totalSpent": "Total Spent",
+        "monthlySpent": "This Month",
+        "todaySpent": "Today",
+        "poolBalance": "Total Balance"
+    },
+    "quickActions": {
+        "title": "Quick Actions",
+        "addTransaction": "Add Transaction",
+        "createPool": "Create Cash Pool"
+    },
+    "recentTransactions": {
+        "title": "Recent Transactions",
+        "viewAll": "View All"
+    }
+}

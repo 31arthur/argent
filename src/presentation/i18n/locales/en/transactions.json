@@ -1,0 +1,71 @@
+{
+    "title": "Transactions",
+    "subtitle": "Track your spending",
+    "types": {
+        "personal": "Personal",
+        "office": "Office"
+    },
+    "form": {
+        "amount": {
+            "label": "Amount",
+            "placeholder": "0.00"
+        },
+        "pool": {
+            "label": "Cash Pool",
+            "placeholder": "Select pool"
+        },
+        "category": {
+            "label": "Category",
+            "placeholder": "Select category"
+        },
+        "type": {
+            "label": "Type"
+        },
+        "purpose": {
+            "label": "Purpose",
+            "placeholder": "What was this for?"
+        },
+        "notes": {
+            "label": "Notes (Optional)",
+            "placeholder": "Additional details"
+        },
+        "tags": {
+            "label": "Tags (Optional)",
+            "placeholder": "Add tags"
+        },
+        "date": {
+            "label": "Date & Time"
+        }
+    },
+    "actions": {
+        "add": "Add Transaction",
+        "quickAdd": "Quick Add",
+        "edit": "Edit Transaction",
+        "delete": "Delete Transaction"
+    },
+    "filters": {
+        "title": "Filters",
+        "dateRange": "Date Range",
+        "pool": "Cash Pool",
+        "type": "Type",
+        "category": "Category",
+        "apply": "Apply Filters",
+        "reset": "Reset"
+    },
+    "summary": {
+        "total": "Total Spent",
+        "today": "Today",
+        "thisWeek": "This Week",
+        "thisMonth": "This Month"
+    },
+    "empty": {
+        "title": "No Transactions Yet",
+        "description": "Add your first transaction to start tracking"
+    },
+    "deleteConfirm": {
+        "title": "Delete Transaction?",
+        "message": "Are you sure you want to delete this transaction?",
+        "confirm": "Delete",
+        "cancel": "Cancel"
+    }
+}

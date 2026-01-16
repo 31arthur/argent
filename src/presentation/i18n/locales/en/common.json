@@ -1,0 +1,35 @@
+{
+    "app": {
+        "name": "Argent",
+        "tagline": "Track Every Rupee"
+    },
+    "actions": {
+        "add": "Add",
+        "edit": "Edit",
+        "delete": "Delete",
+        "cancel": "Cancel",
+        "save": "Save",
+        "search": "Search",
+        "filter": "Filter",
+        "clear": "Clear",
+        "confirm": "Confirm",
+        "back": "Back"
+    },
+    "states": {
+        "loading": "Loading...",
+        "empty": "No data available",
+        "error": "Something went wrong",
+        "success": "Success!"
+    },
+    "currency": {
+        "symbol": "₹",
+        "format": "{{amount}} INR"
+    },
+    "time": {
+        "today": "Today",
+        "yesterday": "Yesterday",
+        "thisWeek": "This Week",
+        "thisMonth": "This Month",
+        "lastMonth": "Last Month"
+    }
+}

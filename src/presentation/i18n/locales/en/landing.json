@@ -1,0 +1,26 @@
+{
+    "hero": {
+        "title": "Know where your money goes. Calmly.",
+        "subtitle": "Argent helps you track expenses across banks, cash, and wallets — without noise, pressure, or ads.",
+        "cta": "Continue with Google",
+        "supporting": "Get started in seconds. Your data stays yours."
+    },
+    "benefits": {
+        "title": "What Argent helps you do",
+        "trackBySource": "Log expenses from every cash pool — bank accounts, wallets, or cash at home.",
+        "separateExpenses": "Clearly divide personal and work expenses without mixing them up.",
+        "monthlyClarity": "See monthly spending summaries that make sense at a glance.",
+        "effortlessTracking": "Quick entries, smart defaults, and zero friction."
+    },
+    "privacy": {
+        "title": "Your data, your control",
+        "noAds": "Argent does not show ads and does not sell your data.",
+        "userControl": "Your data belongs to you. Always.",
+        "googleAuth": "Sign in securely using Google — only for authentication, nothing more."
+    },
+    "closing": {
+        "message": "Start tracking without overthinking.",
+        "cta": "Continue with Google",
+        "footnote": "No setup. No learning curve."
+    }
+}

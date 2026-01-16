@@ -1,0 +1,44 @@
+{
+    "title": "Cash Pools",
+    "subtitle": "Manage your fund sources",
+    "types": {
+        "bank": "Bank Account",
+        "cash": "Cash Holder",
+        "digital": "Digital Wallet"
+    },
+    "card": {
+        "balance": "Current Balance",
+        "lastTransaction": "Last Transaction",
+        "transactionCount_one": "{{count}} Transaction",
+        "transactionCount_other": "{{count}} Transactions"
+    },
+    "form": {
+        "name": {
+            "label": "Pool Name",
+            "placeholder": "e.g., HDFC Savings"
+        },
+        "type": {
+            "label": "Pool Type"
+        },
+        "initialBalance": {
+            "label": "Initial Balance",
+            "placeholder": "0.00"
+        }
+    },
+    "actions": {
+        "create": "Create Cash Pool",
+        "viewDetails": "View Details",
+        "edit": "Edit Pool",
+        "delete": "Delete Pool"
+    },
+    "empty": {
+        "title": "No Cash Pools Yet",
+        "description": "Create your first cash pool to start tracking expenses"
+    },
+    "deleteConfirm": {
+        "title": "Delete Cash Pool?",
+        "message": "Are you sure you want to delete \"{{name}}\"? This action cannot be undone.",
+        "confirm": "Delete",
+        "cancel": "Cancel"
+    }
+}
