@@ -1,0 +1,24 @@
+# Ignore build output
+lib/
+*.log
+
+# Ignore node modules
+node_modules/
+
+# Ignore environment files
+.env
+.env.local
+
+# Ignore Firebase cache
+.firebase/
+
+# Ignore IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Ignore OS files
+.DS_Store
+Thumbs.db

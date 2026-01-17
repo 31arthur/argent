@@ -1,5 +1,6 @@
 import { Outlet } from 'react-router-dom';
 import { Sidebar } from '../components/Sidebar';
+import { ChatWidget } from '../components/ChatWidget';
 
 /**
  * App Layout Component
@@ -25,6 +26,7 @@ export function AppLayout() {
             >
                 <Outlet />
             </main>
+            <ChatWidget />
         </div>
     );
 }

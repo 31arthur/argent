@@ -1,0 +1,51 @@
+{
+    "confirmation": {
+        "review_transaction": "Here's what I understood. Please confirm or make changes.",
+        "draft_confirmed": "Transaction draft confirmed.",
+        "draft_cancelled": "Transaction draft cancelled.",
+        "edit_unclear": "I'm not sure what you'd like to change. Please be more specific.",
+        "edit_failed": "I had trouble processing that edit. Please try again."
+    },
+    "agent": {
+        "extracting": "Understanding your transaction...",
+        "asking_clarification": "I need some more information.",
+        "waiting_confirmation": "Please review and confirm.",
+        "completed": "All done!",
+        "cancelled": "Cancelled.",
+        "error": "Something went wrong. Please try again."
+    },
+    "clarification": {
+        "amount": "What was the amount?",
+        "pool": "Which account or wallet?",
+        "category": "What category is this?",
+        "purpose": "What was this for?",
+        "date": "When did this happen?",
+        "type": "Was this income or an expense?"
+    },
+    "actions": {
+        "confirm": "Confirm",
+        "edit": "Edit",
+        "cancel": "Cancel",
+        "retry": "Try Again"
+    },
+    "chat": {
+        "assistant_name": "Argent Assistant",
+        "greeting": "Hi, I'm Argent. I can help you log expenses in seconds.",
+        "input_placeholder": "Type your message...",
+        "send_button": "Send",
+        "close_button": "Close chat",
+        "open_button": "Open chat assistant",
+        "mock_response": "I'm a UI demo. Backend integration coming soon!",
+        "confirmation_title": "Review Transaction",
+        "success_message": "Transaction created successfully!",
+        "cancelled_message": "Conversation cancelled."
+    },
+    "errors": {
+        "send_failed": "Failed to send message. Please try again.",
+        "network_error": "Connection lost. Please check your internet.",
+        "auth_expired": "Session expired. Please log in again.",
+        "generic": "Something went wrong. Please try again.",
+        "confirm_failed": "Failed to confirm transaction. Please try again.",
+        "cancel_failed": "Failed to cancel conversation. Please try again."
+    }
+}
