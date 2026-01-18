@@ -12,8 +12,12 @@ import { logger } from './logger';
  * Returns generic error message to client
  */
 export function handleError(error: unknown, context: string): never {
-    // Log full error server-side
-    logger.error(`[${context}] Error occurred`, { error });
+    // Log full error server-side with detailed context
+    logger.error(`[${context}] Error occurred`, {
+        error,
+        errorType: error?.constructor?.name,
+        errorMessage: error instanceof Error ? error.message : String(error)
+    });
 
     // If already an HttpsError, rethrow it
     if (error instanceof https.HttpsError) {
@@ -22,18 +26,34 @@ export function handleError(error: unknown, context: string): never {
 
     // Convert known error types
     if (error instanceof Error) {
-        // Don't leak internal error messages to client
-        logger.error(`[${context}] Internal error:`, {
+        // Log internal error details server-side
+        logger.error(`[${context}] Internal error details:`, {
             message: error.message,
             stack: error.stack,
         });
 
-        throw new https.HttpsError('internal', 'An internal error occurred');
+        // Check for specific error patterns to provide better error codes
+        const errorMessage = error.message.toLowerCase();
+
+        if (errorMessage.includes('not found')) {
+            throw new https.HttpsError('not-found', 'The requested resource was not found');
+        }
+
+        if (errorMessage.includes('unauthorized') || errorMessage.includes('permission')) {
+            throw new https.HttpsError('permission-denied', 'You do not have permission to perform this action');
+        }
+
+        if (errorMessage.includes('gemini') || errorMessage.includes('api')) {
+            throw new https.HttpsError('unavailable', 'AI service is temporarily unavailable. Please try again.');
+        }
+
+        // Generic internal error
+        throw new https.HttpsError('internal', 'An internal error occurred. Please try again.');
     }
 
     // Unknown error type
     logger.error(`[${context}] Unknown error type:`, { error });
-    throw new https.HttpsError('unknown', 'An unknown error occurred');
+    throw new https.HttpsError('unknown', 'An unexpected error occurred. Please try again.');
 }
 
 /**

@@ -4,6 +4,7 @@ import { requireAuth } from '../middleware/auth';
 import { validateAgentMessageInput } from '../middleware/validation';
 import { handleError } from '../utils/errors';
 import { logger } from '../utils/logger';
+import { AgentState } from '../domain/entities/AgentState';
 
 /**
  * Cloud Function: agentMessage
@@ -27,7 +28,7 @@ export const agentMessage = onCall(async (request): Promise<any> => {
         logger.info(`${functionName} processing message`, {
             function: functionName,
             userId,
-            conversationId,
+            conversationId: conversationId || 'new',
             messageLength: message.length,
         });
 
@@ -36,10 +37,17 @@ export const agentMessage = onCall(async (request): Promise<any> => {
 
         if (!activeConversationId) {
             // Create new conversation
+            logger.info(`${functionName} creating new conversation`, {
+                function: functionName,
+                userId,
+            });
+
             const conversation = await conversationRepository.create({
                 userId,
-                agentState: 'IDLE',
+                agentState: AgentState.IDLE,
+                activeDraftId: null,
                 isDeleted: false,
+                completedAt: null,
             });
 
             activeConversationId = conversation.id;
@@ -50,30 +58,63 @@ export const agentMessage = onCall(async (request): Promise<any> => {
                 conversationId: activeConversationId,
             });
         } else {
-            // Verify conversation ownership
+            // Verify conversation exists and ownership
             const conversation = await conversationRepository.getById(activeConversationId);
 
             if (!conversation) {
-                throw new Error('Conversation not found');
-            }
+                // Conversation doesn't exist - create a new one instead of erroring
+                logger.warn(`${functionName} conversation not found, creating new one`, {
+                    function: functionName,
+                    userId,
+                    staleConversationId: activeConversationId,
+                });
 
-            if (conversation.userId !== userId) {
+                const newConversation = await conversationRepository.create({
+                    userId,
+                    agentState: AgentState.IDLE,
+                    activeDraftId: null,
+                    isDeleted: false,
+                    completedAt: null,
+                });
+
+                activeConversationId = newConversation.id;
+
+                logger.info(`${functionName} created new conversation after stale ID`, {
+                    function: functionName,
+                    userId,
+                    conversationId: activeConversationId,
+                });
+            } else if (conversation.userId !== userId) {
+                // Conversation exists but belongs to different user
+                logger.warn(`${functionName} unauthorized access attempt`, {
+                    function: functionName,
+                    userId,
+                    conversationId: activeConversationId,
+                    conversationUserId: conversation.userId,
+                });
                 throw new Error('Unauthorized access to conversation');
             }
         }
 
         // 4. Call AgentOrchestrator
+        logger.info(`${functionName} calling orchestrator`, {
+            function: functionName,
+            userId,
+            conversationId: activeConversationId,
+        });
+
         const response = await agentOrchestrator.handleAgentMessage(
             userId,
             activeConversationId,
             message
         );
 
-        logger.info(`${functionName} completed`, {
+        logger.info(`${functionName} completed successfully`, {
             function: functionName,
             userId,
             conversationId: activeConversationId,
             agentState: response.agentState,
+            requiresUserInput: response.requiresUserInput,
         });
 
         // 5. Return structured response
@@ -87,6 +128,7 @@ export const agentMessage = onCall(async (request): Promise<any> => {
             requiresUserInput: response.requiresUserInput,
         };
     } catch (error) {
+        // handleError will throw an HttpsError, which Firebase will catch and return to client
         handleError(error, functionName);
     }
 });

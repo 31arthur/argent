@@ -144,14 +144,43 @@ export class AgentApiClient {
     private handleError(error: any, context: string): Error {
         console.error(`[AgentApiClient.${context}]`, error);
 
-        // Extract error code and message
+        // Extract error code and message from Firebase error
         const code = error.code || 'unknown';
-        const message = error.message || 'An unknown error occurred';
+        let message = error.message || 'An unknown error occurred';
+
+        // Provide more user-friendly error messages based on error codes
+        switch (code) {
+            case 'unauthenticated':
+                message = 'Please sign in to use the AI assistant';
+                break;
+            case 'permission-denied':
+                message = 'You do not have permission to perform this action';
+                break;
+            case 'not-found':
+                message = 'The requested resource was not found';
+                break;
+            case 'unavailable':
+                message = 'The AI service is temporarily unavailable. Please try again in a moment.';
+                break;
+            case 'invalid-argument':
+                // Keep the original message for validation errors as they're usually specific
+                break;
+            case 'internal':
+                message = 'An internal error occurred. Please try again.';
+                break;
+            case 'unknown':
+                message = 'An unexpected error occurred. Please try again.';
+                break;
+            default:
+                // For other error codes, use the original message if available
+                message = error.message || `An error occurred (${code})`;
+        }
 
         // Create structured error
         const structuredError = new Error(message);
         (structuredError as any).code = code;
         (structuredError as any).context = context;
+        (structuredError as any).originalError = error;
 
         return structuredError;
     }
