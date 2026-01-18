@@ -9,7 +9,7 @@ interface AgentMessageProps {
  * Agent message bubble (aligned left)
  */
 export const AgentMessage: React.FC<AgentMessageProps> = ({ message }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('agent');
 
     return (
         <div className="message-wrapper message-wrapper-agent">

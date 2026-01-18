@@ -7,7 +7,7 @@ export interface ConfirmationSummary {
     type: 'INCOME' | 'EXPENSE';
     categoryName: string;
     purpose: string;
-    date: Date;
+    date: string; // ISO string format
     notes?: string;
     tags?: string[];
 }

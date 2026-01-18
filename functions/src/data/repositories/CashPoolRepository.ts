@@ -8,7 +8,7 @@ export class CashPoolRepository implements ICashPoolRepository {
     private collectionRef: admin.firestore.CollectionReference;
 
     constructor(private firestore: admin.firestore.Firestore) {
-        this.collectionRef = firestore.collection('cashPools');
+        this.collectionRef = firestore.collection('pools');
     }
 
     async getById(id: string): Promise<CashPool | null> {

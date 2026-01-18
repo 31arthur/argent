@@ -328,10 +328,27 @@ export class AgentOrchestrator {
         draft: TransactionDraft,
         userId: string
     ): Promise<ConfirmationPayload> {
+        logger.info('AgentOrchestrator: Building confirmation payload', {
+            draftId: draft.id,
+            poolId: draft.extractedFields.poolId,
+            categoryId: draft.extractedFields.categoryId,
+            userId,
+        });
+
         const pool = await this.poolRepository.getById(draft.extractedFields.poolId!);
+        logger.info('AgentOrchestrator: Pool fetched', {
+            poolId: draft.extractedFields.poolId,
+            poolFound: !!pool,
+            poolName: pool?.name,
+        });
         const poolName = pool?.name || 'Unknown Pool';
 
         const category = await this.categoryRepository.getById(draft.extractedFields.categoryId!);
+        logger.info('AgentOrchestrator: Category fetched', {
+            categoryId: draft.extractedFields.categoryId,
+            categoryFound: !!category,
+            categoryKey: category?.key,
+        });
         const categoryName = category?.key || 'Unknown Category';
 
         return {
@@ -342,7 +359,7 @@ export class AgentOrchestrator {
                 type: draft.extractedFields.type!,
                 categoryName,
                 purpose: draft.extractedFields.purpose!,
-                date: draft.extractedFields.date!,
+                date: draft.extractedFields.date!.toISOString(),
                 notes: draft.extractedFields.notes,
                 tags: draft.extractedFields.tags,
             },

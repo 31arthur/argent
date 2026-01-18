@@ -34,11 +34,15 @@ export const agentOrchestrator = new AgentOrchestrator(
     categoryRepository
 );
 
-// Finalization use case (stub for now - requires transaction creation)
+// Import transaction repository
+import { TransactionRepository } from '../data/repositories/TransactionRepository';
+
+// Initialize transaction repository
+export const transactionRepository = new TransactionRepository(firestore);
+
+// Finalization use case - creates actual transaction from draft
 export const finalizeTransactionDraft = {
     execute: async (draftId: string, userId: string) => {
-        // TODO: Implement full FinalizeTransactionDraft use case
-        // This requires creating a real transaction from the draft
         const draft = await draftRepository.getById(draftId);
 
         if (!draft) {
@@ -59,15 +63,59 @@ export const finalizeTransactionDraft = {
             };
         }
 
-        // For now, just mark as finalized without creating a real transaction
-        await draftRepository.markAsFinalized(draftId, `txn-${Date.now()}`);
+        // Check if already finalized
+        if (draft.finalizedAt) {
+            return {
+                status: 'ALREADY_FINALIZED',
+                transactionId: draft.transactionId,
+                errorCode: undefined,
+                errorMessage: undefined,
+            };
+        }
 
-        return {
-            status: 'SUCCESS',
-            transactionId: `txn-${Date.now()}`,
-            errorCode: undefined,
-            errorMessage: undefined,
-        };
+        try {
+            // Create the actual transaction
+            const transaction = await transactionRepository.create({
+                userId: draft.userId,
+                poolId: draft.extractedFields.poolId!,
+                amount: draft.extractedFields.amount!,
+                type: draft.extractedFields.type!,
+                categoryId: draft.extractedFields.categoryId!,
+                purpose: draft.extractedFields.purpose!,
+                date: draft.extractedFields.date!,
+                notes: draft.extractedFields.notes,
+                tags: draft.extractedFields.tags,
+            });
+
+            // Mark draft as finalized
+            await draftRepository.markAsFinalized(draftId, transaction.id);
+
+            logger.info('Transaction created from draft', {
+                draftId,
+                transactionId: transaction.id,
+                userId,
+            });
+
+            return {
+                status: 'SUCCESS',
+                transactionId: transaction.id,
+                errorCode: undefined,
+                errorMessage: undefined,
+            };
+        } catch (error: any) {
+            logger.error('Failed to create transaction from draft', {
+                draftId,
+                userId,
+                error: error.message,
+            });
+
+            return {
+                status: 'ERROR',
+                errorCode: 'TRANSACTION_CREATION_FAILED',
+                errorMessage: 'Failed to create transaction',
+                transactionId: undefined,
+            };
+        }
     },
 };
 
