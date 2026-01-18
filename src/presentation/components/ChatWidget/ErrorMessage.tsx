@@ -11,7 +11,7 @@ interface ErrorMessageProps {
  * Error message component with retry and dismiss actions
  */
 export const ErrorMessage: React.FC<ErrorMessageProps> = ({ error, onRetry, onDismiss }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('agent');
 
     return (
         <div className="error-message">
@@ -29,7 +29,7 @@ export const ErrorMessage: React.FC<ErrorMessageProps> = ({ error, onRetry, onDi
             </div>
             {onRetry && (
                 <button onClick={onRetry} className="error-message-retry" type="button">
-                    {t('agent.actions.retry')}
+                    {t('actions.retry')}
                 </button>
             )}
         </div>

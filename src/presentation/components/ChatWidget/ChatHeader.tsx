@@ -9,15 +9,15 @@ interface ChatHeaderProps {
  * Chat window header with assistant name and close button
  */
 export const ChatHeader: React.FC<ChatHeaderProps> = ({ onClose }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('agent');
 
     return (
         <div className="chat-header">
-            <h3 className="chat-header-title">{t('agent.chat.assistant_name')}</h3>
+            <h3 className="chat-header-title">{t('chat.assistant_name')}</h3>
             <button
                 onClick={onClose}
                 className="chat-header-close"
-                aria-label={t('agent.chat.close_button')}
+                aria-label={t('chat.close_button')}
                 type="button"
             >
                 <X size={20} />

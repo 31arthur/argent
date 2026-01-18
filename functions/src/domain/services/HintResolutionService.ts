@@ -2,6 +2,7 @@ import { TransactionData } from '../value-objects/TransactionData';
 import { ExtractionResult } from './ExtractionResult';
 import { ICashPoolRepository } from '../repositories/ICashPoolRepository';
 import { ICategoryRepository } from '../repositories/ICategoryRepository';
+import { logger } from '../../utils/logger';
 
 /**
  * Hint Resolution Service
@@ -11,7 +12,7 @@ export class HintResolutionService {
     constructor(
         private poolRepository: ICashPoolRepository,
         private categoryRepository: ICategoryRepository
-    ) {}
+    ) { }
 
     async resolveHints(
         extraction: ExtractionResult,
@@ -38,8 +39,16 @@ export class HintResolutionService {
 
         // Resolve cash pool hint
         const cashPoolHint = extraction.fields.cashPoolHint;
+        logger.info('HintResolution: Processing pool hint', {
+            cashPoolHint,
+            hasPoolId: !!extraction.fields.poolId,
+        });
         if (cashPoolHint) {
             const poolId = await this.resolvePoolHint(cashPoolHint, userId);
+            logger.info('HintResolution: Pool hint resolved', {
+                cashPoolHint,
+                resolvedPoolId: poolId,
+            });
             if (poolId !== 'AMBIGUOUS' && poolId !== 'MISSING') {
                 fields.poolId = poolId;
                 confidence.poolId = extraction.confidence.cashPoolHint || 0.6;
@@ -48,12 +57,20 @@ export class HintResolutionService {
 
         // Resolve category hint
         const categoryHint = extraction.fields.categoryHint;
+        logger.info('HintResolution: Processing category hint', {
+            categoryHint,
+            hasCategoryId: !!extraction.fields.categoryId,
+        });
         if (categoryHint) {
             const categoryId = await this.resolveCategoryHint(
                 categoryHint,
                 fields.type || null,
                 userId
             );
+            logger.info('HintResolution: Category hint resolved', {
+                categoryHint,
+                resolvedCategoryId: categoryId,
+            });
             if (categoryId !== 'AMBIGUOUS' && categoryId !== 'MISSING') {
                 fields.categoryId = categoryId;
                 confidence.categoryId = extraction.confidence.categoryHint || 0.6;
@@ -66,6 +83,11 @@ export class HintResolutionService {
             fields.date = this.resolveDateHint(dateHint);
             confidence.date = extraction.confidence.date || 0.6;
         }
+
+        logger.info('HintResolution: Final resolved fields', {
+            fields,
+            confidence,
+        });
 
         return { fields, confidence };
     }
@@ -87,7 +109,7 @@ export class HintResolutionService {
             if (matches.length > 1) return 'AMBIGUOUS';
             return matches[0].id;
         } catch (error) {
-            console.error('[HintResolution] Error resolving pool hint:', error);
+            logger.error('HintResolution: Error resolving pool hint', { error, hint });
             return 'MISSING';
         }
     }
@@ -113,7 +135,7 @@ export class HintResolutionService {
             if (matches.length > 1) return 'AMBIGUOUS';
             return matches[0].id;
         } catch (error) {
-            console.error('[HintResolution] Error resolving category hint:', error);
+            logger.error('HintResolution: Error resolving category hint', { error, hint });
             return 'MISSING';
         }
     }
@@ -133,7 +155,7 @@ export class HintResolutionService {
 
         const parsed = new Date(hint);
         if (isNaN(parsed.getTime())) {
-            console.warn(`[HintResolution] Invalid date hint: ${hint}, defaulting to today`);
+            logger.warn('HintResolution: Invalid date hint, defaulting to today', { hint });
             return new Date();
         }
 

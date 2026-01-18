@@ -61,7 +61,7 @@ export const useChatWidget = () => {
             const greetingMessage: ChatMessage = {
                 id: `msg-${messageIdCounter.current++}`,
                 role: 'agent',
-                content: 'agent.chat.greeting',
+                content: 'chat.greeting',
                 timestamp: new Date(),
             };
             setMessages([greetingMessage]);
@@ -134,11 +134,11 @@ export const useChatWidget = () => {
 
             // Handle specific error codes
             if (err.code === 'unauthenticated') {
-                setError('agent.errors.auth_expired');
+                setError('errors.auth_expired');
             } else if (err.code === 'unavailable') {
-                setError('agent.errors.network_error');
+                setError('errors.network_error');
             } else {
-                setError('agent.errors.send_failed');
+                setError('errors.send_failed');
             }
         } finally {
             setIsLoading(false);
@@ -153,26 +153,42 @@ export const useChatWidget = () => {
         setError(null);
 
         try {
-            const response = await agentApiClient.confirmDraft(confirmationPayload.draftId);
+            // Import Firestore instance
+            const { db } = await import('@/data/firebase/config');
 
-            if (response.status === 'SUCCESS') {
-                // Add success message
-                addMessage({
-                    role: 'system',
-                    content: 'agent.chat.success_message',
-                });
+            // Import use case and repository classes
+            const { ConvertDraftToTransaction } = await import('@/domain/usecases/agent/ConvertDraftToTransaction');
+            const { AddTransaction } = await import('@/domain/usecases/transactions/AddTransaction');
+            const { TransactionDraftRepository } = await import('@/data/repositories/TransactionDraftRepository');
+            const { TransactionRepository } = await import('@/data/repositories/TransactionRepository');
+            const { CashPoolRepository } = await import('@/data/repositories/CashPoolRepository');
 
-                // Clear confirmation payload
-                setConfirmationPayload(null);
+            // Create repository instances
+            const draftRepo = new TransactionDraftRepository(db);
+            const transactionRepo = new TransactionRepository();
+            const poolRepo = new CashPoolRepository();
 
-                // Clear conversation
-                clearConversation();
-            } else if (response.status === 'ERROR') {
-                setError('agent.errors.confirm_failed');
-            }
+            // Create use case instances
+            const addTransaction = new AddTransaction(transactionRepo, poolRepo);
+            const convertDraft = new ConvertDraftToTransaction(draftRepo, addTransaction);
+
+            // Execute conversion
+            await convertDraft.execute(confirmationPayload.draftId);
+
+            // Add success message
+            addMessage({
+                role: 'system',
+                content: 'chat.success_message',
+            });
+
+            // Clear confirmation payload
+            setConfirmationPayload(null);
+
+            // Clear conversation
+            clearConversation();
         } catch (err: any) {
             console.error('[useChatWidget] Error confirming draft:', err);
-            setError('agent.errors.confirm_failed');
+            setError('errors.confirm_failed');
         } finally {
             setIsLoading(false);
         }
@@ -190,14 +206,14 @@ export const useChatWidget = () => {
             // Add cancellation message
             addMessage({
                 role: 'system',
-                content: 'agent.chat.cancelled_message',
+                content: 'chat.cancelled_message',
             });
 
             // Clear conversation
             clearConversation();
         } catch (err: any) {
             console.error('[useChatWidget] Error cancelling conversation:', err);
-            setError('agent.errors.cancel_failed');
+            setError('errors.cancel_failed');
         } finally {
             setIsLoading(false);
         }

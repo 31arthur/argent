@@ -18,7 +18,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
     onSend,
     disabled = false,
 }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('agent');
 
     const handleSend = () => {
         if (value.trim() && !disabled) {
@@ -38,18 +38,18 @@ export const ChatInput: React.FC<ChatInputProps> = ({
             <input
                 type="text"
                 className="chat-input"
-                placeholder={t('agent.chat.input_placeholder')}
+                placeholder={t('chat.input_placeholder')}
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
                 onKeyDown={handleKeyDown}
                 disabled={disabled}
-                aria-label={t('agent.chat.input_placeholder')}
+                aria-label={t('chat.input_placeholder')}
             />
             <button
                 onClick={handleSend}
                 className="chat-send-button"
                 disabled={!value.trim() || disabled}
-                aria-label={t('agent.chat.send_button')}
+                aria-label={t('chat.send_button')}
                 type="button"
             >
                 <Send size={20} />
