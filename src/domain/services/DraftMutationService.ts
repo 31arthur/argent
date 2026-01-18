@@ -27,7 +27,7 @@ import { UpdateTransactionDraft } from '@/domain/usecases/agent/UpdateTransactio
 export class DraftMutationService {
     private updateDraftUseCase: UpdateTransactionDraft;
 
-    constructor(private draftRepository: ITransactionDraftRepository) {
+    constructor(draftRepository: ITransactionDraftRepository) {
         this.updateDraftUseCase = new UpdateTransactionDraft(draftRepository);
     }
 

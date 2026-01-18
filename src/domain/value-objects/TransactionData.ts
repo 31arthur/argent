@@ -1,4 +1,4 @@
-import type { TransactionType } from './Transaction';
+import type { TransactionType } from '../entities/Transaction';
 
 /**
  * Transaction Data Value Object

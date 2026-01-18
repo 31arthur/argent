@@ -26,11 +26,13 @@ interface TransactionDraftDoc {
     conversationId: string;
     status: DraftStatus;
     extractedFields: Record<string, unknown>;
-    confidenceScores: Record<string, number>;
+    confidenceMap: Record<string, number>;
     missingFields: string[];
     isDeleted: boolean;
     confirmedAt: Timestamp | null;
     cancelledAt: Timestamp | null;
+    finalizedAt: Timestamp | null;
+    transactionId: string | null;
     createdAt: Timestamp;
     updatedAt: Timestamp;
 }
@@ -117,7 +119,7 @@ export class TransactionDraftRepository implements ITransactionDraftRepository {
     ): Promise<TransactionDraft> {
         try {
             const docRef = doc(this.collectionRef);
-            const now = serverTimestamp();
+
 
             const firestoreDoc: Omit<TransactionDraftDoc, 'createdAt' | 'updatedAt'> & {
                 createdAt: ReturnType<typeof serverTimestamp>;
@@ -127,13 +129,15 @@ export class TransactionDraftRepository implements ITransactionDraftRepository {
                 conversationId: draft.conversationId,
                 status: draft.status,
                 extractedFields: draft.extractedFields as Record<string, unknown>,
-                confidenceScores: draft.confidenceScores,
+                confidenceMap: draft.confidenceMap,
                 missingFields: draft.missingFields,
                 isDeleted: draft.isDeleted,
                 confirmedAt: draft.confirmedAt ? Timestamp.fromDate(draft.confirmedAt) : null,
                 cancelledAt: draft.cancelledAt ? Timestamp.fromDate(draft.cancelledAt) : null,
-                createdAt: now,
-                updatedAt: now,
+                finalizedAt: draft.finalizedAt ? Timestamp.fromDate(draft.finalizedAt) : null,
+                transactionId: draft.transactionId || null,
+                createdAt: serverTimestamp() as any,
+                updatedAt: serverTimestamp() as any,
             };
 
             await setDoc(docRef, firestoreDoc);
@@ -159,7 +163,7 @@ export class TransactionDraftRepository implements ITransactionDraftRepository {
             const firestoreUpdates: Partial<TransactionDraftDoc> & {
                 updatedAt: ReturnType<typeof serverTimestamp>;
             } = {
-                updatedAt: serverTimestamp(),
+                updatedAt: serverTimestamp() as unknown as Timestamp,
             };
 
             if (updates.status !== undefined) {
@@ -170,8 +174,8 @@ export class TransactionDraftRepository implements ITransactionDraftRepository {
                 firestoreUpdates.extractedFields = updates.extractedFields as Record<string, unknown>;
             }
 
-            if (updates.confidenceScores !== undefined) {
-                firestoreUpdates.confidenceScores = updates.confidenceScores;
+            if (updates.confidenceMap !== undefined) {
+                firestoreUpdates.confidenceMap = updates.confidenceMap;
             }
 
             if (updates.missingFields !== undefined) {
@@ -188,6 +192,16 @@ export class TransactionDraftRepository implements ITransactionDraftRepository {
                 firestoreUpdates.cancelledAt = updates.cancelledAt
                     ? Timestamp.fromDate(updates.cancelledAt)
                     : null;
+            }
+
+            if (updates.finalizedAt !== undefined) {
+                firestoreUpdates.finalizedAt = updates.finalizedAt
+                    ? Timestamp.fromDate(updates.finalizedAt)
+                    : null;
+            }
+
+            if (updates.transactionId !== undefined) {
+                firestoreUpdates.transactionId = updates.transactionId || null;
             }
 
             await updateDoc(docRef, firestoreUpdates);
@@ -265,11 +279,13 @@ export class TransactionDraftRepository implements ITransactionDraftRepository {
             conversationId: doc.conversationId,
             status: doc.status,
             extractedFields: doc.extractedFields as Partial<TransactionData>,
-            confidenceScores: doc.confidenceScores,
+            confidenceMap: doc.confidenceMap,
             missingFields: doc.missingFields,
             isDeleted: doc.isDeleted,
-            confirmedAt: doc.confirmedAt ? doc.confirmedAt.toDate() : null,
-            cancelledAt: doc.cancelledAt ? doc.cancelledAt.toDate() : null,
+            confirmedAt: doc.confirmedAt ? doc.confirmedAt.toDate() : undefined,
+            cancelledAt: doc.cancelledAt ? doc.cancelledAt.toDate() : undefined,
+            finalizedAt: doc.finalizedAt ? doc.finalizedAt.toDate() : undefined,
+            transactionId: doc.transactionId || undefined,
             createdAt: doc.createdAt.toDate(),
             updatedAt: doc.updatedAt.toDate(),
         };

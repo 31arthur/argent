@@ -144,7 +144,7 @@ export class AgentOrchestrator {
         message: string
     ): Promise<AgentResponse> {
         // Create new draft
-        const draft = await this.createDraftUseCase.execute(conversation.id, conversation.userId);
+        await this.createDraftUseCase.execute(conversation.id, conversation.userId);
 
         // Link draft to conversation
         await this.conversationRepository.updateState(conversation.id, AgentState.EXTRACTING);
@@ -210,7 +210,7 @@ export class AgentOrchestrator {
                     AgentState.WAITING_CONFIRMATION
                 );
 
-                return this.generateConfirmationResponse(updatedDraft, conversation.userId);
+                return this.generateConfirmationResponse(updatedDraft);
             } else {
                 // Draft has missing fields → transition to ASKING_CLARIFICATION
                 await this.transitionStateUseCase.execute(
@@ -317,7 +317,7 @@ export class AgentOrchestrator {
                 AgentState.WAITING_CONFIRMATION
             );
 
-            return this.generateConfirmationResponse(updatedDraft, conversation.userId);
+            return this.generateConfirmationResponse(updatedDraft);
         } else {
             // Still missing fields → ask next question
             const clarification = await this.clarificationStrategy.getNextClarification(
@@ -424,7 +424,7 @@ export class AgentOrchestrator {
                 message: 'confirmation.edit_unclear', // i18n key
                 agentState: AgentState.WAITING_CONFIRMATION,
                 requiresUserInput: true,
-                confirmationPayload: await this.buildConfirmationPayload(draft, conversation.userId),
+                confirmationPayload: await this.buildConfirmationPayload(draft),
             };
         }
 
@@ -447,7 +447,7 @@ export class AgentOrchestrator {
             // Check if draft is still complete
             if (updatedDraft.missingFields.length === 0) {
                 // Still complete - re-enter confirmation
-                return this.generateConfirmationResponse(updatedDraft, conversation.userId);
+                return this.generateConfirmationResponse(updatedDraft);
             } else {
                 // Now missing fields - transition to clarification
                 await this.transitionStateUseCase.execute(
@@ -476,7 +476,7 @@ export class AgentOrchestrator {
                 message: 'confirmation.edit_failed', // i18n key
                 agentState: AgentState.WAITING_CONFIRMATION,
                 requiresUserInput: true,
-                confirmationPayload: await this.buildConfirmationPayload(draft, conversation.userId),
+                confirmationPayload: await this.buildConfirmationPayload(draft),
             };
         }
     }
@@ -490,9 +490,8 @@ export class AgentOrchestrator {
      */
     private async generateConfirmationResponse(
         draft: TransactionDraft,
-        userId: string
     ): Promise<AgentResponse> {
-        const confirmationPayload = await this.buildConfirmationPayload(draft, userId);
+        const confirmationPayload = await this.buildConfirmationPayload(draft);
 
         return {
             message: 'confirmation.review_transaction', // i18n key
@@ -512,7 +511,6 @@ export class AgentOrchestrator {
      */
     private async buildConfirmationPayload(
         draft: TransactionDraft,
-        userId: string
     ): Promise<ConfirmationPayload> {
         // Get pool name
         const pool = await this.poolRepository.getById(draft.extractedFields.poolId!);

@@ -1,4 +1,4 @@
-import { useState, KeyboardEvent } from 'react';
+import { type KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Send } from 'lucide-react';
 

@@ -5,7 +5,7 @@ import type { IAgentConversationRepository } from '@/domain/repositories/IAgentC
 import type { ITransactionRepository } from '@/domain/repositories/ITransactionRepository';
 import { DraftStatus } from '@/domain/entities/DraftStatus';
 import { AgentState } from '@/domain/entities/AgentState';
-import { CreateTransaction } from '@/domain/usecases/transactions/CreateTransaction';
+import { AddTransaction } from '@/domain/usecases/transactions/AddTransaction';
 
 /**
  * Finalization Result
@@ -33,7 +33,7 @@ export interface FinalizationResult {
  * - Implement idempotency (prevent duplicate transactions)
  * - Validate all required fields
  * - Convert draft → transaction data
- * - Create transaction (via CreateTransaction use case)
+ * - Create transaction (via AddTransaction use case)
  * - Mark draft as FINALIZED
  * - Close agent conversation
  * 
@@ -48,7 +48,7 @@ export class FinalizeTransactionDraft {
         private draftRepository: ITransactionDraftRepository,
         private conversationRepository: IAgentConversationRepository,
         private transactionRepository: ITransactionRepository,
-        private createTransaction: CreateTransaction
+        private addTransaction: AddTransaction
     ) { }
 
     /**
@@ -84,8 +84,7 @@ export class FinalizeTransactionDraft {
             if (draft.status === DraftStatus.FINALIZED && draft.transactionId) {
                 // Already finalized - return existing transaction
                 const transaction = await this.transactionRepository.getById(
-                    draft.transactionId,
-                    userId
+                    draft.transactionId
                 );
 
                 return {
@@ -117,8 +116,23 @@ export class FinalizeTransactionDraft {
             // 6. Convert draft → transaction data
             const transactionData = this.mapDraftToTransactionData(draft);
 
-            // 7. Create transaction (via CreateTransaction use case)
-            const transaction = await this.createTransaction.execute(userId, transactionData);
+            // 7. Create transaction (via AddTransaction use case)
+            // AddTransaction.execute takes extracted fields, not the Omit<Transaction...> object directly
+            // I need to adapt the call or map properly.
+            // Let's check AddTransaction signature from file view previously...
+            // It takes { userId, poolId, amount, type, categoryId, purpose, notes?, tags?, date }
+
+            const transaction = await this.addTransaction.execute({
+                userId: transactionData.userId,
+                poolId: transactionData.poolId, // fixed from cashPoolId
+                amount: transactionData.amount,
+                type: transactionData.type,
+                categoryId: transactionData.categoryId,
+                purpose: transactionData.purpose, // fixed from description
+                notes: transactionData.notes,
+                tags: transactionData.tags,
+                date: transactionData.date,
+            });
 
             // 8. Mark draft as FINALIZED
             await this.draftRepository.update(draftId, {
@@ -189,22 +203,27 @@ export class FinalizeTransactionDraft {
 
     /**
      * Map draft fields to transaction data
-     * 
-     * RULES:
-     * - Amount is always positive (direction inferred from type)
-     * - All required fields must be present
-     * - No AI metadata stored in transaction
      */
-    private mapDraftToTransactionData(draft: TransactionDraft): Omit<Transaction, 'id' | 'createdAt' | 'updatedAt'> {
+    private mapDraftToTransactionData(draft: TransactionDraft): {
+        userId: string;
+        type: any; // TransactionType
+        amount: number;
+        poolId: string;
+        categoryId: string;
+        purpose: string;
+        date: Date;
+        tags: string[];
+        notes?: string;
+    } {
         const { extractedFields } = draft;
 
         return {
             userId: draft.userId,
             type: extractedFields.type!,
             amount: Math.abs(extractedFields.amount!), // Always positive
-            cashPoolId: extractedFields.poolId!,
+            poolId: extractedFields.poolId!,
             categoryId: extractedFields.categoryId!,
-            description: extractedFields.purpose || '',
+            purpose: extractedFields.purpose || '',
             date: extractedFields.date!,
             tags: extractedFields.tags || [],
             notes: extractedFields.notes,

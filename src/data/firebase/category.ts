@@ -5,7 +5,6 @@ import {
     query,
     where,
     Timestamp,
-    type DocumentData,
 } from 'firebase/firestore';
 import { db } from './config';
 import type { Category } from '@/domain/entities/Category';

@@ -72,7 +72,7 @@ export class ChatMessageRepository implements IChatMessageRepository {
                 timestamp: ReturnType<typeof serverTimestamp>;
             } = {
                 conversationId: message.conversationId,
-                role: message.role,
+                role: message.sender,
                 content: message.content,
                 timestamp: serverTimestamp(),
             };
@@ -83,7 +83,7 @@ export class ChatMessageRepository implements IChatMessageRepository {
             return {
                 id: docRef.id,
                 conversationId: message.conversationId,
-                role: message.role,
+                sender: message.sender,
                 content: message.content,
                 timestamp: new Date(),
             };
@@ -120,7 +120,7 @@ export class ChatMessageRepository implements IChatMessageRepository {
         return {
             id,
             conversationId: doc.conversationId,
-            role: doc.role,
+            sender: doc.role,
             content: doc.content,
             timestamp: doc.timestamp.toDate(),
         };

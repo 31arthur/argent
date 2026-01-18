@@ -1,0 +1,36 @@
+
+> argent@0.0.0 build
+> tsc -b && vite build
+
+src/data/repositories/__tests__/TransactionDraftRepository.test.ts(70,19): error TS6133: 'draftId' is declared but its value is never read.
+src/data/repositories/__tests__/TransactionDraftRepository.test.ts(79,19): error TS6133: 'draftId' is declared but its value is never read.
+src/domain/services/__tests__/AgentOrchestrator.integration.test.ts(49,13): error TS1117: An object literal cannot have multiple properties with the same name.
+src/domain/services/__tests__/AgentOrchestrator.integration.test.ts(131,71): error TS2345: Argument of type '{ id: string; userId: string; agentState: AgentState; activeDraftId: string; isDeleted: boolean; completedAt: null; startedAt: Date; lastActivityAt: Date; }' is not assignable to parameter of type 'AgentConversation'.
+  Types of property 'completedAt' are incompatible.
+    Type 'null' is not assignable to type 'Date | undefined'.
+src/domain/services/__tests__/AgentOrchestrator.integration.test.ts(132,74): error TS2345: Argument of type '{ id: string; userId: string; conversationId: string; status: DraftStatus; extractedFields: { amount: number; poolId: string; categoryId: string; purpose: string; type: "EXPENSE"; date: Date; }; ... 6 more ...; updatedAt: Date; }' is not assignable to parameter of type 'TransactionDraft'.
+  Types of property 'confirmedAt' are incompatible.
+    Type 'null' is not assignable to type 'Date | undefined'.
+src/domain/services/__tests__/AgentOrchestrator.integration.test.ts(177,71): error TS2345: Argument of type '{ id: string; userId: string; agentState: AgentState; activeDraftId: string; isDeleted: boolean; completedAt: null; startedAt: Date; lastActivityAt: Date; }' is not assignable to parameter of type 'AgentConversation'.
+  Types of property 'completedAt' are incompatible.
+    Type 'null' is not assignable to type 'Date | undefined'.
+src/domain/services/__tests__/AgentOrchestrator.integration.test.ts(178,74): error TS2345: Argument of type '{ id: string; userId: string; conversationId: string; status: DraftStatus; extractedFields: { amount: number; poolId: string; categoryId: string; purpose: string; type: "EXPENSE"; date: Date; }; ... 6 more ...; updatedAt: Date; }' is not assignable to parameter of type 'TransactionDraft'.
+  Types of property 'confirmedAt' are incompatible.
+    Type 'null' is not assignable to type 'Date | undefined'.
+src/domain/services/__tests__/AgentOrchestrator.integration.test.ts(231,71): error TS2345: Argument of type '{ id: string; userId: string; agentState: AgentState; activeDraftId: string; isDeleted: boolean; completedAt: null; startedAt: Date; lastActivityAt: Date; }' is not assignable to parameter of type 'AgentConversation'.
+  Types of property 'completedAt' are incompatible.
+    Type 'null' is not assignable to type 'Date | undefined'.
+src/domain/services/__tests__/AgentOrchestrator.integration.test.ts(232,74): error TS2345: Argument of type '{ id: string; userId: string; conversationId: string; status: DraftStatus; extractedFields: { amount: number; poolId: string; categoryId: string; purpose: string; type: "EXPENSE"; date: Date; }; ... 6 more ...; updatedAt: Date; }' is not assignable to parameter of type 'TransactionDraft'.
+  Types of property 'confirmedAt' are incompatible.
+    Type 'null' is not assignable to type 'Date | undefined'.
+src/domain/services/__tests__/AgentOrchestrator.integration.test.ts(233,63): error TS2345: Argument of type '{ extractedFields: { amount: number; poolId: string; categoryId: string; purpose: string; type: "EXPENSE"; date: Date; }; id: string; userId: string; conversationId: string; status: DraftStatus; ... 6 more ...; updatedAt: Date; }' is not assignable to parameter of type 'TransactionDraft'.
+  Types of property 'confirmedAt' are incompatible.
+    Type 'null' is not assignable to type 'Date | undefined'.
+src/domain/services/__tests__/AgentOrchestrator.integration.test.ts(254,17): error TS2353: Object literal may only specify known properties, and 'updatedAt' does not exist in type 'Category'.
+src/domain/services/__tests__/AgentOrchestrator.integration.test.ts(313,75): error TS2345: Argument of type '{ id: string; userId: string; agentState: AgentState; activeDraftId: string; isDeleted: boolean; completedAt: null; startedAt: Date; lastActivityAt: Date; }' is not assignable to parameter of type 'AgentConversation'.
+  Types of property 'completedAt' are incompatible.
+    Type 'null' is not assignable to type 'Date | undefined'.
+src/domain/services/__tests__/AgentOrchestrator.integration.test.ts(314,78): error TS2345: Argument of type '{ id: string; userId: string; conversationId: string; status: DraftStatus; extractedFields: { amount: number; poolId: string; categoryId: string; purpose: string; type: "EXPENSE"; date: Date; }; ... 6 more ...; updatedAt: Date; }' is not assignable to parameter of type 'TransactionDraft'.
+  Types of property 'confirmedAt' are incompatible.
+    Type 'null' is not assignable to type 'Date | undefined'.
+src/domain/services/AgentOrchestrator.ts(427,81): error TS2554: Expected 1 arguments, but got 2.

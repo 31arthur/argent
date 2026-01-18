@@ -30,6 +30,7 @@ export class CreateTransactionDraft {
             confidenceMap: {},
             missingFields: ['poolId', 'amount', 'type', 'categoryId', 'purpose', 'date'],
             status: DraftStatus.IN_PROGRESS,
+            isDeleted: false,
         });
 
         return draft;

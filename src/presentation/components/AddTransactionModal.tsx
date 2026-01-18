@@ -347,7 +347,7 @@ export function AddTransactionModal({
                         >
                             <option value="">{t('transactions:form.category.placeholder')}</option>
                             {filteredCategories.map((cat) => {
-                                const translationKey = cat.name.replace('categories.', '');
+                                const translationKey = `${cat.type.toLowerCase()}.${cat.key}`;
                                 return (
                                     <option key={cat.id} value={cat.id}>
                                         {cat.icon} {t(translationKey, { ns: 'categories' })}

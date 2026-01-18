@@ -126,7 +126,7 @@ export class AgentConversationRepository implements IAgentConversationRepository
             } = {
                 userId: conversation.userId,
                 agentState: conversation.agentState,
-                activeDraftId: conversation.activeDraftId,
+                activeDraftId: conversation.activeDraftId ?? null,
                 isDeleted: conversation.isDeleted,
                 completedAt: conversation.completedAt
                     ? Timestamp.fromDate(conversation.completedAt)
@@ -260,9 +260,9 @@ export class AgentConversationRepository implements IAgentConversationRepository
             id,
             userId: doc.userId,
             agentState: doc.agentState,
-            activeDraftId: doc.activeDraftId,
+            activeDraftId: doc.activeDraftId || undefined,
             isDeleted: doc.isDeleted,
-            completedAt: doc.completedAt ? doc.completedAt.toDate() : null,
+            completedAt: doc.completedAt ? doc.completedAt.toDate() : undefined,
             startedAt: doc.startedAt.toDate(),
             lastActivityAt: doc.lastActivityAt.toDate(),
         };

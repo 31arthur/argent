@@ -36,6 +36,7 @@ describe('AgentOrchestrator - Confirmation Flow Integration', () => {
             update: vi.fn(),
             markAsConfirmed: vi.fn(),
             markAsCancelled: vi.fn(),
+            markAsFinalized: vi.fn(),
             softDelete: vi.fn(),
             permanentDelete: vi.fn(),
         };
@@ -45,7 +46,9 @@ describe('AgentOrchestrator - Confirmation Flow Integration', () => {
             getById: vi.fn(),
             create: vi.fn(),
             update: vi.fn(),
+
             delete: vi.fn(),
+            updateBalance: vi.fn(),
         };
 
         mockCategoryRepo = {
@@ -54,6 +57,8 @@ describe('AgentOrchestrator - Confirmation Flow Integration', () => {
             create: vi.fn(),
             update: vi.fn(),
             delete: vi.fn(),
+            getByType: vi.fn(),
+            initializeDefaultCategories: vi.fn(),
         };
 
         orchestrator = new AgentOrchestrator(
@@ -72,7 +77,7 @@ describe('AgentOrchestrator - Confirmation Flow Integration', () => {
                 agentState: AgentState.WAITING_CONFIRMATION,
                 activeDraftId: 'draft-1',
                 isDeleted: false,
-                completedAt: null,
+                completedAt: undefined,
                 startedAt: new Date(),
                 lastActivityAt: new Date(),
             };
@@ -90,11 +95,11 @@ describe('AgentOrchestrator - Confirmation Flow Integration', () => {
                     type: 'EXPENSE' as const,
                     date: new Date(),
                 },
-                confidenceScores: {},
+                confidenceMap: {},
                 missingFields: [],
                 isDeleted: false,
-                confirmedAt: null,
-                cancelledAt: null,
+                confirmedAt: undefined,
+                cancelledAt: undefined,
                 createdAt: new Date(),
                 updatedAt: new Date(),
             };
@@ -103,8 +108,9 @@ describe('AgentOrchestrator - Confirmation Flow Integration', () => {
                 id: 'pool-1',
                 userId: 'user-1',
                 name: 'Main Wallet',
-                type: 'CASH' as const,
+                type: 'cash' as const,
                 balance: 1000,
+                initialBalance: 1000,
                 currency: 'INR',
                 isActive: true,
                 createdAt: new Date(),
@@ -115,9 +121,10 @@ describe('AgentOrchestrator - Confirmation Flow Integration', () => {
                 id: 'cat-1',
                 userId: 'user-1',
                 key: 'groceries',
+                icon: '🛒',
+                color: 'blue',
                 type: 'EXPENSE' as const,
                 createdAt: new Date(),
-                updatedAt: new Date(),
             };
 
             vi.mocked(mockConversationRepo.getById).mockResolvedValue(conversation);
@@ -139,7 +146,7 @@ describe('AgentOrchestrator - Confirmation Flow Integration', () => {
                 agentState: AgentState.WAITING_CONFIRMATION,
                 activeDraftId: 'draft-1',
                 isDeleted: false,
-                completedAt: null,
+                completedAt: undefined,
                 startedAt: new Date(),
                 lastActivityAt: new Date(),
             };
@@ -157,11 +164,11 @@ describe('AgentOrchestrator - Confirmation Flow Integration', () => {
                     type: 'EXPENSE' as const,
                     date: new Date(),
                 },
-                confidenceScores: {},
+                confidenceMap: {},
                 missingFields: [],
                 isDeleted: false,
-                confirmedAt: null,
-                cancelledAt: null,
+                confirmedAt: undefined,
+                cancelledAt: undefined,
                 createdAt: new Date(),
                 updatedAt: new Date(),
             };
@@ -185,7 +192,7 @@ describe('AgentOrchestrator - Confirmation Flow Integration', () => {
                 agentState: AgentState.WAITING_CONFIRMATION,
                 activeDraftId: 'draft-1',
                 isDeleted: false,
-                completedAt: null,
+                completedAt: undefined,
                 startedAt: new Date(),
                 lastActivityAt: new Date(),
             };
@@ -203,11 +210,11 @@ describe('AgentOrchestrator - Confirmation Flow Integration', () => {
                     type: 'EXPENSE' as const,
                     date: new Date(),
                 },
-                confidenceScores: {},
+                confidenceMap: {},
                 missingFields: [],
                 isDeleted: false,
-                confirmedAt: null,
-                cancelledAt: null,
+                confirmedAt: undefined,
+                cancelledAt: undefined,
                 createdAt: new Date(),
                 updatedAt: new Date(),
             };
@@ -227,8 +234,9 @@ describe('AgentOrchestrator - Confirmation Flow Integration', () => {
                 id: 'pool-1',
                 userId: 'user-1',
                 name: 'Main Wallet',
-                type: 'CASH' as const,
+                type: 'cash' as const,
                 balance: 1000,
+                initialBalance: 1000,
                 currency: 'INR',
                 isActive: true,
                 createdAt: new Date(),
@@ -238,9 +246,11 @@ describe('AgentOrchestrator - Confirmation Flow Integration', () => {
                 id: 'cat-1',
                 userId: 'user-1',
                 key: 'groceries',
+                icon: '🛒',
+                color: 'blue',
                 type: 'EXPENSE' as const,
                 createdAt: new Date(),
-                updatedAt: new Date(),
+
             });
 
             // Note: This test will fail until Gemini API is properly mocked
@@ -272,7 +282,7 @@ describe('AgentOrchestrator - Confirmation Flow Integration', () => {
                     agentState: AgentState.WAITING_CONFIRMATION,
                     activeDraftId: 'draft-1',
                     isDeleted: false,
-                    completedAt: null,
+                    completedAt: undefined,
                     startedAt: new Date(),
                     lastActivityAt: new Date(),
                 };
@@ -290,11 +300,11 @@ describe('AgentOrchestrator - Confirmation Flow Integration', () => {
                         type: 'EXPENSE' as const,
                         date: new Date(),
                     },
-                    confidenceScores: {},
+                    confidenceMap: {},
                     missingFields: [],
                     isDeleted: false,
-                    confirmedAt: null,
-                    cancelledAt: null,
+                    confirmedAt: undefined,
+                    cancelledAt: undefined,
                     createdAt: new Date(),
                     updatedAt: new Date(),
                 };

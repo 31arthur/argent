@@ -1,6 +1,6 @@
 import type { ExtractionSchema } from '@/domain/entities/ExtractionSchema';
 import type { TransactionData } from '@/domain/value-objects/TransactionData';
-import { ConfidenceLevel, mapConfidenceToNumeric } from '@/domain/entities/ConfidenceLevel';
+import { mapConfidenceToNumeric } from '@/domain/entities/ConfidenceLevel';
 import { GeminiValidationError } from '@/domain/entities/GeminiValidationError';
 import type { ExtractionResult } from './StubExtractionService';
 
@@ -38,9 +38,9 @@ export class GeminiExtractionService {
 
     constructor() {
         // TODO: Load from environment variables
-        this.GEMINI_API_KEY = process.env.GEMINI_API_KEY || '';
-        this.GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-pro';
-        this.GEMINI_TIMEOUT_MS = parseInt(process.env.GEMINI_TIMEOUT_MS || '10000', 10);
+        this.GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY || '';
+        this.GEMINI_MODEL = import.meta.env.VITE_GEMINI_MODEL || 'gemini-pro';
+        this.GEMINI_TIMEOUT_MS = parseInt(import.meta.env.VITE_GEMINI_TIMEOUT_MS || '10000', 10);
     }
 
     /**
@@ -351,7 +351,7 @@ Return ONLY the JSON object:`;
             }
         }
 
-        return data as ExtractionSchema;
+        return data as unknown as ExtractionSchema;
     }
 
     /**

@@ -1,4 +1,4 @@
-import { useTranslation } from 'react-i18next';
+
 import type { SelectableOption } from '@/data/api/AgentApiClient';
 
 interface SelectableOptionsProps {
@@ -10,7 +10,7 @@ interface SelectableOptionsProps {
  * Selectable options component for clarification questions
  */
 export const SelectableOptions: React.FC<SelectableOptionsProps> = ({ options, onSelect }) => {
-    const { t } = useTranslation();
+    // const { t } = useTranslation();
 
     return (
         <div className="selectable-options">

@@ -106,5 +106,14 @@ export interface TransactionDraft {
      * When the draft was cancelled
      * Only set when status === CANCELLED
      */
+    /**
+     * When the draft was cancelled
+     * Only set when status === CANCELLED
+     */
     cancelledAt?: Date;
+
+    /**
+     * Whether the draft is soft deleted
+     */
+    isDeleted: boolean;
 }

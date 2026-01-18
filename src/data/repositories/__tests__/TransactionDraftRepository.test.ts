@@ -37,33 +37,7 @@ describe('TransactionDraftRepository', () => {
     describe('Data Conversion', () => {
         it('should convert Firestore document to TransactionDraft entity', () => {
             // This test demonstrates the expected conversion logic
-            const firestoreDoc = {
-                userId: 'user-1',
-                conversationId: 'conv-1',
-                status: DraftStatus.IN_PROGRESS,
-                extractedFields: {
-                    amount: 500,
-                    purpose: 'groceries',
-                },
-                confidenceScores: {
-                    amount: 0.9,
-                    purpose: 0.8,
-                },
-                missingFields: ['poolId', 'categoryId'],
-                isDeleted: false,
-                confirmedAt: null,
-                cancelledAt: null,
-                createdAt: {
-                    toDate: () => new Date('2026-01-17'),
-                    seconds: 0,
-                    nanoseconds: 0,
-                },
-                updatedAt: {
-                    toDate: () => new Date('2026-01-17'),
-                    seconds: 0,
-                    nanoseconds: 0,
-                },
-            };
+
 
             // Expected entity structure
             const expectedEntity = {
@@ -93,7 +67,7 @@ describe('TransactionDraftRepository', () => {
 
     describe('Status Transitions', () => {
         it('should mark draft as confirmed', async () => {
-            const draftId = 'draft-1';
+
 
             // This test demonstrates the expected behavior
             // Actual implementation would require proper Firestore mocking
@@ -102,7 +76,7 @@ describe('TransactionDraftRepository', () => {
         });
 
         it('should mark draft as cancelled', async () => {
-            const draftId = 'draft-1';
+
 
             expect(repository.markAsCancelled).toBeDefined();
             expect(typeof repository.markAsCancelled).toBe('function');
