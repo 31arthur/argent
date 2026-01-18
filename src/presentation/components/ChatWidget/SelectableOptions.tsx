@@ -10,7 +10,7 @@ interface SelectableOptionsProps {
  * Selectable options component for clarification questions
  */
 export const SelectableOptions: React.FC<SelectableOptionsProps> = ({ options, onSelect }) => {
-    const { t } = useTranslation();
+
 
     return (
         <div className="selectable-options">
