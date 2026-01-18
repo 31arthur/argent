@@ -80,7 +80,9 @@ export class ConvertDraftToTransaction {
             purpose: purpose!,
             notes,
             tags,
-            date,
+            date: date && typeof (date as any).toDate === 'function'
+                ? (date as any).toDate()
+                : new Date(date!),
         });
 
         return transaction;

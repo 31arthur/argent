@@ -168,6 +168,9 @@ export const useChatWidget = () => {
             const transactionRepo = new TransactionRepository();
             const poolRepo = new CashPoolRepository();
 
+            // First, mark the draft as confirmed
+            await draftRepo.markAsConfirmed(confirmationPayload.draftId);
+
             // Create use case instances
             const addTransaction = new AddTransaction(transactionRepo, poolRepo);
             const convertDraft = new ConvertDraftToTransaction(draftRepo, addTransaction);
