@@ -11,7 +11,7 @@ interface ChatLauncherProps {
  * Positioned at bottom-right corner
  */
 export const ChatLauncher: React.FC<ChatLauncherProps> = ({ isOpen, onClick }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('agent');
 
     if (isOpen) return null;
 
@@ -19,7 +19,7 @@ export const ChatLauncher: React.FC<ChatLauncherProps> = ({ isOpen, onClick }) =
         <button
             onClick={onClick}
             className="chat-launcher"
-            aria-label={t('agent.chat.open_button')}
+            aria-label={t('chat.open_button')}
             type="button"
         >
             <MessageCircle size={24} />

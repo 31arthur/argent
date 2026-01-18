@@ -19,7 +19,7 @@ export const ConfirmationCard: React.FC<ConfirmationCardProps> = ({
     onCancel,
     isLoading,
 }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('agent');
     const { summary } = payload;
 
     // Format date
@@ -31,7 +31,7 @@ export const ConfirmationCard: React.FC<ConfirmationCardProps> = ({
 
     return (
         <div className="confirmation-card">
-            <h4 className="confirmation-card-title">{t('agent.chat.confirmation_title')}</h4>
+            <h4 className="confirmation-card-title">{t('chat.confirmation_title')}</h4>
 
             <div className="confirmation-card-summary">
                 <div className="confirmation-card-row">
@@ -90,7 +90,7 @@ export const ConfirmationCard: React.FC<ConfirmationCardProps> = ({
                     disabled={isLoading}
                     type="button"
                 >
-                    {isLoading ? 'Confirming...' : t('agent.actions.confirm')}
+                    {isLoading ? 'Confirming...' : t('actions.confirm')}
                 </button>
                 <button
                     onClick={onEdit}
@@ -98,7 +98,7 @@ export const ConfirmationCard: React.FC<ConfirmationCardProps> = ({
                     disabled={isLoading}
                     type="button"
                 >
-                    {t('agent.actions.edit')}
+                    {t('actions.edit')}
                 </button>
                 <button
                     onClick={onCancel}
@@ -106,7 +106,7 @@ export const ConfirmationCard: React.FC<ConfirmationCardProps> = ({
                     disabled={isLoading}
                     type="button"
                 >
-                    {t('agent.actions.cancel')}
+                    {t('actions.cancel')}
                 </button>
             </div>
         </div>

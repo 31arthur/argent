@@ -13,6 +13,7 @@ import categoriesEN from './locales/en/categories.json';
 import settingsEN from './locales/en/settings.json';
 import validationEN from './locales/en/validation.json';
 import banksEN from './locales/en/banks.json';
+import agentEN from './locales/en/agent.json';
 
 const resources = {
     en: {
@@ -26,6 +27,7 @@ const resources = {
         settings: settingsEN,
         validation: validationEN,
         banks: banksEN,
+        agent: agentEN,
     },
     // Future: hi (Hindi), te (Telugu), etc.
 };
