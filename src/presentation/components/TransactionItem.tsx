@@ -36,7 +36,7 @@ export function TransactionItem({ transaction, pool, category, onDelete }: Trans
                 padding: '16px 0',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '16px',
+                gap: '12px',
                 borderBottom: '1px solid var(--color-border-subtle)',
                 transition: 'background-color 0.2s',
             }}
@@ -45,14 +45,14 @@ export function TransactionItem({ transaction, pool, category, onDelete }: Trans
             {category ? (
                 <div
                     style={{
-                        width: '48px',
-                        height: '48px',
-                        borderRadius: '16px',
+                        width: '40px',
+                        height: '40px',
+                        borderRadius: '12px',
                         backgroundColor: category.color + '15', // very subtle opacity
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        fontSize: '20px',
+                        fontSize: '18px',
                         color: category.color,
                         flexShrink: 0,
                     }}
@@ -175,6 +175,11 @@ export function TransactionItem({ transaction, pool, category, onDelete }: Trans
                         padding: '8px',
                         borderRadius: '50%',
                         flexShrink: 0,
+                        minWidth: '44px',
+                        minHeight: '44px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
                     }}
                     onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-status-expense)'}
                     onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-text-muted)'}

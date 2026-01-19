@@ -63,7 +63,11 @@ export function CashPoolCard({ pool, onEdit, onDelete, onClick }: CashPoolCardPr
                                 onEdit();
                             }}
                             aria-label={t('pools:actions.edit')}
-                            style={{ color: 'var(--color-text-secondary)' }}
+                            style={{
+                                color: 'var(--color-text-secondary)',
+                                minWidth: '44px',
+                                minHeight: '44px',
+                            }}
                         >
                             ✎
                         </button>
@@ -76,7 +80,11 @@ export function CashPoolCard({ pool, onEdit, onDelete, onClick }: CashPoolCardPr
                                 onDelete();
                             }}
                             aria-label={t('pools:actions.delete')}
-                            style={{ color: 'var(--color-status-latest)' }}
+                            style={{
+                                color: 'var(--color-status-latest)',
+                                minWidth: '44px',
+                                minHeight: '44px',
+                            }}
                         >
                             ×
                         </button>

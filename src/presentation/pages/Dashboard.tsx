@@ -56,9 +56,16 @@ export default function Dashboard() {
     }
 
     return (
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-7xl mx-auto pt-16 md:pt-0">
             {/* Header */}
-            <div style={{ marginBottom: 'var(--spacing-xl)', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '16px' }}>
+            <div
+                className="stack-mobile"
+                style={{
+                    marginBottom: 'var(--spacing-xl)',
+                    justifyContent: 'space-between',
+                    alignItems: 'flex-start',
+                }}
+            >
                 <div>
                     <h1
                         style={{
@@ -83,7 +90,7 @@ export default function Dashboard() {
 
                 <button
                     onClick={() => setIsAddModalOpen(true)}
-                    className="btn-primary"
+                    className="btn-primary w-full sm:w-auto"
                     style={{
                         padding: 'var(--spacing-sm) var(--spacing-lg)',
                         backgroundColor: 'var(--color-text-primary)',
@@ -98,6 +105,8 @@ export default function Dashboard() {
                         gap: 'var(--spacing-sm)',
                         boxShadow: 'var(--shadow-md)',
                         transition: 'transform 0.2s',
+                        minHeight: '44px',
+                        justifyContent: 'center',
                     }}
                 >
                     + {t('dashboard:quickActions.addTransaction')}
@@ -106,10 +115,8 @@ export default function Dashboard() {
 
             {/* Summary Cards */}
             <div
+                className="grid-responsive-1 grid-responsive-2 grid-responsive-3"
                 style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-                    gap: 'var(--spacing-lg)',
                     marginBottom: 'var(--spacing-xl)',
                 }}
             >

@@ -117,10 +117,13 @@ export function AddTransactionModal({
             onClick={handleClose}
         >
             <div
-                className="bg-[var(--color-background-secondary)] border border-[var(--color-border)] rounded-[var(--radius)] w-full max-w-[500px] max-h-[90vh] overflow-y-auto"
+                className="bg-[var(--color-background-secondary)] border border-[var(--color-border)] w-full overflow-y-auto"
                 style={{
                     padding: 'var(--spacing-xl)',
                     fontFamily: 'var(--font-sans)',
+                    borderRadius: 'var(--radius)',
+                    maxWidth: '500px',
+                    maxHeight: '90vh',
                 }}
                 onClick={(e) => e.stopPropagation()}
             >

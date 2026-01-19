@@ -56,12 +56,12 @@ export default function Transactions() {
     }
 
     return (
-        <div style={{ padding: 'var(--spacing-xl)' }}>
+        <div className="pt-16 md:pt-0" style={{ padding: 'var(--spacing-xl)' }}>
             <div
+                className="stack-mobile"
                 style={{
-                    display: 'flex',
                     justifyContent: 'space-between',
-                    alignItems: 'center',
+                    alignItems: 'flex-start',
                     marginBottom: 'var(--spacing-xl)',
                 }}
             >
@@ -91,6 +91,7 @@ export default function Transactions() {
                 <button
                     onClick={() => setIsAddModalOpen(true)}
                     disabled={pools.length === 0}
+                    className="w-full sm:w-auto"
                     style={{
                         padding: 'var(--spacing-sm) var(--spacing-lg)',
                         fontSize: 'var(--font-size-base)',
@@ -102,6 +103,7 @@ export default function Transactions() {
                         color: 'var(--color-text-inverse)',
                         cursor: pools.length === 0 ? 'not-allowed' : 'pointer',
                         opacity: pools.length === 0 ? 0.5 : 1,
+                        minHeight: '44px',
                     }}
                 >
                     + {t('transactions:actions.add')}

@@ -83,12 +83,12 @@ export default function CashPools() {
     }
 
     return (
-        <div style={{ padding: 'var(--spacing-xl)' }}>
+        <div className="pt-16 md:pt-0" style={{ padding: 'var(--spacing-xl)' }}>
             <div
+                className="stack-mobile"
                 style={{
-                    display: 'flex',
                     justifyContent: 'space-between',
-                    alignItems: 'center',
+                    alignItems: 'flex-start',
                     marginBottom: 'var(--spacing-xl)',
                 }}
             >
@@ -118,6 +118,7 @@ export default function CashPools() {
                 <button
                     onClick={() => setIsCreateModalOpen(true)}
                     disabled={!user}
+                    className="w-full sm:w-auto"
                     style={{
                         padding: 'var(--spacing-sm) var(--spacing-lg)',
                         fontSize: 'var(--font-size-base)',
@@ -129,6 +130,7 @@ export default function CashPools() {
                         color: 'var(--color-text-inverse)',
                         cursor: user ? 'pointer' : 'not-allowed',
                         opacity: user ? 1 : 0.5,
+                        minHeight: '44px',
                     }}
                 >
                     + {t('pools:actions.create')}
@@ -185,9 +187,8 @@ export default function CashPools() {
                 </div>
             ) : (
                 <div
+                    className="grid-responsive-1 grid-responsive-2 grid-responsive-3"
                     style={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
                         gap: 'var(--spacing-lg)',
                     }}
                 >

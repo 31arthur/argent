@@ -17,6 +17,7 @@ export function AppLayout() {
         >
             <Sidebar />
             <main
+                className="transition-all duration-300"
                 style={{
                     marginLeft: 'var(--width-sidebar)',
                     padding: 'var(--spacing-lg)',
