@@ -14,6 +14,10 @@ import settingsEN from './locales/en/settings.json';
 import validationEN from './locales/en/validation.json';
 import banksEN from './locales/en/banks.json';
 import agentEN from './locales/en/agent.json';
+import budgetsEN from './locales/en/budgets.json';
+import leadsEN from './locales/en/leads.json';
+import loansEN from './locales/en/loans.json';
+import personsEN from './locales/en/persons.json';
 
 const resources = {
     en: {
@@ -28,6 +32,10 @@ const resources = {
         validation: validationEN,
         banks: banksEN,
         agent: agentEN,
+        budgets: budgetsEN,
+        leads: leadsEN,
+        loans: loansEN,
+        persons: personsEN,
     },
     // Future: hi (Hindi), te (Telugu), etc.
 };

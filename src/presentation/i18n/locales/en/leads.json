@@ -1,0 +1,44 @@
+{
+    "title": "Leads",
+    "subtitle": "Track potential income opportunities",
+    "addLead": "Add Lead",
+    "noLeads": "No leads yet. Add your first potential income opportunity!",
+    "totalExpected": "Total Expected",
+    "weightedValue": "Weighted Value",
+    "status": {
+        "open": "Open",
+        "won": "Won",
+        "lost": "Lost",
+        "cancelled": "Cancelled"
+    },
+    "form": {
+        "title": "Title",
+        "titlePlaceholder": "e.g., Freelance Project - ABC Corp",
+        "source": "Source",
+        "sourcePlaceholder": "e.g., Referral, Cold Outreach",
+        "expectedAmount": "Expected Amount",
+        "probability": "Probability (%)",
+        "expectedCloseDate": "Expected Close Date",
+        "status": "Status",
+        "notes": "Notes",
+        "tags": "Tags"
+    },
+    "import": {
+        "title": "Import Leads",
+        "uploadFile": "Upload CSV or JSON",
+        "preview": "Preview",
+        "confirm": "Confirm Import",
+        "validRecords": "{{count}} valid records",
+        "invalidRecords": "{{count}} invalid records"
+    },
+    "actions": {
+        "create": "Create",
+        "edit": "Edit",
+        "delete": "Delete",
+        "save": "Save",
+        "cancel": "Cancel",
+        "import": "Import",
+        "markWon": "Mark as Won",
+        "markLost": "Mark as Lost"
+    }
+}

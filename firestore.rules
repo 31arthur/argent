@@ -1,0 +1,247 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper function: Check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Helper function: Check if user owns the resource
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    // Helper function: Validate required fields exist
+    function hasRequiredFields(fields) {
+      return request.resource.data.keys().hasAll(fields);
+    }
+    
+    // Helper function: Validate pool type
+    function isValidPoolType() {
+      return request.resource.data.type in ['bank', 'cash', 'digital'];
+    }
+    
+    // Helper function: Validate transaction type
+    function isValidTransactionType() {
+      return request.resource.data.type in ['INCOME', 'EXPENSE'];
+    }
+    
+    // Cash Pools Collection
+    match /pools/{poolId} {
+      allow read: if isAuthenticated() && 
+                     resource.data.userId == request.auth.uid;
+      
+      allow create: if isAuthenticated() && 
+                       request.resource.data.userId == request.auth.uid &&
+                       hasRequiredFields(['userId', 'name', 'type', 'balance', 'initialBalance', 'currency', 'isActive']) &&
+                       isValidPoolType() &&
+                       request.resource.data.name is string &&
+                       request.resource.data.name.size() >= 2 &&
+                       request.resource.data.balance is number &&
+                       request.resource.data.initialBalance is number &&
+                       request.resource.data.initialBalance >= 0 &&
+                       request.resource.data.currency is string &&
+                       request.resource.data.isActive == true &&
+                       request.resource.data.icon is string &&
+                       request.resource.data.color is string;
+      
+      allow update: if isAuthenticated() && 
+                       resource.data.userId == request.auth.uid &&
+                       request.resource.data.userId == resource.data.userId;
+      
+      allow delete: if isAuthenticated() && 
+                       resource.data.userId == request.auth.uid;
+    }
+    
+    // Transactions Collection
+    match /transactions/{transactionId} {
+      allow read: if isAuthenticated() && 
+                     resource.data.userId == request.auth.uid;
+      
+      allow create: if isAuthenticated() && 
+                       request.resource.data.userId == request.auth.uid &&
+                       hasRequiredFields(['userId', 'poolId', 'amount', 'type', 'categoryId', 'purpose', 'date']) &&
+                       isValidTransactionType() &&
+                       request.resource.data.amount is number &&
+                       request.resource.data.amount > 0 &&
+                       request.resource.data.purpose is string &&
+                       request.resource.data.purpose.size() >= 2;
+      
+      allow update: if isAuthenticated() && 
+                       resource.data.userId == request.auth.uid &&
+                       request.resource.data.userId == resource.data.userId;
+      
+      allow delete: if isAuthenticated() && 
+                       resource.data.userId == request.auth.uid;
+    }
+    
+    // Transaction Drafts Collection (for AI Agent)
+    match /transactionDrafts/{draftId} {
+      allow read: if isAuthenticated() && 
+                     resource.data.userId == request.auth.uid;
+      
+      allow create: if isAuthenticated() && 
+                       request.resource.data.userId == request.auth.uid &&
+                       hasRequiredFields(['userId', 'conversationId', 'status', 'extractedFields', 'confidenceScores', 'missingFields', 'isDeleted']) &&
+                       request.resource.data.isDeleted == false;
+      
+      allow update: if isAuthenticated() && 
+                       resource.data.userId == request.auth.uid &&
+                       request.resource.data.userId == resource.data.userId;
+      
+      allow delete: if isAuthenticated() && 
+                       resource.data.userId == request.auth.uid;
+    }
+    
+    // Agent Conversations Collection
+    match /agentConversations/{conversationId} {
+      allow read: if isAuthenticated() && 
+                     resource.data.userId == request.auth.uid;
+      
+      allow create: if isAuthenticated() && 
+                       request.resource.data.userId == request.auth.uid;
+      
+      allow update: if isAuthenticated() && 
+                       resource.data.userId == request.auth.uid &&
+                       request.resource.data.userId == resource.data.userId;
+      
+      allow delete: if isAuthenticated() && 
+                       resource.data.userId == request.auth.uid;
+    }
+    
+    // Chat Messages Collection (nested under conversations)
+    match /agentConversations/{conversationId}/messages/{messageId} {
+      allow read: if isAuthenticated();
+      
+      allow create: if isAuthenticated();
+      
+      allow update: if isAuthenticated();
+      
+      allow delete: if isAuthenticated();
+    }
+    
+    // Categories Collection
+    match /categories/{categoryId} {
+      allow read: if isAuthenticated() && 
+                     resource.data.userId == request.auth.uid;
+      
+      allow create: if isAuthenticated() && 
+                       request.resource.data.userId == request.auth.uid;
+      
+      allow update: if isAuthenticated() && 
+                       resource.data.userId == request.auth.uid &&
+                       request.resource.data.userId == resource.data.userId;
+      
+      allow delete: if isAuthenticated() && 
+                       resource.data.userId == request.auth.uid;
+    }
+    
+    // Budgets Collection
+    match /budgets/{budgetId} {
+      allow read: if isAuthenticated() && 
+                     resource.data.userId == request.auth.uid;
+      
+      allow create: if isAuthenticated() && 
+                       request.resource.data.userId == request.auth.uid &&
+                       hasRequiredFields(['userId', 'month', 'year']) &&
+                       request.resource.data.month is int &&
+                       request.resource.data.month >= 1 &&
+                       request.resource.data.month <= 12 &&
+                       request.resource.data.year is int &&
+                       request.resource.data.year >= 2000;
+      
+      allow update: if isAuthenticated() && 
+                       resource.data.userId == request.auth.uid &&
+                       request.resource.data.userId == resource.data.userId;
+      
+      allow delete: if isAuthenticated() && 
+                       resource.data.userId == request.auth.uid;
+    }
+    
+    // Budget Categories Collection
+    match /budgetCategories/{budgetCategoryId} {
+      allow read: if isAuthenticated();
+      
+      allow create: if isAuthenticated() &&
+                       hasRequiredFields(['budgetId', 'categoryId', 'plannedAmount']) &&
+                       request.resource.data.plannedAmount is number &&
+                       request.resource.data.plannedAmount >= 0;
+      
+      allow update: if isAuthenticated();
+      
+      allow delete: if isAuthenticated();
+    }
+    
+    // Leads Collection
+    match /leads/{leadId} {
+      allow read: if isAuthenticated() && 
+                     resource.data.userId == request.auth.uid;
+      
+      allow create: if isAuthenticated() && 
+                       request.resource.data.userId == request.auth.uid &&
+                       hasRequiredFields(['userId', 'title', 'expectedAmount', 'probability', 'status']) &&
+                       request.resource.data.title is string &&
+                       request.resource.data.title.size() >= 1 &&
+                       request.resource.data.expectedAmount is number &&
+                       request.resource.data.expectedAmount > 0 &&
+                       request.resource.data.probability is number &&
+                       request.resource.data.probability >= 0 &&
+                       request.resource.data.probability <= 100 &&
+                       request.resource.data.status in ['OPEN', 'WON', 'LOST', 'CANCELLED'];
+      
+      allow update: if isAuthenticated() && 
+                       resource.data.userId == request.auth.uid &&
+                       request.resource.data.userId == resource.data.userId;
+      
+      allow delete: if isAuthenticated() && 
+                       resource.data.userId == request.auth.uid;
+    }
+    
+    // Persons Collection
+    match /persons/{personId} {
+      allow read: if isAuthenticated() && 
+                     resource.data.userId == request.auth.uid;
+      
+      allow create: if isAuthenticated() && 
+                       request.resource.data.userId == request.auth.uid &&
+                       hasRequiredFields(['userId', 'name']) &&
+                       request.resource.data.name is string &&
+                       request.resource.data.name.size() >= 2;
+      
+      allow update: if isAuthenticated() && 
+                       resource.data.userId == request.auth.uid &&
+                       request.resource.data.userId == resource.data.userId;
+      
+      allow delete: if isAuthenticated() && 
+                       resource.data.userId == request.auth.uid;
+    }
+    
+    // Loans Collection
+    match /loans/{loanId} {
+      allow read: if isAuthenticated() && 
+                     resource.data.userId == request.auth.uid;
+      
+      allow create: if isAuthenticated() && 
+                       request.resource.data.userId == request.auth.uid &&
+                       hasRequiredFields(['userId', 'personId', 'direction', 'principalAmount', 'borrowedDate', 'status']) &&
+                       request.resource.data.direction in ['TAKEN', 'GIVEN'] &&
+                       request.resource.data.principalAmount is number &&
+                       request.resource.data.principalAmount > 0 &&
+                       request.resource.data.status in ['ACTIVE', 'REPAID', 'DEFAULTED'];
+      
+      allow update: if isAuthenticated() && 
+                       resource.data.userId == request.auth.uid &&
+                       request.resource.data.userId == resource.data.userId;
+      
+      allow delete: if isAuthenticated() && 
+                       resource.data.userId == request.auth.uid;
+    }
+    
+    // Deny all other access
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

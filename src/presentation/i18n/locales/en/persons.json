@@ -1,0 +1,24 @@
+{
+    "title": "Persons",
+    "subtitle": "Manage individuals for loans and settlements",
+    "addPerson": "Add Person",
+    "noPersons": "No persons yet. Add someone to track loans!",
+    "loanCount": "{{count}} loan(s)",
+    "form": {
+        "name": "Name",
+        "namePlaceholder": "Full name",
+        "email": "Email",
+        "emailPlaceholder": "email@example.com",
+        "phone": "Phone",
+        "phonePlaceholder": "+1234567890",
+        "notes": "Notes"
+    },
+    "actions": {
+        "create": "Create",
+        "edit": "Edit",
+        "delete": "Delete",
+        "save": "Save",
+        "cancel": "Cancel"
+    },
+    "deleteWarning": "This person has {{count}} active loan(s). Are you sure you want to delete?"
+}

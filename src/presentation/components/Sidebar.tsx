@@ -38,6 +38,10 @@ export function Sidebar({ className }: SidebarProps) {
         { icon: LayoutGrid, label: t('common:app.name'), href: '/dashboard', title: 'Dashboard' },
         { icon: Wallet, label: 'Cash Pools', href: '/pools', title: 'Cash Pools' },
         { icon: Receipt, label: 'Transactions', href: '/transactions', title: 'Transactions' },
+        { icon: Receipt, label: 'Budgets', href: '/budgets', title: 'Budgets' },
+        { icon: Receipt, label: 'Leads', href: '/leads', title: 'Leads' },
+        { icon: Receipt, label: 'Loans', href: '/loans', title: 'Loans' },
+        { icon: Receipt, label: 'Persons', href: '/persons', title: 'Persons' },
     ];
 
     const isActive = (href: string) => location.pathname === href;

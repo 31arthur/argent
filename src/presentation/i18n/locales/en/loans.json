@@ -1,0 +1,40 @@
+{
+    "title": "Loans",
+    "subtitle": "Track borrowed and lent money",
+    "addLoan": "Add Loan",
+    "noLoans": "No loans yet. Track money you've borrowed or lent!",
+    "direction": {
+        "taken": "Borrowed",
+        "given": "Lent"
+    },
+    "status": {
+        "active": "Active",
+        "repaid": "Repaid",
+        "defaulted": "Defaulted"
+    },
+    "summary": {
+        "totalTaken": "Total Borrowed",
+        "totalGiven": "Total Lent",
+        "netPosition": "Net Position"
+    },
+    "form": {
+        "person": "Person",
+        "selectPerson": "Select a person",
+        "direction": "Direction",
+        "principalAmount": "Principal Amount",
+        "interestRate": "Interest Rate (%)",
+        "borrowedDate": "Borrowed Date",
+        "expectedRepaymentDate": "Expected Repayment Date",
+        "actualRepaymentDate": "Actual Repayment Date",
+        "status": "Status",
+        "notes": "Notes"
+    },
+    "actions": {
+        "create": "Create",
+        "edit": "Edit",
+        "delete": "Delete",
+        "save": "Save",
+        "cancel": "Cancel",
+        "markRepaid": "Mark as Repaid"
+    }
+}

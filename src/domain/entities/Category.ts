@@ -19,4 +19,6 @@ export interface Category {
     type: TransactionType; // INCOME or EXPENSE
     isDefault?: boolean; // System-provided categories
     createdAt?: Date;
+    updatedAt?: Date; // Track when category was last modified
 }
+

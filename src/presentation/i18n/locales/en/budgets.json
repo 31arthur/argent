@@ -1,0 +1,46 @@
+{
+    "title": "Budgets",
+    "subtitle": "Plan your monthly spending",
+    "createBudget": "Create Budget",
+    "selectMonth": "Select Month",
+    "selectYear": "Select Year",
+    "noBudgets": "No budgets yet. Create your first budget to start planning!",
+    "totalPlanned": "Total Planned",
+    "categoryCount": "{{count}} Categories",
+    "carryForward": "Carry Forward from Previous Month",
+    "months": {
+        "1": "January",
+        "2": "February",
+        "3": "March",
+        "4": "April",
+        "5": "May",
+        "6": "June",
+        "7": "July",
+        "8": "August",
+        "9": "September",
+        "10": "October",
+        "11": "November",
+        "12": "December"
+    },
+    "detail": {
+        "title": "Budget for {{month}} {{year}}",
+        "addCategory": "Add Category",
+        "plannedAmount": "Planned Amount",
+        "actualSpent": "Actual Spent",
+        "difference": "Difference",
+        "noCategories": "No categories allocated yet"
+    },
+    "actions": {
+        "create": "Create",
+        "edit": "Edit",
+        "delete": "Delete",
+        "save": "Save",
+        "cancel": "Cancel"
+    },
+    "form": {
+        "month": "Month",
+        "year": "Year",
+        "name": "Budget Name (Optional)",
+        "notes": "Notes"
+    }
+}
