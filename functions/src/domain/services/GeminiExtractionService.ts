@@ -17,7 +17,7 @@ export class GeminiExtractionService {
     constructor() {
         this.GEMINI_API_KEY = process.env.GEMINI_API_KEY || '';
         this.GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-1.5-flash';
-        this.GEMINI_TIMEOUT_MS = parseInt(process.env.GEMINI_TIMEOUT_MS || '15000', 10);
+        this.GEMINI_TIMEOUT_MS = parseInt(process.env.GEMINI_TIMEOUT_MS || '60000', 10);
     }
 
     async extract(

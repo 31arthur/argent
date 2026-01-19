@@ -206,10 +206,17 @@ export class AgentOrchestrator {
             throw new Error('No active draft found for conversation');
         }
 
-        const fieldToClarify = draft.missingFields[0];
-        if (!fieldToClarify) {
-            throw new Error('No missing fields to clarify');
+        // If no missing fields, the draft is complete - transition to confirmation
+        if (draft.missingFields.length === 0) {
+            await this.transitionStateUseCase.execute(
+                conversation.id,
+                AgentState.WAITING_CONFIRMATION
+            );
+
+            return this.generateConfirmationResponse(draft, conversation.userId);
         }
+
+        const fieldToClarify = draft.missingFields[0];
 
         const value = ClarificationParser.parse(message, fieldToClarify);
 
