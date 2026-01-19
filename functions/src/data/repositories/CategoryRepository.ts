@@ -1,49 +1,80 @@
 import * as admin from 'firebase-admin';
-import { Category, ICategoryRepository } from '../../domain/repositories/ICategoryRepository';
+import type { Category } from '../../domain/entities/Category';
+import type { ICategoryRepository } from '../../domain/repositories/ICategoryRepository';
+import type { TransactionType } from '../../domain/entities/Transaction';
 
 /**
- * Firebase Admin Firestore Implementation
+ * Category Repository Implementation
+ * Implements ICategoryRepository using Firestore via injected instance
  */
 export class CategoryRepository implements ICategoryRepository {
-    private collectionRef: admin.firestore.CollectionReference;
+    constructor(private firestore: admin.firestore.Firestore) { }
 
-    constructor(private firestore: admin.firestore.Firestore) {
-        this.collectionRef = firestore.collection('categories');
+    async getAll(userId: string): Promise<Category[]> {
+        const snapshot = await this.firestore
+            .collection('categories')
+            .where('userId', '==', userId)
+            .where('isDeleted', '==', false)
+            .get();
+
+        return snapshot.docs.map(doc => this.mapToCategory(doc));
     }
 
     async getById(id: string): Promise<Category | null> {
-        const docRef = this.collectionRef.doc(id);
-        const docSnap = await docRef.get();
-
-        if (!docSnap.exists) {
-            return null;
-        }
-
-        const data = docSnap.data()!;
-        return {
-            id: docSnap.id,
-            userId: data.userId,
-            key: data.key || data.name || 'Unknown',
-            type: data.type || 'EXPENSE',
-            icon: data.icon || '📦',
-            color: data.color || '#808080',
-        };
+        const doc = await this.firestore.collection('categories').doc(id).get();
+        if (!doc.exists) return null;
+        return this.mapToCategory(doc);
     }
 
-    async getAll(userId: string): Promise<Category[]> {
-        const q = this.collectionRef.where('userId', '==', userId);
-        const querySnapshot = await q.get();
+    async getByType(userId: string, type: TransactionType): Promise<Category[]> {
+        const snapshot = await this.firestore
+            .collection('categories')
+            .where('userId', '==', userId)
+            .where('type', '==', type)
+            .where('isDeleted', '==', false)
+            .get();
 
-        return querySnapshot.docs.map((docSnap) => {
-            const data = docSnap.data();
-            return {
-                id: docSnap.id,
-                userId: data.userId,
-                key: data.key || data.name || 'Unknown',
-                type: data.type || 'EXPENSE',
-                icon: data.icon || '📦',
-                color: data.color || '#808080',
-            };
+        return snapshot.docs.map(doc => this.mapToCategory(doc));
+    }
+
+    async create(category: Omit<Category, 'id' | 'createdAt'>): Promise<Category> {
+        const docRef = await this.firestore.collection('categories').add({
+            ...category,
+            createdAt: admin.firestore.FieldValue.serverTimestamp(),
+            isDeleted: false,
         });
+
+        const doc = await docRef.get();
+        return this.mapToCategory(doc);
+    }
+
+    async update(id: string, category: Partial<Category>): Promise<Category> {
+        await this.firestore.collection('categories').doc(id).update(category);
+        const doc = await this.firestore.collection('categories').doc(id).get();
+        return this.mapToCategory(doc);
+    }
+
+    async delete(id: string): Promise<void> {
+        await this.firestore.collection('categories').doc(id).update({
+            isDeleted: true,
+        });
+    }
+
+    async initializeDefaultCategories(userId: string): Promise<void> {
+        // Implementation for initializing default categories
+        // This can be implemented as needed
+    }
+
+    private mapToCategory(doc: admin.firestore.DocumentSnapshot): Category {
+        const data = doc.data()!;
+        return {
+            id: doc.id,
+            userId: data.userId,
+            key: data.key || data.name,
+            type: data.type,
+            icon: data.icon,
+            color: data.color,
+            createdAt: data.createdAt?.toDate() || new Date(),
+        };
     }
 }

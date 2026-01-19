@@ -1,0 +1,28 @@
+﻿
+> argent-functions@1.0.0 build
+> tsc
+
+src/data/repositories/CashPoolRepository.ts(25,42): error TS2345: Argument of type 'DocumentSnapshot<DocumentData, DocumentData>' is not assignable to parameter of type 'QueryDocumentSnapshot<DocumentData, DocumentData>'.
+  Property 'createTime' is optional in type 'DocumentSnapshot<DocumentData, DocumentData>' but required in type 'QueryDocumentSnapshot<DocumentData, DocumentData>'.
+src/data/repositories/CashPoolRepository.ts(36,42): error TS2345: Argument of type 'DocumentSnapshot<DocumentData, DocumentData>' is not assignable to parameter of type 'QueryDocumentSnapshot<DocumentData, DocumentData>'.
+  Property 'createTime' is optional in type 'DocumentSnapshot<DocumentData, DocumentData>' but required in type 'QueryDocumentSnapshot<DocumentData, DocumentData>'.
+src/data/repositories/CashPoolRepository.ts(46,42): error TS2345: Argument of type 'DocumentSnapshot<DocumentData, DocumentData>' is not assignable to parameter of type 'QueryDocumentSnapshot<DocumentData, DocumentData>'.
+  Property 'createTime' is optional in type 'DocumentSnapshot<DocumentData, DocumentData>' but required in type 'QueryDocumentSnapshot<DocumentData, DocumentData>'.
+src/domain/services/AgentOrchestrator.ts(13,40): error TS2307: Cannot find module '../usecases/CreateTransactionDraft' or its corresponding type declarations.
+src/domain/services/AgentOrchestrator.ts(14,38): error TS2307: Cannot find module '../usecases/TransitionAgentState' or its corresponding type declarations.
+src/domain/services/AgentOrchestrator.ts(366,17): error TS2322: Type 'string' is not assignable to type 'Date'.
+src/domain/services/DraftMutationService.ts(4,40): error TS2307: Cannot find module '../usecases/UpdateTransactionDraft' or its corresponding type declarations.
+src/domain/usecases/agent/ConfirmTransactionDraft.ts(30,13): error TS2367: This comparison appears to be unintentional because the types 'DraftStatus' and '"WAITING_FOR_CONFIRMATION"' have no overlap.
+src/domain/usecases/agent/CreateTransactionDraft.ts(32,13): error TS2322: Type 'DraftStatus.IN_PROGRESS' is not assignable to type 'DraftStatus'.
+src/domain/usecases/agent/UpdateTransactionDraft.ts(77,17): error TS2367: This comparison appears to be unintentional because the types '"INCOMPLETE" | "READY" | "FINALIZED"' and 'DraftStatus.IN_PROGRESS' have no overlap.
+src/domain/usecases/agent/UpdateTransactionDraft.ts(78,17): error TS2367: This comparison appears to be unintentional because the types '"INCOMPLETE" | "READY" | "FINALIZED"' and 'DraftStatus.WAITING_FOR_INPUT' have no overlap.
+src/domain/usecases/agent/UpdateTransactionDraft.ts(80,17): error TS2322: Type 'DraftStatus.WAITING_FOR_CONFIRMATION' is not assignable to type '"INCOMPLETE" | "READY" | "FINALIZED"'.
+src/domain/usecases/agent/UpdateTransactionDraft.ts(84,17): error TS2367: This comparison appears to be unintentional because the types '"INCOMPLETE" | "READY" | "FINALIZED"' and 'DraftStatus.IN_PROGRESS' have no overlap.
+src/domain/usecases/agent/UpdateTransactionDraft.ts(85,17): error TS2322: Type 'DraftStatus.WAITING_FOR_INPUT' is not assignable to type '"INCOMPLETE" | "READY" | "FINALIZED"'.
+src/domain/usecases/budgets/AddBudgetAllocation.ts(78,17): error TS2353: Object literal may only specify known properties, and 'totalPlanned' does not exist in type 'Omit<Budget, "id" | "createdAt" | "updatedAt">'.
+src/domain/usecases/budgets/AddBudgetAllocation.ts(100,17): error TS2353: Object literal may only specify known properties, and 'actualAmount' does not exist in type 'Omit<BudgetCategory, "id" | "createdAt" | "updatedAt">'.
+src/domain/usecases/budgets/AddBudgetAllocation.ts(109,13): error TS2353: Object literal may only specify known properties, and 'totalPlanned' does not exist in type 'Partial<Budget>'.
+src/domain/usecases/loans/RepayLoan.ts(109,27): error TS2554: Expected 2 arguments, but got 1.
+src/domain/usecases/loans/RepayLoan.ts(113,32): error TS2304: Cannot find name 'newOutstanding'.
+src/domain/usecases/persons/CreatePerson.ts(28,51): error TS2345: Argument of type '{ userId: string; name: string; email: string; phone: string; profileImageUrl: string; notes: string; }' is not assignable to parameter of type 'Omit<Person, "id" | "createdAt" | "updatedAt">'.
+  Property 'isDeleted' is missing in type '{ userId: string; name: string; email: string; phone: string; profileImageUrl: string; notes: string; }' but required in type 'Omit<Person, "id" | "createdAt" | "updatedAt">'.

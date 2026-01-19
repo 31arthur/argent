@@ -1,0 +1,5 @@
+﻿
+> argent-functions@1.0.0 build
+> tsc
+
+src/domain/entities/Loan.ts(98,54): error TS1005: ',' expected.

@@ -1,19 +1,15 @@
-/**
- * Cash Pool Entity
- */
-export interface CashPool {
-    id: string;
-    userId: string;
-    name: string;
-    balance: number;
-    currency: string;
-    isActive: boolean;
-}
+import type { CashPool } from '../entities/CashPool';
 
 /**
- * Cash Pool Repository Interface
+ * Repository Interface: ICashPoolRepository
+ * Defines the contract for cash pool data operations
  */
 export interface ICashPoolRepository {
-    getById(id: string): Promise<CashPool | null>;
     getAll(userId: string): Promise<CashPool[]>;
+    getById(id: string): Promise<CashPool | null>;
+    create(pool: Omit<CashPool, 'id' | 'createdAt' | 'updatedAt'>): Promise<CashPool>;
+    update(id: string, pool: Partial<CashPool>): Promise<CashPool>;
+    delete(id: string): Promise<void>;
+    updateBalance(id: string, amount: number): Promise<void>;
 }
+

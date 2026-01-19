@@ -12,3 +12,4 @@ export interface TransactionData {
     notes?: string;
     tags?: string[];
 }
+

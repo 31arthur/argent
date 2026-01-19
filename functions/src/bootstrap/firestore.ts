@@ -1,18 +1,13 @@
 import * as admin from 'firebase-admin';
 
 /**
- * Initialize Firebase Admin SDK
- * Called once at module load
+ * Firestore instance for dependency injection
  */
-export function initializeFirebase(): admin.firestore.Firestore {
-    if (!admin.apps.length) {
-        admin.initializeApp();
-    }
 
-    return admin.firestore();
+// Initialize Firebase Admin if not already initialized
+if (!admin.apps.length) {
+    admin.initializeApp();
 }
 
-/**
- * Get Firestore instance
- */
-export const firestore = initializeFirebase();
+// Export Firestore instance
+export const firestore = admin.firestore();

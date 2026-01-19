@@ -1,0 +1,26 @@
+﻿src/domain/repositories/IAgentConversationRepository.ts(19,6): error TS1109: Expression expected.
+src/domain/repositories/IAgentConversationRepository.ts(19,17): error TS1005: ';' expected.
+src/domain/repositories/IAgentConversationRepository.ts(19,19): error TS1434: Unexpected keyword or identifier.
+src/domain/repositories/IAgentConversationRepository.ts(19,32): error TS1434: Unexpected keyword or identifier.
+src/domain/repositories/IAgentConversationRepository.ts(19,35): error TS1434: Unexpected keyword or identifier.
+src/domain/repositories/IAgentConversationRepository.ts(20,6): error TS1161: Unterminated regular expression literal.
+src/domain/repositories/IAgentConversationRepository.ts(21,11): error TS1005: ',' expected.
+src/domain/repositories/IAgentConversationRepository.ts(21,20): error TS1005: ';' expected.
+src/domain/repositories/IAgentConversationRepository.ts(28,23): error TS1005: ',' expected.
+src/domain/repositories/IAgentConversationRepository.ts(28,32): error TS1005: ';' expected.
+src/domain/repositories/IAgentConversationRepository.ts(34,20): error TS1005: ',' expected.
+src/domain/repositories/IAgentConversationRepository.ts(34,29): error TS1005: ';' expected.
+src/domain/repositories/IAgentConversationRepository.ts(40,17): error TS1005: ',' expected.
+src/domain/repositories/IAgentConversationRepository.ts(41,2): error TS1005: ';' expected.
+src/domain/repositories/IAgentConversationRepository.ts(47,15): error TS1005: ',' expected.
+src/domain/repositories/IAgentConversationRepository.ts(47,33): error TS1005: ',' expected.
+src/domain/repositories/IAgentConversationRepository.ts(47,46): error TS1005: ';' expected.
+src/domain/repositories/IAgentConversationRepository.ts(53,18): error TS1005: ',' expected.
+src/domain/repositories/IAgentConversationRepository.ts(53,27): error TS1005: ';' expected.
+src/domain/repositories/IAgentConversationRepository.ts(59,19): error TS1005: ',' expected.
+src/domain/repositories/IAgentConversationRepository.ts(59,28): error TS1005: ';' expected.
+src/domain/repositories/IAgentConversationRepository.ts(65,19): error TS1005: ',' expected.
+src/domain/repositories/IAgentConversationRepository.ts(65,28): error TS1005: ';' expected.
+src/domain/repositories/IAgentConversationRepository.ts(71,14): error TS1005: ',' expected.
+src/domain/repositories/IAgentConversationRepository.ts(71,23): error TS1005: ';' expected.
+src/domain/repositories/IAgentConversationRepository.ts(72,1): error TS1128: Declaration or statement expected.

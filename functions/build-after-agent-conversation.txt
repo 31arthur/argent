@@ -1,0 +1,115 @@
+﻿
+> argent-functions@1.0.0 build
+> tsc
+
+src/bootstrap/container.ts(27,63): error TS2345: Argument of type 'FirebaseFirestore.Firestore' is not assignable to parameter of type 'import("C:/Users/kanth/Documents/GitHub/argent/node_modules/@firebase/firestore/dist/index").Firestore'.
+  Type 'Firestore' is missing the following properties from type 'Firestore': type, app, toJSON
+src/bootstrap/container.ts(40,5): error TS2345: Argument of type 'LoanRepository' is not assignable to parameter of type 'ILoanRepository'.
+  Property 'getByPersonId' is missing in type 'LoanRepository' but required in type 'ILoanRepository'.
+src/bootstrap/container.ts(84,68): error TS2345: Argument of type '{ userId: string; poolId: string; amount: number; type: "INCOME" | "EXPENSE"; categoryId: string; purpose: string; date: Date; notes: string; tags: string[]; }' is not assignable to parameter of type 'Omit<Transaction, "id" | "createdAt" | "updatedAt">'.
+  Property 'isDeleted' is missing in type '{ userId: string; poolId: string; amount: number; type: "INCOME" | "EXPENSE"; categoryId: string; purpose: string; date: Date; notes: string; tags: string[]; }' but required in type 'Omit<Transaction, "id" | "createdAt" | "updatedAt">'.
+src/data/repositories/AgentConversationRepository.ts(74,9): error TS2741: Property 'isDeleted' is missing in type '{ id: string; userId: string; agentState: AgentState; activeDraftId: string; completedAt: Date; startedAt: Date; lastActivityAt: Date; }' but required in type 'AgentConversation'.
+src/data/repositories/AgentConversationRepository.ts(207,9): error TS2741: Property 'isDeleted' is missing in type '{ id: string; userId: any; agentState: any; activeDraftId: any; completedAt: any; startedAt: any; lastActivityAt: any; }' but required in type 'AgentConversation'.
+src/data/repositories/ArtworkRepository.ts(3,39): error TS2307: Cannot find module '../datasources/MockArtworkDataSource' or its corresponding type declarations.
+src/data/repositories/CashPoolRepository.ts(65,9): error TS2739: Type '{ id: string; userId: any; name: any; balance: any; currency: any; isActive: boolean; }' is missing the following properties from type 'CashPool': type, initialBalance, createdAt, updatedAt
+src/data/repositories/ChatMessageRepository.ts(13,16): error TS2304: Cannot find name 'Timestamp'.
+src/data/repositories/ChatMessageRepository.ts(34,30): error TS2304: Cannot find name 'collection'.
+src/data/repositories/ChatMessageRepository.ts(39,23): error TS2304: Cannot find name 'query'.
+src/data/repositories/ChatMessageRepository.ts(41,17): error TS2304: Cannot find name 'where'.
+src/data/repositories/ChatMessageRepository.ts(42,17): error TS2304: Cannot find name 'orderBy'.
+src/data/repositories/ChatMessageRepository.ts(45,41): error TS2304: Cannot find name 'getDocs'.
+src/data/repositories/ChatMessageRepository.ts(58,28): error TS2304: Cannot find name 'doc'.
+src/data/repositories/ChatMessageRepository.ts(61,46): error TS2304: Cannot find name 'serverTimestamp'.
+src/data/repositories/ChatMessageRepository.ts(66,28): error TS2304: Cannot find name 'serverTimestamp'.
+src/data/repositories/ChatMessageRepository.ts(69,19): error TS2304: Cannot find name 'setDoc'.
+src/data/repositories/ChatMessageRepository.ts(87,23): error TS2304: Cannot find name 'query'.
+src/data/repositories/ChatMessageRepository.ts(87,49): error TS2304: Cannot find name 'where'.
+src/data/repositories/ChatMessageRepository.ts(89,41): error TS2304: Cannot find name 'getDocs'.
+src/data/repositories/ChatMessageRepository.ts(92,27): error TS2304: Cannot find name 'writeBatch'.
+src/data/repositories/CommissionRepository.ts(3,42): error TS2307: Cannot find module '../datasources/MockCommissionDataSource' or its corresponding type declarations.
+src/data/repositories/LoanRepaymentRepository.ts(2,15): error TS2305: Module '"../../domain/entities/Loan"' has no exported member 'LoanRepayment'.
+src/data/repositories/LoanRepository.ts(10,14): error TS2420: Class 'LoanRepository' incorrectly implements interface 'ILoanRepository'.
+  Property 'getByPersonId' is missing in type 'LoanRepository' but required in type 'ILoanRepository'.
+src/data/repositories/LoanRepository.ts(92,31): error TS2339: Property 'totalRepaid' does not exist on type 'Omit<Loan, "id" | "createdAt" | "updatedAt">'.
+src/data/repositories/LoanRepository.ts(93,37): error TS2339: Property 'outstandingAmount' does not exist on type 'Omit<Loan, "id" | "createdAt" | "updatedAt">'.
+src/data/repositories/LoanRepository.ts(115,13): error TS2353: Object literal may only specify known properties, and 'totalRepaid' does not exist in type 'Loan'.
+src/data/repositories/LoanRepository.ts(129,18): error TS2339: Property 'totalRepaid' does not exist on type 'Partial<Loan>'.
+src/data/repositories/LoanRepository.ts(129,75): error TS2339: Property 'totalRepaid' does not exist on type 'Partial<Loan>'.
+src/data/repositories/LoanRepository.ts(130,18): error TS2339: Property 'outstandingAmount' does not exist on type 'Partial<Loan>'.
+src/data/repositories/LoanRepository.ts(130,87): error TS2339: Property 'outstandingAmount' does not exist on type 'Partial<Loan>'.
+src/data/repositories/LoanRepository.ts(177,13): error TS2353: Object literal may only specify known properties, and 'totalRepaid' does not exist in type 'Loan'.
+src/data/repositories/PersonRepository.ts(63,13): error TS2353: Object literal may only specify known properties, and 'isDeleted' does not exist in type 'Person'.
+src/data/repositories/PersonRepository.ts(105,13): error TS2353: Object literal may only specify known properties, and 'isDeleted' does not exist in type 'Person'.
+src/data/repositories/SaleRepository.ts(3,36): error TS2307: Cannot find module '../datasources/MockSaleDataSource' or its corresponding type declarations.
+src/data/repositories/TransactionDraftRepository.ts(19,18): error TS2304: Cannot find name 'Timestamp'.
+src/data/repositories/TransactionDraftRepository.ts(20,18): error TS2304: Cannot find name 'Timestamp'.
+src/data/repositories/TransactionDraftRepository.ts(21,18): error TS2304: Cannot find name 'Timestamp'.
+src/data/repositories/TransactionDraftRepository.ts(23,16): error TS2304: Cannot find name 'Timestamp'.
+src/data/repositories/TransactionDraftRepository.ts(24,16): error TS2304: Cannot find name 'Timestamp'.
+src/data/repositories/TransactionDraftRepository.ts(41,30): error TS2304: Cannot find name 'collection'.
+src/data/repositories/TransactionDraftRepository.ts(46,28): error TS2304: Cannot find name 'doc'.
+src/data/repositories/TransactionDraftRepository.ts(47,35): error TS2304: Cannot find name 'getDoc'.
+src/data/repositories/TransactionDraftRepository.ts(62,23): error TS2304: Cannot find name 'query'.
+src/data/repositories/TransactionDraftRepository.ts(64,17): error TS2304: Cannot find name 'where'.
+src/data/repositories/TransactionDraftRepository.ts(65,17): error TS2304: Cannot find name 'where'.
+src/data/repositories/TransactionDraftRepository.ts(66,17): error TS2304: Cannot find name 'orderBy'.
+src/data/repositories/TransactionDraftRepository.ts(67,17): error TS2304: Cannot find name 'limit'.
+src/data/repositories/TransactionDraftRepository.ts(70,41): error TS2304: Cannot find name 'getDocs'.
+src/data/repositories/TransactionDraftRepository.ts(86,23): error TS2304: Cannot find name 'query'.
+src/data/repositories/TransactionDraftRepository.ts(88,17): error TS2304: Cannot find name 'where'.
+src/data/repositories/TransactionDraftRepository.ts(89,17): error TS2304: Cannot find name 'where'.
+src/data/repositories/TransactionDraftRepository.ts(90,17): error TS2304: Cannot find name 'orderBy'.
+src/data/repositories/TransactionDraftRepository.ts(93,41): error TS2304: Cannot find name 'getDocs'.
+src/data/repositories/TransactionDraftRepository.ts(108,28): error TS2304: Cannot find name 'doc'.
+src/data/repositories/TransactionDraftRepository.ts(112,46): error TS2304: Cannot find name 'serverTimestamp'.
+src/data/repositories/TransactionDraftRepository.ts(113,46): error TS2304: Cannot find name 'serverTimestamp'.
+src/data/repositories/TransactionDraftRepository.ts(117,17): error TS2322: Type 'import("C:/Users/kanth/Documents/GitHub/argent/functions/src/domain/entities/DraftType").DraftStatus' is not assignable to type 'import("C:/Users/kanth/Documents/GitHub/argent/functions/src/domain/entities/DraftStatus").DraftStatus'.
+  Type '"CANCELLED"' is not assignable to type 'DraftStatus'.
+src/data/repositories/TransactionDraftRepository.ts(122,50): error TS2304: Cannot find name 'Timestamp'.
+src/data/repositories/TransactionDraftRepository.ts(123,50): error TS2304: Cannot find name 'Timestamp'.
+src/data/repositories/TransactionDraftRepository.ts(124,50): error TS2304: Cannot find name 'Timestamp'.
+src/data/repositories/TransactionDraftRepository.ts(126,28): error TS2304: Cannot find name 'serverTimestamp'.
+src/data/repositories/TransactionDraftRepository.ts(127,28): error TS2304: Cannot find name 'serverTimestamp'.
+src/data/repositories/TransactionDraftRepository.ts(130,19): error TS2304: Cannot find name 'setDoc'.
+src/data/repositories/TransactionDraftRepository.ts(133,38): error TS2304: Cannot find name 'getDoc'.
+src/data/repositories/TransactionDraftRepository.ts(147,28): error TS2304: Cannot find name 'doc'.
+src/data/repositories/TransactionDraftRepository.ts(151,46): error TS2304: Cannot find name 'serverTimestamp'.
+src/data/repositories/TransactionDraftRepository.ts(153,28): error TS2304: Cannot find name 'serverTimestamp'.
+src/data/repositories/TransactionDraftRepository.ts(153,60): error TS2304: Cannot find name 'Timestamp'.
+src/data/repositories/TransactionDraftRepository.ts(157,17): error TS2322: Type 'import("C:/Users/kanth/Documents/GitHub/argent/functions/src/domain/entities/DraftType").DraftStatus' is not assignable to type 'import("C:/Users/kanth/Documents/GitHub/argent/functions/src/domain/entities/DraftStatus").DraftStatus'.
+  Type '"CANCELLED"' is not assignable to type 'DraftStatus'.
+src/data/repositories/TransactionDraftRepository.ts(174,23): error TS2304: Cannot find name 'Timestamp'.
+src/data/repositories/TransactionDraftRepository.ts(180,23): error TS2304: Cannot find name 'Timestamp'.
+src/data/repositories/TransactionDraftRepository.ts(186,23): error TS2304: Cannot find name 'Timestamp'.
+src/data/repositories/TransactionDraftRepository.ts(194,19): error TS2304: Cannot find name 'updateDoc'.
+src/data/repositories/TransactionDraftRepository.ts(197,38): error TS2304: Cannot find name 'getDoc'.
+src/data/repositories/TransactionDraftRepository.ts(233,28): error TS2304: Cannot find name 'doc'.
+src/data/repositories/TransactionDraftRepository.ts(234,19): error TS2304: Cannot find name 'updateDoc'.
+src/data/repositories/TransactionDraftRepository.ts(236,28): error TS2304: Cannot find name 'serverTimestamp'.
+src/data/repositories/TransactionDraftRepository.ts(246,28): error TS2304: Cannot find name 'doc'.
+src/data/repositories/TransactionDraftRepository.ts(247,19): error TS2304: Cannot find name 'updateDoc'.
+src/data/repositories/TransactionDraftRepository.ts(249,28): error TS2304: Cannot find name 'serverTimestamp'.
+src/data/repositories/TransactionDraftRepository.ts(267,13): error TS2322: Type 'import("C:/Users/kanth/Documents/GitHub/argent/functions/src/domain/entities/DraftStatus").DraftStatus' is not assignable to type 'import("C:/Users/kanth/Documents/GitHub/argent/functions/src/domain/entities/DraftType").DraftStatus'.
+src/data/repositories/WorkGroupRepository.ts(3,41): error TS2307: Cannot find module '../datasources/MockWorkGroupDataSource' or its corresponding type declarations.
+src/domain/repositories/ILoanRepaymentRepository.ts(1,15): error TS2305: Module '"../entities/Loan"' has no exported member 'LoanRepayment'.
+src/domain/services/AgentOrchestrator.ts(13,40): error TS2307: Cannot find module '../usecases/CreateTransactionDraft' or its corresponding type declarations.
+src/domain/services/AgentOrchestrator.ts(14,38): error TS2307: Cannot find module '../usecases/TransitionAgentState' or its corresponding type declarations.
+src/domain/services/AgentOrchestrator.ts(366,17): error TS2322: Type 'string' is not assignable to type 'Date'.
+src/domain/services/DraftMutationService.ts(4,40): error TS2307: Cannot find module '../usecases/UpdateTransactionDraft' or its corresponding type declarations.
+src/domain/usecases/agent/ConfirmTransactionDraft.ts(30,13): error TS2367: This comparison appears to be unintentional because the types 'DraftStatus' and '"WAITING_FOR_CONFIRMATION"' have no overlap.
+src/domain/usecases/agent/CreateTransactionDraft.ts(32,13): error TS2322: Type 'DraftStatus.IN_PROGRESS' is not assignable to type 'DraftStatus'.
+src/domain/usecases/agent/UpdateTransactionDraft.ts(77,17): error TS2367: This comparison appears to be unintentional because the types '"INCOMPLETE" | "READY" | "FINALIZED"' and 'DraftStatus.IN_PROGRESS' have no overlap.
+src/domain/usecases/agent/UpdateTransactionDraft.ts(78,17): error TS2367: This comparison appears to be unintentional because the types '"INCOMPLETE" | "READY" | "FINALIZED"' and 'DraftStatus.WAITING_FOR_INPUT' have no overlap.
+src/domain/usecases/agent/UpdateTransactionDraft.ts(80,17): error TS2322: Type 'DraftStatus.WAITING_FOR_CONFIRMATION' is not assignable to type '"INCOMPLETE" | "READY" | "FINALIZED"'.
+src/domain/usecases/agent/UpdateTransactionDraft.ts(84,17): error TS2367: This comparison appears to be unintentional because the types '"INCOMPLETE" | "READY" | "FINALIZED"' and 'DraftStatus.IN_PROGRESS' have no overlap.
+src/domain/usecases/agent/UpdateTransactionDraft.ts(85,17): error TS2322: Type 'DraftStatus.WAITING_FOR_INPUT' is not assignable to type '"INCOMPLETE" | "READY" | "FINALIZED"'.
+src/domain/usecases/budgets/AddBudgetAllocation.ts(78,17): error TS2353: Object literal may only specify known properties, and 'totalPlanned' does not exist in type 'Omit<Budget, "id" | "createdAt" | "updatedAt">'.
+src/domain/usecases/budgets/AddBudgetAllocation.ts(100,17): error TS2353: Object literal may only specify known properties, and 'actualAmount' does not exist in type 'Omit<BudgetCategory, "id" | "createdAt" | "updatedAt">'.
+src/domain/usecases/budgets/AddBudgetAllocation.ts(109,13): error TS2353: Object literal may only specify known properties, and 'totalPlanned' does not exist in type 'Partial<Budget>'.
+src/domain/usecases/loans/RepayLoan.ts(3,15): error TS2305: Module '"../../entities/Loan"' has no exported member 'LoanRepayment'.
+src/domain/usecases/loans/RepayLoan.ts(8,10): error TS2305: Module '"../../entities/Loan"' has no exported member 'calculateOutstandingAmount'.
+src/domain/usecases/loans/RepayLoan.ts(8,38): error TS2305: Module '"../../entities/Loan"' has no exported member 'shouldMarkAsRepaid'.
+src/domain/usecases/loans/RepayLoan.ts(66,33): error TS2339: Property 'outstandingAmount' does not exist on type 'Loan'.
+src/domain/usecases/loans/RepayLoan.ts(67,100): error TS2339: Property 'outstandingAmount' does not exist on type 'Loan'.
+src/domain/usecases/loans/RepayLoan.ts(107,37): error TS2339: Property 'totalRepaid' does not exist on type 'Loan'.
+src/domain/usecases/loans/RepayLoan.ts(112,13): error TS2353: Object literal may only specify known properties, and 'totalRepaid' does not exist in type 'Partial<Loan>'.

@@ -1,0 +1,201 @@
+import type { BaseDraft } from '../entities/DraftType';
+import type { TransactionDraft } from '../entities/TransactionDraft';
+import type { LoanRepaymentDraft } from '../entities/LoanRepaymentDraft';
+import type { LeadDraft } from '../entities/LeadDraft';
+import type { BudgetAllocationDraft } from '../entities/BudgetAllocationDraft';
+
+// Import use cases
+import { RepayLoan } from '../usecases/loans/RepayLoan';
+import { PayPersonExpense } from '../usecases/transactions/PayPersonExpense';
+import { AddBudgetAllocation } from '../usecases/budgets/AddBudgetAllocation';
+import { CreateLead } from '../usecases/leads/CreateLead';
+
+/**
+ * Draft Finalizer Service
+ * Routes confirmed drafts to appropriate use cases for execution
+ * 
+ * RESPONSIBILITIES:
+ * - Validate draft is confirmed and complete
+ * - Route to correct use case based on draft type
+ * - Handle errors and return results
+ * - Maintain idempotency
+ * 
+ * SAFETY:
+ * - Only processes CONFIRMED drafts
+ * - All mutations go through use cases
+ * - No direct repository access
+ * - Full validation before execution
+ */
+export class DraftFinalizer {
+    constructor(
+        private repayLoanUseCase: RepayLoan,
+        private payPersonExpenseUseCase: PayPersonExpense,
+        private addBudgetAllocationUseCase: AddBudgetAllocation,
+        private createLeadUseCase: CreateLead
+        // Add other use cases as needed
+    ) { }
+
+    /**
+     * Finalize a confirmed draft
+     * Routes to appropriate use case based on draft type
+     */
+    async finalize(draft: BaseDraft): Promise<FinalizedResult> {
+        // Validate draft status
+        if (draft.status !== 'CONFIRMED') {
+            throw new Error('Draft must be confirmed before finalization');
+        }
+
+        // Validate draft is complete
+        if (draft.missingFields.length > 0) {
+            throw new Error(`Draft has missing fields: ${draft.missingFields.join(', ')}`);
+        }
+
+        // Route to appropriate use case
+        switch (draft.type) {
+            case 'LOAN_REPAYMENT':
+                return this.finalizeLoanRepayment(draft as LoanRepaymentDraft);
+
+            case 'LEAD':
+                return this.finalizeLead(draft as LeadDraft);
+
+            case 'BUDGET_ALLOCATION':
+                return this.finalizeBudgetAllocation(draft as BudgetAllocationDraft);
+
+            case 'TRANSACTION':
+                return this.finalizeTransaction(draft as TransactionDraft);
+
+            default:
+                throw new Error(`Unknown draft type: ${draft.type}`);
+        }
+    }
+
+    /**
+     * Finalize loan repayment draft
+     */
+    private async finalizeLoanRepayment(draft: LoanRepaymentDraft): Promise<FinalizedResult> {
+        if (!draft.loanId || !draft.amount || !draft.cashPoolId) {
+            throw new Error('Loan repayment draft is incomplete');
+        }
+
+        const result = await this.repayLoanUseCase.execute({
+            userId: draft.userId,
+            loanId: draft.loanId,
+            amount: draft.amount,
+            cashPoolId: draft.cashPoolId,
+            categoryId: 'loan-repayment', // Default category for repayments
+            date: draft.date || new Date(),
+            notes: draft.notes,
+        });
+
+        return {
+            type: 'LOAN_REPAYMENT',
+            success: true,
+            data: {
+                loan: result.loan,
+                transaction: result.transaction,
+                repayment: result.repayment,
+            },
+            message: `Repaid ₹${draft.amount} to loan. Remaining: ₹${result.loan.outstandingAmount}`,
+        };
+    }
+
+    /**
+     * Finalize lead draft
+     */
+    private async finalizeLead(draft: LeadDraft): Promise<FinalizedResult> {
+        if (!draft.title || !draft.expectedAmount) {
+            throw new Error('Lead draft is incomplete');
+        }
+
+        const lead = await this.createLeadUseCase.execute({
+            userId: draft.userId,
+            title: draft.title,
+            expectedAmount: draft.expectedAmount,
+            probability: draft.probability || 50,
+            source: draft.source,
+            expectedCloseDate: draft.expectedCloseDate,
+            notes: draft.notes,
+        });
+
+        return {
+            type: 'LEAD',
+            success: true,
+            data: { lead },
+            message: `Created lead: ${draft.title} (₹${draft.expectedAmount})`,
+        };
+    }
+
+    /**
+     * Finalize budget allocation draft
+     */
+    private async finalizeBudgetAllocation(draft: BudgetAllocationDraft): Promise<FinalizedResult> {
+        if (!draft.month || !draft.year || !draft.categoryId || draft.plannedAmount === undefined) {
+            throw new Error('Budget allocation draft is incomplete');
+        }
+
+        const result = await this.addBudgetAllocationUseCase.execute({
+            userId: draft.userId,
+            month: draft.month,
+            year: draft.year,
+            categoryId: draft.categoryId,
+            plannedAmount: draft.plannedAmount,
+        });
+
+        const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const monthName = monthNames[draft.month - 1];
+
+        return {
+            type: 'BUDGET_ALLOCATION',
+            success: true,
+            data: {
+                budget: result.budget,
+                allocation: result.allocation,
+            },
+            message: `Set budget for ${monthName} ${draft.year}: ₹${draft.plannedAmount}`,
+        };
+    }
+
+    /**
+     * Finalize transaction draft
+     */
+    private async finalizeTransaction(draft: TransactionDraft): Promise<FinalizedResult> {
+        // Check if this is a person payment
+        const extractedFields = draft.extractedFields;
+
+        if (extractedFields.payeeType === 'PERSON' && extractedFields.payeeId) {
+            // Use PayPersonExpense use case
+            const transaction = await this.payPersonExpenseUseCase.execute({
+                userId: draft.userId,
+                personId: extractedFields.payeeId,
+                amount: extractedFields.amount!,
+                categoryId: extractedFields.categoryId!,
+                poolId: extractedFields.poolId!,
+                purpose: extractedFields.purpose!,
+                date: extractedFields.date,
+                notes: extractedFields.notes,
+            });
+
+            return {
+                type: 'TRANSACTION',
+                success: true,
+                data: { transaction },
+                message: `Paid ₹${extractedFields.amount} to person`,
+            };
+        }
+
+        // Regular transaction (use existing CreateTransaction use case)
+        // This would be handled by the existing transaction finalization logic
+        throw new Error('Regular transaction finalization not yet implemented in this service');
+    }
+}
+
+/**
+ * Result of draft finalization
+ */
+export interface FinalizedResult {
+    type: string;
+    success: boolean;
+    data: any;
+    message: string;
+    error?: string;
+}

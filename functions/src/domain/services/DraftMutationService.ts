@@ -1,7 +1,7 @@
-import { TransactionDraft } from '../entities/TransactionDraft';
-import { TransactionData } from '../value-objects/TransactionData';
-import { ITransactionDraftRepository } from '../repositories/ITransactionDraftRepository';
-import { UpdateTransactionDraft } from '../usecases/UpdateTransactionDraft';
+import type { TransactionDraft } from '../entities/TransactionDraft';
+import type { TransactionData } from '../value-objects/TransactionData';
+import type { ITransactionDraftRepository } from '../repositories/ITransactionDraftRepository';
+import { UpdateTransactionDraft } from '../usecases/agent/UpdateTransactionDraft';
 
 /**
  * Draft Mutation Service
@@ -63,3 +63,4 @@ export class DraftMutationService {
         return this.updateDraftUseCase.execute(draftId, updates, confidenceUpdates);
     }
 }
+

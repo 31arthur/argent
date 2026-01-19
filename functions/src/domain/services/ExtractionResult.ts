@@ -12,3 +12,4 @@ export interface ExtractionResult {
     };
     confidence: Record<string, number>;
 }
+

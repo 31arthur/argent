@@ -1,89 +1,65 @@
 import * as admin from 'firebase-admin';
-import { AgentConversation } from '../../domain/entities/AgentConversation';
-import { AgentState } from '../../domain/entities/AgentState';
-import { IAgentConversationRepository } from '../../domain/repositories/IAgentConversationRepository';
+import type { AgentConversation } from '../../domain/entities/AgentConversation';
+import type { AgentState } from '../../domain/entities/AgentState';
+import type { IAgentConversationRepository } from '../../domain/repositories/IAgentConversationRepository';
 
 /**
- * Firestore Document Type
- */
-interface AgentConversationDoc {
-    userId: string;
-    agentState: AgentState;
-    activeDraftId: string | null;
-    isDeleted: boolean;
-    completedAt: admin.firestore.Timestamp | null;
-    startedAt: admin.firestore.Timestamp;
-    lastActivityAt: admin.firestore.Timestamp;
-}
-
-/**
- * Firebase Admin Firestore Implementation
+ * Agent Conversation Repository Implementation
+ * Implements IAgentConversationRepository using Firebase Admin SDK
+ * Designed for Cloud Functions deployment
  */
 export class AgentConversationRepository implements IAgentConversationRepository {
-    private collectionRef: admin.firestore.CollectionReference;
+    private readonly collectionName = 'agentConversations';
 
-    constructor(private firestore: admin.firestore.Firestore) {
-        this.collectionRef = firestore.collection('agentConversations');
-    }
+    constructor(private firestore: admin.firestore.Firestore) { }
 
     async getById(id: string): Promise<AgentConversation | null> {
-        const docRef = this.collectionRef.doc(id);
-        const docSnap = await docRef.get();
+        const doc = await this.firestore
+            .collection(this.collectionName)
+            .doc(id)
+            .get();
 
-        if (!docSnap.exists) {
+        if (!doc.exists) {
             return null;
         }
 
-        return this.convertFromFirestore(id, docSnap.data() as AgentConversationDoc);
+        return this.mapToConversation(doc);
     }
 
     async getActiveByUser(userId: string): Promise<AgentConversation | null> {
-        const q = this.collectionRef
+        const snapshot = await this.firestore
+            .collection(this.collectionName)
             .where('userId', '==', userId)
-            .where('isDeleted', '==', false)
-            .where('agentState', 'in', [
-                AgentState.IDLE,
-                AgentState.EXTRACTING,
-                AgentState.ASKING_CLARIFICATION,
-                AgentState.WAITING_CONFIRMATION,
-            ])
+            .where('agentState', 'not-in', ['COMPLETED', 'CANCELLED'])
             .orderBy('lastActivityAt', 'desc')
-            .limit(1);
+            .limit(1)
+            .get();
 
-        const querySnapshot = await q.get();
-
-        if (querySnapshot.empty) {
+        if (snapshot.empty) {
             return null;
         }
 
-        const docSnap = querySnapshot.docs[0];
-        return this.convertFromFirestore(docSnap.id, docSnap.data() as AgentConversationDoc);
+        return this.mapToConversation(snapshot.docs[0]);
     }
 
     async getAllByUser(userId: string): Promise<AgentConversation[]> {
-        const q = this.collectionRef
+        const snapshot = await this.firestore
+            .collection(this.collectionName)
             .where('userId', '==', userId)
-            .where('isDeleted', '==', false)
-            .orderBy('lastActivityAt', 'desc');
+            .orderBy('lastActivityAt', 'desc')
+            .get();
 
-        const querySnapshot = await q.get();
-
-        return querySnapshot.docs.map((docSnap) =>
-            this.convertFromFirestore(docSnap.id, docSnap.data() as AgentConversationDoc)
-        );
+        return snapshot.docs.map(doc => this.mapToConversation(doc));
     }
 
     async create(
         conversation: Omit<AgentConversation, 'id' | 'startedAt' | 'lastActivityAt'>
     ): Promise<AgentConversation> {
-        const docRef = this.collectionRef.doc();
-        const now = admin.firestore.FieldValue.serverTimestamp();
-
-        const firestoreDoc = {
+        const now = admin.firestore.Timestamp.now();
+        const docData = {
             userId: conversation.userId,
             agentState: conversation.agentState,
-            activeDraftId: conversation.activeDraftId,
-            isDeleted: conversation.isDeleted,
+            activeDraftId: conversation.activeDraftId || null,
             completedAt: conversation.completedAt
                 ? admin.firestore.Timestamp.fromDate(conversation.completedAt)
                 : null,
@@ -91,116 +67,154 @@ export class AgentConversationRepository implements IAgentConversationRepository
             lastActivityAt: now,
         };
 
-        await docRef.set(firestoreDoc);
+        const docRef = await this.firestore
+            .collection(this.collectionName)
+            .add(docData);
 
-        // Fetch the created document
-        const createdDoc = await docRef.get();
-        if (!createdDoc.exists) {
-            throw new Error('Failed to create conversation');
+        return {
+            id: docRef.id,
+            userId: docData.userId,
+            agentState: docData.agentState,
+            activeDraftId: docData.activeDraftId || undefined,
+            completedAt: docData.completedAt?.toDate(),
+            startedAt: now.toDate(),
+            lastActivityAt: now.toDate(),
+            isDeleted: false,
+        };
+    }
+
+    async update(id: string, updates: Partial<AgentConversation>): Promise<AgentConversation> {
+        const updateData: any = {
+            lastActivityAt: admin.firestore.Timestamp.now(),
+        };
+
+        if (updates.agentState !== undefined) updateData.agentState = updates.agentState;
+        if (updates.activeDraftId !== undefined) updateData.activeDraftId = updates.activeDraftId || null;
+        if (updates.completedAt !== undefined) {
+            updateData.completedAt = updates.completedAt
+                ? admin.firestore.Timestamp.fromDate(updates.completedAt)
+                : null;
         }
 
-        return this.convertFromFirestore(docRef.id, createdDoc.data() as AgentConversationDoc);
+        await this.firestore
+            .collection(this.collectionName)
+            .doc(id)
+            .update(updateData);
+
+        const updated = await this.getById(id);
+        if (!updated) {
+            throw new Error(`Conversation with id ${id} not found after update`);
+        }
+
+        return updated;
+    }
+
+    async updateAgentState(id: string, state: AgentState): Promise<void> {
+        await this.firestore
+            .collection(this.collectionName)
+            .doc(id)
+            .update({
+                agentState: state,
+                lastActivityAt: admin.firestore.Timestamp.now(),
+            });
     }
 
     async updateState(id: string, newState: AgentState): Promise<AgentConversation> {
-        const docRef = this.collectionRef.doc(id);
-
-        await docRef.update({
-            agentState: newState,
-            lastActivityAt: admin.firestore.FieldValue.serverTimestamp(),
-        });
-
-        const updatedDoc = await docRef.get();
-        if (!updatedDoc.exists) {
-            throw new Error('Conversation not found after update');
+        await this.updateAgentState(id, newState);
+        const updated = await this.getById(id);
+        if (!updated) {
+            throw new Error(`Conversation with id ${id} not found after update`);
         }
-
-        return this.convertFromFirestore(id, updatedDoc.data() as AgentConversationDoc);
+        return updated;
     }
 
     async updateActivity(id: string): Promise<AgentConversation> {
-        const docRef = this.collectionRef.doc(id);
+        await this.firestore
+            .collection(this.collectionName)
+            .doc(id)
+            .update({
+                lastActivityAt: admin.firestore.Timestamp.now(),
+            });
 
-        await docRef.update({
-            lastActivityAt: admin.firestore.FieldValue.serverTimestamp(),
-        });
-
-        const updatedDoc = await docRef.get();
-        if (!updatedDoc.exists) {
-            throw new Error('Conversation not found after update');
+        const updated = await this.getById(id);
+        if (!updated) {
+            throw new Error(`Conversation with id ${id} not found after update`);
         }
-
-        return this.convertFromFirestore(id, updatedDoc.data() as AgentConversationDoc);
+        return updated;
     }
 
     async updateActiveDraftId(id: string, draftId: string): Promise<AgentConversation> {
-        const docRef = this.collectionRef.doc(id);
+        await this.firestore
+            .collection(this.collectionName)
+            .doc(id)
+            .update({
+                activeDraftId: draftId,
+                lastActivityAt: admin.firestore.Timestamp.now(),
+            });
 
-        await docRef.update({
-            activeDraftId: draftId,
-            lastActivityAt: admin.firestore.FieldValue.serverTimestamp(),
-        });
-
-        const updatedDoc = await docRef.get();
-        if (!updatedDoc.exists) {
-            throw new Error('Conversation not found after update');
+        const updated = await this.getById(id);
+        if (!updated) {
+            throw new Error(`Conversation with id ${id} not found after update`);
         }
-
-        return this.convertFromFirestore(id, updatedDoc.data() as AgentConversationDoc);
+        return updated;
     }
 
     async markAsCompleted(id: string): Promise<AgentConversation> {
-        const docRef = this.collectionRef.doc(id);
+        await this.firestore
+            .collection(this.collectionName)
+            .doc(id)
+            .update({
+                agentState: 'COMPLETED',
+                completedAt: admin.firestore.Timestamp.now(),
+                lastActivityAt: admin.firestore.Timestamp.now(),
+            });
 
-        await docRef.update({
-            agentState: AgentState.COMPLETED,
-            completedAt: admin.firestore.FieldValue.serverTimestamp(),
-            lastActivityAt: admin.firestore.FieldValue.serverTimestamp(),
-        });
-
-        const updatedDoc = await docRef.get();
-        if (!updatedDoc.exists) {
-            throw new Error('Conversation not found after update');
+        const updated = await this.getById(id);
+        if (!updated) {
+            throw new Error(`Conversation with id ${id} not found after update`);
         }
-
-        return this.convertFromFirestore(id, updatedDoc.data() as AgentConversationDoc);
+        return updated;
     }
 
     async markAsCancelled(id: string): Promise<AgentConversation> {
-        const docRef = this.collectionRef.doc(id);
+        await this.firestore
+            .collection(this.collectionName)
+            .doc(id)
+            .update({
+                agentState: 'CANCELLED',
+                completedAt: admin.firestore.Timestamp.now(),
+                lastActivityAt: admin.firestore.Timestamp.now(),
+            });
 
-        await docRef.update({
-            agentState: AgentState.CANCELLED,
-            completedAt: admin.firestore.FieldValue.serverTimestamp(),
-            lastActivityAt: admin.firestore.FieldValue.serverTimestamp(),
-        });
-
-        const updatedDoc = await docRef.get();
-        if (!updatedDoc.exists) {
-            throw new Error('Conversation not found after update');
+        const updated = await this.getById(id);
+        if (!updated) {
+            throw new Error(`Conversation with id ${id} not found after update`);
         }
-
-        return this.convertFromFirestore(id, updatedDoc.data() as AgentConversationDoc);
+        return updated;
     }
 
     async softDelete(id: string): Promise<void> {
-        const docRef = this.collectionRef.doc(id);
-        await docRef.update({
-            isDeleted: true,
-            lastActivityAt: admin.firestore.FieldValue.serverTimestamp(),
-        });
+        await this.firestore
+            .collection(this.collectionName)
+            .doc(id)
+            .update({
+                isDeleted: true,
+                deletedAt: admin.firestore.Timestamp.now(),
+            });
     }
 
-    private convertFromFirestore(id: string, doc: AgentConversationDoc): AgentConversation {
+    private mapToConversation(doc: admin.firestore.DocumentSnapshot): AgentConversation {
+        const data = doc.data()!;
         return {
-            id,
-            userId: doc.userId,
-            agentState: doc.agentState,
-            activeDraftId: doc.activeDraftId,
-            isDeleted: doc.isDeleted,
-            completedAt: doc.completedAt ? doc.completedAt.toDate() : null,
-            startedAt: doc.startedAt.toDate(),
-            lastActivityAt: doc.lastActivityAt.toDate(),
+            id: doc.id,
+            userId: data.userId,
+            agentState: data.agentState,
+            activeDraftId: data.activeDraftId || undefined,
+            completedAt: data.completedAt?.toDate(),
+            startedAt: data.startedAt?.toDate() || new Date(),
+            lastActivityAt: data.lastActivityAt?.toDate() || new Date(),
+            isDeleted: data.isDeleted || false,
+            deletedAt: data.deletedAt?.toDate(),
         };
     }
 }

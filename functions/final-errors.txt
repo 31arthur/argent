@@ -1,0 +1,61 @@
+﻿
+> argent-functions@1.0.0 build
+> tsc
+
+src/bootstrap/container.ts(10,34): error TS2307: Cannot find module '../data/repositories/PersonRepository' or its corresponding type declarations.
+src/bootstrap/container.ts(11,32): error TS2307: Cannot find module '../data/repositories/LoanRepository' or its corresponding type declarations.
+src/bootstrap/container.ts(26,71): error TS2345: Argument of type 'FirebaseFirestore.Firestore' is not assignable to parameter of type 'import("C:/Users/kanth/Documents/GitHub/argent/node_modules/@firebase/firestore/dist/index").Firestore'.
+  Type 'Firestore' is missing the following properties from type 'Firestore': type, app, toJSON
+src/bootstrap/container.ts(27,63): error TS2345: Argument of type 'FirebaseFirestore.Firestore' is not assignable to parameter of type 'import("C:/Users/kanth/Documents/GitHub/argent/node_modules/@firebase/firestore/dist/index").Firestore'.
+  Type 'Firestore' is missing the following properties from type 'Firestore': type, app, toJSON
+src/bootstrap/container.ts(28,54): error TS2554: Expected 0 arguments, but got 1.
+src/bootstrap/container.ts(29,58): error TS2554: Expected 0 arguments, but got 1.
+src/bootstrap/container.ts(39,5): error TS2554: Expected 4 arguments, but got 6.
+src/bootstrap/container.ts(47,64): error TS2554: Expected 0 arguments, but got 1.
+src/bootstrap/container.ts(84,68): error TS2345: Argument of type '{ userId: string; poolId: string; amount: number; type: "INCOME" | "EXPENSE"; categoryId: string; purpose: string; date: Date; notes: string; tags: string[]; }' is not assignable to parameter of type 'Omit<Transaction, "id" | "createdAt" | "updatedAt">'.
+  Property 'isDeleted' is missing in type '{ userId: string; poolId: string; amount: number; type: "INCOME" | "EXPENSE"; categoryId: string; purpose: string; date: Date; notes: string; tags: string[]; }' but required in type 'Omit<Transaction, "id" | "createdAt" | "updatedAt">'.
+src/data/repositories/AgentConversationRepository.ts(43,14): error TS2420: Class 'AgentConversationRepository' incorrectly implements interface 'IAgentConversationRepository'.
+  Type 'AgentConversationRepository' is missing the following properties from type 'IAgentConversationRepository': update, updateAgentState, updateActiveDraftId
+src/data/repositories/ArtworkRepository.ts(3,39): error TS2307: Cannot find module '../datasources/MockArtworkDataSource' or its corresponding type declarations.
+src/data/repositories/BudgetCategoryRepository.ts(16,20): error TS2307: Cannot find module './firebase/config' or its corresponding type declarations.
+src/data/repositories/BudgetRepository.ts(16,20): error TS2307: Cannot find module './firebase/config' or its corresponding type declarations.
+src/data/repositories/CashPoolRepository.ts(3,44): error TS2307: Cannot find module './firebase/config' or its corresponding type declarations.
+src/data/repositories/CategoryRepository.ts(4,44): error TS2307: Cannot find module './firebase/config' or its corresponding type declarations.
+src/data/repositories/CommissionRepository.ts(3,42): error TS2307: Cannot find module '../datasources/MockCommissionDataSource' or its corresponding type declarations.
+src/data/repositories/LeadRepository.ts(16,20): error TS2307: Cannot find module './firebase/config' or its corresponding type declarations.
+src/data/repositories/LoanRepaymentRepository.ts(1,36): error TS2307: Cannot find module '../../domain/entities/Loan' or its corresponding type declarations.
+src/data/repositories/LoanRepaymentRepository.ts(16,20): error TS2307: Cannot find module './firebase/config' or its corresponding type declarations.
+src/data/repositories/SaleRepository.ts(3,36): error TS2307: Cannot find module '../datasources/MockSaleDataSource' or its corresponding type declarations.
+src/data/repositories/TransactionDraftRepository.ts(130,17): error TS2322: Type 'import("C:/Users/kanth/Documents/GitHub/argent/functions/src/domain/entities/DraftType").DraftStatus' is not assignable to type 'import("C:/Users/kanth/Documents/GitHub/argent/functions/src/domain/entities/DraftStatus").DraftStatus'.
+  Type '"CANCELLED"' is not assignable to type 'DraftStatus'.
+src/data/repositories/TransactionDraftRepository.ts(170,17): error TS2322: Type 'import("C:/Users/kanth/Documents/GitHub/argent/functions/src/domain/entities/DraftType").DraftStatus' is not assignable to type 'import("C:/Users/kanth/Documents/GitHub/argent/functions/src/domain/entities/DraftStatus").DraftStatus'.
+  Type '"CANCELLED"' is not assignable to type 'DraftStatus'.
+src/data/repositories/TransactionDraftRepository.ts(280,13): error TS2322: Type 'import("C:/Users/kanth/Documents/GitHub/argent/functions/src/domain/entities/DraftStatus").DraftStatus' is not assignable to type 'import("C:/Users/kanth/Documents/GitHub/argent/functions/src/domain/entities/DraftType").DraftStatus'.
+src/data/repositories/TransactionRepository.ts(3,47): error TS2307: Cannot find module './firebase/config' or its corresponding type declarations.
+src/data/repositories/UserRepository.ts(3,37): error TS2307: Cannot find module './firebase/config' or its corresponding type declarations.
+src/data/repositories/WorkGroupRepository.ts(3,41): error TS2307: Cannot find module '../datasources/MockWorkGroupDataSource' or its corresponding type declarations.
+src/domain/repositories/ILoanRepaymentRepository.ts(1,36): error TS2307: Cannot find module '../entities/Loan' or its corresponding type declarations.
+src/domain/services/AgentOrchestrator.ts(11,40): error TS2307: Cannot find module '../usecases/CreateTransactionDraft' or its corresponding type declarations.
+src/domain/services/AgentOrchestrator.ts(12,38): error TS2307: Cannot find module '../usecases/TransitionAgentState' or its corresponding type declarations.
+src/domain/services/AgentOrchestrator.ts(362,17): error TS2322: Type 'string' is not assignable to type 'Date'.
+src/domain/services/DraftMutationService.ts(4,40): error TS2307: Cannot find module '../usecases/UpdateTransactionDraft' or its corresponding type declarations.
+src/domain/usecases/agent/ConfirmTransactionDraft.ts(30,13): error TS2367: This comparison appears to be unintentional because the types 'DraftStatus' and '"WAITING_FOR_CONFIRMATION"' have no overlap.
+src/domain/usecases/agent/CreateTransactionDraft.ts(32,13): error TS2322: Type 'DraftStatus.IN_PROGRESS' is not assignable to type 'DraftStatus'.
+src/domain/usecases/agent/UpdateTransactionDraft.ts(77,17): error TS2367: This comparison appears to be unintentional because the types '"INCOMPLETE" | "READY" | "FINALIZED"' and 'DraftStatus.IN_PROGRESS' have no overlap.
+src/domain/usecases/agent/UpdateTransactionDraft.ts(78,17): error TS2367: This comparison appears to be unintentional because the types '"INCOMPLETE" | "READY" | "FINALIZED"' and 'DraftStatus.WAITING_FOR_INPUT' have no overlap.
+src/domain/usecases/agent/UpdateTransactionDraft.ts(80,17): error TS2322: Type 'DraftStatus.WAITING_FOR_CONFIRMATION' is not assignable to type '"INCOMPLETE" | "READY" | "FINALIZED"'.
+src/domain/usecases/agent/UpdateTransactionDraft.ts(84,17): error TS2367: This comparison appears to be unintentional because the types '"INCOMPLETE" | "READY" | "FINALIZED"' and 'DraftStatus.IN_PROGRESS' have no overlap.
+src/domain/usecases/agent/UpdateTransactionDraft.ts(85,17): error TS2322: Type 'DraftStatus.WAITING_FOR_INPUT' is not assignable to type '"INCOMPLETE" | "READY" | "FINALIZED"'.
+src/domain/usecases/budgets/AddBudgetAllocation.ts(78,17): error TS2353: Object literal may only specify known properties, and 'totalPlanned' does not exist in type 'Omit<Budget, "id" | "createdAt" | "updatedAt">'.
+src/domain/usecases/budgets/AddBudgetAllocation.ts(100,17): error TS2353: Object literal may only specify known properties, and 'actualAmount' does not exist in type 'Omit<BudgetCategory, "id" | "createdAt" | "updatedAt">'.
+src/domain/usecases/budgets/AddBudgetAllocation.ts(109,13): error TS2353: Object literal may only specify known properties, and 'totalPlanned' does not exist in type 'Partial<Budget>'.
+src/domain/usecases/loans/CreateLoan.ts(1,27): error TS2307: Cannot find module '../../entities/Loan' or its corresponding type declarations.
+src/domain/usecases/loans/CreateLoan.ts(2,38): error TS2307: Cannot find module '../../repositories/ILoanRepository' or its corresponding type declarations.
+src/domain/usecases/loans/CreateLoan.ts(3,40): error TS2307: Cannot find module '../../repositories/IPersonRepository' or its corresponding type declarations.
+src/domain/usecases/loans/RepayLoan.ts(1,27): error TS2307: Cannot find module '../../entities/Loan' or its corresponding type declarations.
+src/domain/usecases/loans/RepayLoan.ts(3,36): error TS2307: Cannot find module '../../entities/Loan' or its corresponding type declarations.
+src/domain/usecases/loans/RepayLoan.ts(4,38): error TS2307: Cannot find module '../../repositories/ILoanRepository' or its corresponding type declarations.
+src/domain/usecases/loans/RepayLoan.ts(8,64): error TS2307: Cannot find module '../../entities/Loan' or its corresponding type declarations.
+src/domain/usecases/persons/CreatePerson.ts(1,29): error TS2307: Cannot find module '../../entities/Person' or its corresponding type declarations.
+src/domain/usecases/persons/CreatePerson.ts(2,40): error TS2307: Cannot find module '../../repositories/IPersonRepository' or its corresponding type declarations.
+src/domain/usecases/transactions/PayPersonExpense.ts(3,40): error TS2307: Cannot find module '../../repositories/IPersonRepository' or its corresponding type declarations.

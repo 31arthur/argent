@@ -1,0 +1,138 @@
+import type { BaseDraft, DraftType } from '../entities/DraftType';
+import type { LoanRepaymentDraft } from '../entities/LoanRepaymentDraft';
+import type { LeadDraft } from '../entities/LeadDraft';
+import type { BudgetAllocationDraft } from '../entities/BudgetAllocationDraft';
+
+/**
+ * Draft Validator Service
+ * Validates drafts and determines missing fields for each draft type
+ * 
+ * RESPONSIBILITIES:
+ * - Validate draft completeness
+ * - Identify missing required fields
+ * - Return user-friendly field names for clarification
+ */
+export class DraftValidator {
+    /**
+     * Validate loan repayment draft
+     */
+    validateLoanRepayment(draft: LoanRepaymentDraft): string[] {
+        const missing: string[] = [];
+
+        // Must have either loanId or personId
+        if (!draft.loanId && !draft.personId) {
+            missing.push('loan or person');
+        }
+        if (!draft.amount) {
+            missing.push('amount');
+        }
+        if (!draft.cashPoolId) {
+            missing.push('cash pool');
+        }
+        if (!draft.date) {
+            missing.push('date');
+        }
+
+        return missing;
+    }
+
+    /**
+     * Validate lead draft
+     */
+    validateLead(draft: LeadDraft): string[] {
+        const missing: string[] = [];
+
+        if (!draft.title) {
+            missing.push('title');
+        }
+        if (!draft.expectedAmount) {
+            missing.push('expected amount');
+        }
+        if (draft.probability === undefined) {
+            missing.push('probability');
+        }
+
+        return missing;
+    }
+
+    /**
+     * Validate budget allocation draft
+     */
+    validateBudgetAllocation(draft: BudgetAllocationDraft): string[] {
+        const missing: string[] = [];
+
+        if (!draft.month) {
+            missing.push('month');
+        }
+        if (!draft.year) {
+            missing.push('year');
+        }
+        if (!draft.categoryId) {
+            missing.push('category');
+        }
+        if (draft.plannedAmount === undefined) {
+            missing.push('planned amount');
+        }
+
+        return missing;
+    }
+
+    /**
+     * Validate any draft type
+     */
+    validate(draft: BaseDraft): string[] {
+        switch (draft.type) {
+            case 'LOAN_REPAYMENT':
+                return this.validateLoanRepayment(draft as LoanRepaymentDraft);
+            case 'LEAD':
+                return this.validateLead(draft as LeadDraft);
+            case 'BUDGET_ALLOCATION':
+                return this.validateBudgetAllocation(draft as BudgetAllocationDraft);
+            case 'TRANSACTION':
+                // Use existing transaction draft validation
+                return draft.missingFields || [];
+            default:
+                return [];
+        }
+    }
+
+    /**
+     * Check if draft is complete (ready for confirmation)
+     */
+    isComplete(draft: BaseDraft): boolean {
+        return this.validate(draft).length === 0;
+    }
+
+    /**
+     * Get next missing field to ask about (priority order)
+     */
+    getNextMissingField(draft: BaseDraft): string | null {
+        const missing = this.validate(draft);
+        if (missing.length === 0) return null;
+
+        // Priority order for clarification
+        const priorityFields = [
+            'loan or person',
+            'person',
+            'loan',
+            'amount',
+            'category',
+            'cash pool',
+            'month',
+            'year',
+            'title',
+            'date',
+            'probability',
+            'planned amount',
+            'expected amount',
+        ];
+
+        for (const field of priorityFields) {
+            if (missing.includes(field)) {
+                return field;
+            }
+        }
+
+        return missing[0];
+    }
+}

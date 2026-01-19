@@ -1,0 +1,48 @@
+﻿
+> argent-functions@1.0.0 build
+> tsc
+
+src/bootstrap/container.ts(40,5): error TS2345: Argument of type 'LoanRepository' is not assignable to parameter of type 'ILoanRepository'.
+  Property 'getByPersonId' is missing in type 'LoanRepository' but required in type 'ILoanRepository'.
+src/bootstrap/container.ts(84,68): error TS2345: Argument of type '{ userId: string; poolId: string; amount: number; type: "INCOME" | "EXPENSE"; categoryId: string; purpose: string; date: Date; notes: string; tags: string[]; }' is not assignable to parameter of type 'Omit<Transaction, "id" | "createdAt" | "updatedAt">'.
+  Property 'isDeleted' is missing in type '{ userId: string; poolId: string; amount: number; type: "INCOME" | "EXPENSE"; categoryId: string; purpose: string; date: Date; notes: string; tags: string[]; }' but required in type 'Omit<Transaction, "id" | "createdAt" | "updatedAt">'.
+src/data/repositories/AgentConversationRepository.ts(74,9): error TS2741: Property 'isDeleted' is missing in type '{ id: string; userId: string; agentState: AgentState; activeDraftId: string; completedAt: Date; startedAt: Date; lastActivityAt: Date; }' but required in type 'AgentConversation'.
+src/data/repositories/AgentConversationRepository.ts(207,9): error TS2741: Property 'isDeleted' is missing in type '{ id: string; userId: any; agentState: any; activeDraftId: any; completedAt: any; startedAt: any; lastActivityAt: any; }' but required in type 'AgentConversation'.
+src/data/repositories/CashPoolRepository.ts(65,9): error TS2739: Type '{ id: string; userId: any; name: any; balance: any; currency: any; isActive: boolean; }' is missing the following properties from type 'CashPool': type, initialBalance, createdAt, updatedAt
+src/data/repositories/LoanRepaymentRepository.ts(2,15): error TS2305: Module '"../../domain/entities/Loan"' has no exported member 'LoanRepayment'.
+src/data/repositories/LoanRepository.ts(10,14): error TS2420: Class 'LoanRepository' incorrectly implements interface 'ILoanRepository'.
+  Property 'getByPersonId' is missing in type 'LoanRepository' but required in type 'ILoanRepository'.
+src/data/repositories/LoanRepository.ts(92,31): error TS2339: Property 'totalRepaid' does not exist on type 'Omit<Loan, "id" | "createdAt" | "updatedAt">'.
+src/data/repositories/LoanRepository.ts(93,37): error TS2339: Property 'outstandingAmount' does not exist on type 'Omit<Loan, "id" | "createdAt" | "updatedAt">'.
+src/data/repositories/LoanRepository.ts(115,13): error TS2353: Object literal may only specify known properties, and 'totalRepaid' does not exist in type 'Loan'.
+src/data/repositories/LoanRepository.ts(129,18): error TS2339: Property 'totalRepaid' does not exist on type 'Partial<Loan>'.
+src/data/repositories/LoanRepository.ts(129,75): error TS2339: Property 'totalRepaid' does not exist on type 'Partial<Loan>'.
+src/data/repositories/LoanRepository.ts(130,18): error TS2339: Property 'outstandingAmount' does not exist on type 'Partial<Loan>'.
+src/data/repositories/LoanRepository.ts(130,87): error TS2339: Property 'outstandingAmount' does not exist on type 'Partial<Loan>'.
+src/data/repositories/LoanRepository.ts(177,13): error TS2353: Object literal may only specify known properties, and 'totalRepaid' does not exist in type 'Loan'.
+src/data/repositories/PersonRepository.ts(63,13): error TS2353: Object literal may only specify known properties, and 'isDeleted' does not exist in type 'Person'.
+src/data/repositories/PersonRepository.ts(105,13): error TS2353: Object literal may only specify known properties, and 'isDeleted' does not exist in type 'Person'.
+src/data/repositories/TransactionDraftRepository.ts(87,9): error TS2741: Property 'type' is missing in type '{ id: string; userId: string; conversationId: string; status: DraftStatus; extractedFields: Partial<TransactionData>; confidenceMap: Record<string, number>; missingFields: string[]; ... 6 more ...; updatedAt: Date; }' but required in type 'TransactionDraft'.
+src/data/repositories/TransactionDraftRepository.ts(187,9): error TS2741: Property 'type' is missing in type '{ id: string; userId: any; conversationId: any; status: any; extractedFields: Partial<TransactionData>; confidenceMap: any; missingFields: any; isDeleted: any; confirmedAt: any; cancelledAt: any; finalizedAt: any; transactionId: any; createdAt: any; updatedAt: any; }' but required in type 'TransactionDraft'.
+src/domain/repositories/ILoanRepaymentRepository.ts(1,15): error TS2305: Module '"../entities/Loan"' has no exported member 'LoanRepayment'.
+src/domain/services/AgentOrchestrator.ts(13,40): error TS2307: Cannot find module '../usecases/CreateTransactionDraft' or its corresponding type declarations.
+src/domain/services/AgentOrchestrator.ts(14,38): error TS2307: Cannot find module '../usecases/TransitionAgentState' or its corresponding type declarations.
+src/domain/services/AgentOrchestrator.ts(366,17): error TS2322: Type 'string' is not assignable to type 'Date'.
+src/domain/services/DraftMutationService.ts(4,40): error TS2307: Cannot find module '../usecases/UpdateTransactionDraft' or its corresponding type declarations.
+src/domain/usecases/agent/ConfirmTransactionDraft.ts(30,13): error TS2367: This comparison appears to be unintentional because the types 'DraftStatus' and '"WAITING_FOR_CONFIRMATION"' have no overlap.
+src/domain/usecases/agent/CreateTransactionDraft.ts(32,13): error TS2322: Type 'DraftStatus.IN_PROGRESS' is not assignable to type 'DraftStatus'.
+src/domain/usecases/agent/UpdateTransactionDraft.ts(77,17): error TS2367: This comparison appears to be unintentional because the types '"INCOMPLETE" | "READY" | "FINALIZED"' and 'DraftStatus.IN_PROGRESS' have no overlap.
+src/domain/usecases/agent/UpdateTransactionDraft.ts(78,17): error TS2367: This comparison appears to be unintentional because the types '"INCOMPLETE" | "READY" | "FINALIZED"' and 'DraftStatus.WAITING_FOR_INPUT' have no overlap.
+src/domain/usecases/agent/UpdateTransactionDraft.ts(80,17): error TS2322: Type 'DraftStatus.WAITING_FOR_CONFIRMATION' is not assignable to type '"INCOMPLETE" | "READY" | "FINALIZED"'.
+src/domain/usecases/agent/UpdateTransactionDraft.ts(84,17): error TS2367: This comparison appears to be unintentional because the types '"INCOMPLETE" | "READY" | "FINALIZED"' and 'DraftStatus.IN_PROGRESS' have no overlap.
+src/domain/usecases/agent/UpdateTransactionDraft.ts(85,17): error TS2322: Type 'DraftStatus.WAITING_FOR_INPUT' is not assignable to type '"INCOMPLETE" | "READY" | "FINALIZED"'.
+src/domain/usecases/budgets/AddBudgetAllocation.ts(78,17): error TS2353: Object literal may only specify known properties, and 'totalPlanned' does not exist in type 'Omit<Budget, "id" | "createdAt" | "updatedAt">'.
+src/domain/usecases/budgets/AddBudgetAllocation.ts(100,17): error TS2353: Object literal may only specify known properties, and 'actualAmount' does not exist in type 'Omit<BudgetCategory, "id" | "createdAt" | "updatedAt">'.
+src/domain/usecases/budgets/AddBudgetAllocation.ts(109,13): error TS2353: Object literal may only specify known properties, and 'totalPlanned' does not exist in type 'Partial<Budget>'.
+src/domain/usecases/loans/RepayLoan.ts(3,15): error TS2305: Module '"../../entities/Loan"' has no exported member 'LoanRepayment'.
+src/domain/usecases/loans/RepayLoan.ts(8,10): error TS2305: Module '"../../entities/Loan"' has no exported member 'calculateOutstandingAmount'.
+src/domain/usecases/loans/RepayLoan.ts(8,38): error TS2305: Module '"../../entities/Loan"' has no exported member 'shouldMarkAsRepaid'.
+src/domain/usecases/loans/RepayLoan.ts(66,33): error TS2339: Property 'outstandingAmount' does not exist on type 'Loan'.
+src/domain/usecases/loans/RepayLoan.ts(67,100): error TS2339: Property 'outstandingAmount' does not exist on type 'Loan'.
+src/domain/usecases/loans/RepayLoan.ts(107,37): error TS2339: Property 'totalRepaid' does not exist on type 'Loan'.
+src/domain/usecases/loans/RepayLoan.ts(112,13): error TS2353: Object literal may only specify known properties, and 'totalRepaid' does not exist in type 'Partial<Loan>'.

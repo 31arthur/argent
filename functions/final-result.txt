@@ -1,0 +1,16 @@
+﻿
+> argent-functions@1.0.0 build
+> tsc
+
+src/domain/services/AgentOrchestrator.ts(366,17): error TS2322: Type 'string' is not assignable to type 'Date'.
+src/domain/usecases/agent/ConfirmTransactionDraft.ts(30,13): error TS2367: This comparison appears to be unintentional because the types 'DraftStatus' and '"WAITING_FOR_CONFIRMATION"' have no overlap.
+src/domain/usecases/agent/CreateTransactionDraft.ts(32,13): error TS2322: Type 'DraftStatus.IN_PROGRESS' is not assignable to type 'DraftStatus'.
+src/domain/usecases/agent/UpdateTransactionDraft.ts(77,17): error TS2367: This comparison appears to be unintentional because the types '"INCOMPLETE" | "READY" | "FINALIZED"' and 'DraftStatus.IN_PROGRESS' have no overlap.
+src/domain/usecases/agent/UpdateTransactionDraft.ts(78,17): error TS2367: This comparison appears to be unintentional because the types '"INCOMPLETE" | "READY" | "FINALIZED"' and 'DraftStatus.WAITING_FOR_INPUT' have no overlap.
+src/domain/usecases/agent/UpdateTransactionDraft.ts(80,17): error TS2322: Type 'DraftStatus.WAITING_FOR_CONFIRMATION' is not assignable to type '"INCOMPLETE" | "READY" | "FINALIZED"'.
+src/domain/usecases/agent/UpdateTransactionDraft.ts(84,17): error TS2367: This comparison appears to be unintentional because the types '"INCOMPLETE" | "READY" | "FINALIZED"' and 'DraftStatus.IN_PROGRESS' have no overlap.
+src/domain/usecases/agent/UpdateTransactionDraft.ts(85,17): error TS2322: Type 'DraftStatus.WAITING_FOR_INPUT' is not assignable to type '"INCOMPLETE" | "READY" | "FINALIZED"'.
+src/domain/usecases/budgets/CreateBudget.ts(33,51): error TS2345: Argument of type '{ userId: string; month: number; year: number; name: string; notes: string; }' is not assignable to parameter of type 'Omit<Budget, "id" | "createdAt" | "updatedAt">'.
+  Type '{ userId: string; month: number; year: number; name: string; notes: string; }' is missing the following properties from type 'Omit<Budget, "id" | "createdAt" | "updatedAt">': totalPlanned, totalActual
+src/domain/usecases/loans/RepayLoan.ts(109,27): error TS2554: Expected 2 arguments, but got 1.
+src/domain/usecases/loans/RepayLoan.ts(113,32): error TS2304: Cannot find name 'newOutstanding'.

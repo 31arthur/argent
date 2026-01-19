@@ -1,0 +1,12 @@
+﻿
+> argent-functions@1.0.0 build
+> tsc
+
+src/data/repositories/BudgetCategoryRepository.ts(22,1): error TS1005: 'from' expected.
+src/data/repositories/BudgetRepository.ts(22,1): error TS1005: 'from' expected.
+src/data/repositories/CashPoolRepository.ts(9,1): error TS1005: 'from' expected.
+src/data/repositories/CategoryRepository.ts(10,1): error TS1005: 'from' expected.
+src/data/repositories/LeadRepository.ts(22,1): error TS1005: 'from' expected.
+src/data/repositories/LoanRepaymentRepository.ts(27,1): error TS1005: 'from' expected.
+src/data/repositories/TransactionRepository.ts(9,1): error TS1005: 'from' expected.
+src/data/repositories/UserRepository.ts(9,1): error TS1005: 'from' expected.

@@ -8,8 +8,10 @@ import { IAgentConversationRepository } from '../repositories/IAgentConversation
 import { ITransactionDraftRepository } from '../repositories/ITransactionDraftRepository';
 import { ICashPoolRepository } from '../repositories/ICashPoolRepository';
 import { ICategoryRepository } from '../repositories/ICategoryRepository';
-import { CreateTransactionDraft } from '../usecases/CreateTransactionDraft';
-import { TransitionAgentState } from '../usecases/TransitionAgentState';
+import { IPersonRepository } from '../repositories/IPersonRepository';
+import { ILoanRepository } from '../repositories/ILoanRepository';
+import { CreateTransactionDraft } from '../usecases/agent/CreateTransactionDraft';
+import { TransitionAgentState } from '../usecases/agent/TransitionAgentState';
 import { DraftMutationService } from './DraftMutationService';
 import { ClarificationStrategy } from './ClarificationStrategy';
 import { GeminiExtractionService } from './GeminiExtractionService';
@@ -35,7 +37,9 @@ export class AgentOrchestrator {
         private conversationRepository: IAgentConversationRepository,
         private draftRepository: ITransactionDraftRepository,
         private poolRepository: ICashPoolRepository,
-        private categoryRepository: ICategoryRepository
+        private categoryRepository: ICategoryRepository,
+        private personRepository: IPersonRepository,
+        private loanRepository: ILoanRepository
     ) {
         this.draftMutationService = new DraftMutationService(draftRepository);
         this.clarificationStrategy = new ClarificationStrategy(poolRepository, categoryRepository);
@@ -359,7 +363,7 @@ export class AgentOrchestrator {
                 type: draft.extractedFields.type!,
                 categoryName,
                 purpose: draft.extractedFields.purpose!,
-                date: draft.extractedFields.date!.toISOString(),
+                date: draft.extractedFields.date!,
                 notes: draft.extractedFields.notes,
                 tags: draft.extractedFields.tags,
             },
@@ -367,3 +371,4 @@ export class AgentOrchestrator {
         };
     }
 }
+

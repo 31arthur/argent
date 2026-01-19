@@ -1,0 +1,108 @@
+import type { BaseDraft } from '../entities/DraftType';
+import { DraftValidator } from './DraftValidator';
+
+/**
+ * Clarification Engine
+ * Generates user-friendly questions to fill missing draft fields
+ * 
+ * RESPONSIBILITIES:
+ * - Identify next missing field to ask about
+ * - Generate natural language question
+ * - Provide context and examples
+ * - Support all draft types
+ * 
+ * RULES:
+ * - Ask ONE question at a time
+ * - Use simple, clear language
+ * - Provide examples when helpful
+ * - Respect priority order (critical fields first)
+ */
+export class ClarificationEngine {
+    private validator: DraftValidator;
+
+    constructor() {
+        this.validator = new DraftValidator();
+    }
+
+    /**
+     * Get next clarification question for a draft
+     * Returns null if draft is complete
+     */
+    getNextQuestion(draft: BaseDraft, context?: {
+        availablePersons?: Array<{ id: string; name: string }>;
+        availableLoans?: Array<{ id: string; personName: string; amount: number }>;
+        availableCategories?: Array<{ id: string; name: string }>;
+        availablePools?: Array<{ id: string; name: string }>;
+    }): string | null {
+        const nextField = this.validator.getNextMissingField(draft);
+        if (!nextField) return null;
+
+        return this.generateQuestion(draft.type, nextField, context);
+    }
+
+    /**
+     * Generate natural language question for a specific field
+     */
+    private generateQuestion(
+        draftType: string,
+        field: string,
+        context?: any
+    ): string {
+        const questions: Record<string, Record<string, string>> = {
+            LOAN_REPAYMENT: {
+                'loan or person': context?.availableLoans?.length > 0
+                    ? `Which loan are you repaying? Available: ${context.availableLoans.map((l: any) => `${l.personName} (₹${l.amount})`).join(', ')}`
+                    : 'Which person did you borrow from?',
+                'person': 'Who did you borrow from?',
+                'loan': 'Which loan are you repaying?',
+                'amount': 'How much are you repaying?',
+                'cash pool': context?.availablePools?.length > 0
+                    ? `Which account are you paying from? Available: ${context.availablePools.map((p: any) => p.name).join(', ')}`
+                    : 'Which account are you paying from?',
+                'date': 'When did you make this repayment? (e.g., today, yesterday, Jan 15)',
+            },
+            LEAD: {
+                'title': 'What is this potential income for? (e.g., "Freelance project", "Consulting gig")',
+                'expected amount': 'How much do you expect to receive?',
+                'probability': 'How likely is this? (0-100%, e.g., 70 for 70% likely)',
+                'date': 'When do you expect to receive this? (e.g., next month, Feb 2026)',
+            },
+            BUDGET_ALLOCATION: {
+                'month': 'Which month? (e.g., January, March, 3 for March)',
+                'year': 'Which year? (e.g., 2026)',
+                'category': context?.availableCategories?.length > 0
+                    ? `Which category? Available: ${context.availableCategories.map((c: any) => c.name).join(', ')}`
+                    : 'Which category?',
+                'planned amount': 'How much do you want to budget?',
+            },
+            TRANSACTION: {
+                'amount': 'How much?',
+                'category': context?.availableCategories?.length > 0
+                    ? `Which category? Available: ${context.availableCategories.map((c: any) => c.name).join(', ')}`
+                    : 'Which category?',
+                'cash pool': context?.availablePools?.length > 0
+                    ? `Which account? Available: ${context.availablePools.map((p: any) => p.name).join(', ')}`
+                    : 'Which account?',
+                'purpose': 'What was this for?',
+                'date': 'When? (e.g., today, yesterday, Jan 15)',
+            },
+        };
+
+        const draftQuestions = questions[draftType] || questions.TRANSACTION;
+        return draftQuestions[field] || `Please provide: ${field}`;
+    }
+
+    /**
+     * Check if draft is complete (no more questions needed)
+     */
+    isComplete(draft: BaseDraft): boolean {
+        return this.validator.isComplete(draft);
+    }
+
+    /**
+     * Get all missing fields (for debugging/UI)
+     */
+    getAllMissingFields(draft: BaseDraft): string[] {
+        return this.validator.validate(draft);
+    }
+}

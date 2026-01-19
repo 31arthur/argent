@@ -1,223 +1,206 @@
 import * as admin from 'firebase-admin';
-import { TransactionDraft } from '../../domain/entities/TransactionDraft';
+import type { TransactionDraft } from '../../domain/entities/TransactionDraft';
+import type { ITransactionDraftRepository } from '../../domain/repositories/ITransactionDraftRepository';
 import { DraftStatus } from '../../domain/entities/DraftStatus';
-import { ITransactionDraftRepository } from '../../domain/repositories/ITransactionDraftRepository';
+import type { TransactionData } from '../../domain/value-objects/TransactionData';
 
 /**
- * Firestore Document Type
- */
-interface TransactionDraftDoc {
-    userId: string;
-    conversationId: string;
-    extractedFields: Record<string, unknown>;
-    confidenceMap: Record<string, number>;
-    missingFields: string[];
-    status: DraftStatus;
-    createdAt: admin.firestore.Timestamp;
-    updatedAt: admin.firestore.Timestamp;
-    confirmedAt: admin.firestore.Timestamp | null;
-    cancelledAt: admin.firestore.Timestamp | null;
-    finalizedAt: admin.firestore.Timestamp | null;
-    transactionId: string | null;
-    isDeleted: boolean;
-}
-
-/**
- * Firebase Admin Firestore Implementation
+ * Transaction Draft Repository Implementation
+ * Implements ITransactionDraftRepository using Firebase Admin SDK
+ * Designed for Cloud Functions deployment
  */
 export class TransactionDraftRepository implements ITransactionDraftRepository {
-    private collectionRef: admin.firestore.CollectionReference;
+    private readonly collectionName = 'transactionDrafts';
 
-    constructor(private firestore: admin.firestore.Firestore) {
-        this.collectionRef = firestore.collection('transactionDrafts');
-    }
+    constructor(private firestore: admin.firestore.Firestore) { }
 
     async getById(id: string): Promise<TransactionDraft | null> {
-        const docRef = this.collectionRef.doc(id);
-        const docSnap = await docRef.get();
+        const doc = await this.firestore
+            .collection(this.collectionName)
+            .doc(id)
+            .get();
 
-        if (!docSnap.exists) {
+        if (!doc.exists) {
             return null;
         }
 
-        return this.convertFromFirestore(id, docSnap.data() as TransactionDraftDoc);
+        return this.mapToDraft(doc);
     }
 
     async getByConversation(conversationId: string): Promise<TransactionDraft | null> {
-        const q = this.collectionRef
+        const snapshot = await this.firestore
+            .collection(this.collectionName)
             .where('conversationId', '==', conversationId)
             .where('isDeleted', '==', false)
             .orderBy('createdAt', 'desc')
-            .limit(1);
+            .limit(1)
+            .get();
 
-        const querySnapshot = await q.get();
-
-        if (querySnapshot.empty) {
+        if (snapshot.empty) {
             return null;
         }
 
-        const docSnap = querySnapshot.docs[0];
-        return this.convertFromFirestore(docSnap.id, docSnap.data() as TransactionDraftDoc);
+        return this.mapToDraft(snapshot.docs[0]);
     }
 
     async getAllByUser(userId: string): Promise<TransactionDraft[]> {
-        const q = this.collectionRef
+        const snapshot = await this.firestore
+            .collection(this.collectionName)
             .where('userId', '==', userId)
             .where('isDeleted', '==', false)
-            .orderBy('createdAt', 'desc');
+            .orderBy('createdAt', 'desc')
+            .get();
 
-        const querySnapshot = await q.get();
-
-        return querySnapshot.docs.map((docSnap) =>
-            this.convertFromFirestore(docSnap.id, docSnap.data() as TransactionDraftDoc)
-        );
+        return snapshot.docs.map(doc => this.mapToDraft(doc));
     }
 
     async create(
-        draft: Omit<TransactionDraft, 'id' | 'createdAt' | 'updatedAt' | 'confirmedAt' | 'cancelledAt' | 'finalizedAt' | 'transactionId' | 'isDeleted'>
+        draft: Omit<TransactionDraft, ' id' | 'createdAt' | 'updatedAt'>
     ): Promise<TransactionDraft> {
-        const docRef = this.collectionRef.doc();
-        const now = admin.firestore.FieldValue.serverTimestamp();
-
-        const firestoreDoc = {
+        const now = admin.firestore.Timestamp.now();
+        const docData = {
             userId: draft.userId,
             conversationId: draft.conversationId,
+            status: draft.status,
             extractedFields: draft.extractedFields || {},
             confidenceMap: draft.confidenceMap || {},
             missingFields: draft.missingFields || [],
-            status: draft.status,
+            isDeleted: draft.isDeleted || false,
+            confirmedAt: draft.confirmedAt
+                ? admin.firestore.Timestamp.fromDate(draft.confirmedAt)
+                : null,
+            cancelledAt: draft.cancelledAt
+                ? admin.firestore.Timestamp.fromDate(draft.cancelledAt)
+                : null,
+            finalizedAt: draft.finalizedAt
+                ? admin.firestore.Timestamp.fromDate(draft.finalizedAt)
+                : null,
+            transactionId: draft.transactionId || null,
             createdAt: now,
             updatedAt: now,
-            confirmedAt: null,
-            cancelledAt: null,
-            finalizedAt: null,
-            transactionId: null,
-            isDeleted: false,
         };
 
-        await docRef.set(firestoreDoc);
+        const docRef = await this.firestore
+            .collection(this.collectionName)
+            .add(docData);
 
-        const createdDoc = await docRef.get();
-        if (!createdDoc.exists) {
-            throw new Error('Failed to create draft');
-        }
-
-        return this.convertFromFirestore(docRef.id, createdDoc.data() as TransactionDraftDoc);
+        return {
+            id: docRef.id,
+            type: 'TRANSACTION',
+            userId: docData.userId,
+            conversationId: docData.conversationId,
+            status: docData.status,
+            extractedFields: docData.extractedFields as Partial<TransactionData>,
+            confidenceMap: docData.confidenceMap,
+            missingFields: docData.missingFields,
+            isDeleted: docData.isDeleted,
+            confirmedAt: docData.confirmedAt?.toDate(),
+            cancelledAt: docData.cancelledAt?.toDate(),
+            finalizedAt: docData.finalizedAt?.toDate(),
+            transactionId: docData.transactionId || undefined,
+            createdAt: now.toDate(),
+            updatedAt: now.toDate(),
+        };
     }
 
     async update(id: string, updates: Partial<TransactionDraft>): Promise<TransactionDraft> {
-        const docRef = this.collectionRef.doc(id);
-
-        // Build update object
-        const updateData: Record<string, unknown> = {
-            updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+        const updateData: any = {
+            updatedAt: admin.firestore.Timestamp.now(),
         };
 
-        if (updates.extractedFields !== undefined) {
-            updateData.extractedFields = updates.extractedFields;
+        if (updates.status !== undefined) updateData.status = updates.status;
+        if (updates.extractedFields !== undefined) updateData.extractedFields = updates.extractedFields;
+        if (updates.confidenceMap !== undefined) updateData.confidenceMap = updates.confidenceMap;
+        if (updates.missingFields !== undefined) updateData.missingFields = updates.missingFields;
+        if (updates.confirmedAt !== undefined) {
+            updateData.confirmedAt = updates.confirmedAt
+                ? admin.firestore.Timestamp.fromDate(updates.confirmedAt)
+                : null;
         }
-        if (updates.confidenceMap !== undefined) {
-            updateData.confidenceMap = updates.confidenceMap;
+        if (updates.cancelledAt !== undefined) {
+            updateData.cancelledAt = updates.cancelledAt
+                ? admin.firestore.Timestamp.fromDate(updates.cancelledAt)
+                : null;
         }
-        if (updates.missingFields !== undefined) {
-            updateData.missingFields = updates.missingFields;
+        if (updates.finalizedAt !== undefined) {
+            updateData.finalizedAt = updates.finalizedAt
+                ? admin.firestore.Timestamp.fromDate(updates.finalizedAt)
+                : null;
         }
-        if (updates.status !== undefined) {
-            updateData.status = updates.status;
+        if (updates.transactionId !== undefined) {
+            updateData.transactionId = updates.transactionId || null;
         }
 
-        await docRef.update(updateData);
+        await this.firestore
+            .collection(this.collectionName)
+            .doc(id)
+            .update(updateData);
 
-        const updatedDoc = await docRef.get();
-        if (!updatedDoc.exists) {
-            throw new Error('Draft not found after update');
+        const updated = await this.getById(id);
+        if (!updated) {
+            throw new Error(`Draft with id ${id} not found after update`);
         }
 
-        return this.convertFromFirestore(id, updatedDoc.data() as TransactionDraftDoc);
+        return updated;
     }
 
     async markAsConfirmed(id: string): Promise<TransactionDraft> {
-        const docRef = this.collectionRef.doc(id);
-
-        await docRef.update({
+        return this.update(id, {
             status: DraftStatus.CONFIRMED,
-            confirmedAt: admin.firestore.FieldValue.serverTimestamp(),
-            updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+            confirmedAt: new Date(),
         });
-
-        const updatedDoc = await docRef.get();
-        if (!updatedDoc.exists) {
-            throw new Error('Draft not found after update');
-        }
-
-        return this.convertFromFirestore(id, updatedDoc.data() as TransactionDraftDoc);
     }
 
     async markAsCancelled(id: string): Promise<TransactionDraft> {
-        const docRef = this.collectionRef.doc(id);
-
-        await docRef.update({
+        return this.update(id, {
             status: DraftStatus.CANCELLED,
-            cancelledAt: admin.firestore.FieldValue.serverTimestamp(),
-            updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+            cancelledAt: new Date(),
         });
-
-        const updatedDoc = await docRef.get();
-        if (!updatedDoc.exists) {
-            throw new Error('Draft not found after update');
-        }
-
-        return this.convertFromFirestore(id, updatedDoc.data() as TransactionDraftDoc);
     }
 
     async markAsFinalized(id: string, transactionId: string): Promise<TransactionDraft> {
-        const docRef = this.collectionRef.doc(id);
-
-        await docRef.update({
+        return this.update(id, {
             status: DraftStatus.FINALIZED,
             transactionId,
-            finalizedAt: admin.firestore.FieldValue.serverTimestamp(),
-            updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+            finalizedAt: new Date(),
         });
-
-        const updatedDoc = await docRef.get();
-        if (!updatedDoc.exists) {
-            throw new Error('Draft not found after update');
-        }
-
-        return this.convertFromFirestore(id, updatedDoc.data() as TransactionDraftDoc);
     }
 
     async softDelete(id: string): Promise<void> {
-        const docRef = this.collectionRef.doc(id);
-        await docRef.update({
-            isDeleted: true,
-            updatedAt: admin.firestore.FieldValue.serverTimestamp(),
-        });
+        await this.firestore
+            .collection(this.collectionName)
+            .doc(id)
+            .update({
+                isDeleted: true,
+                updatedAt: admin.firestore.Timestamp.now(),
+            });
     }
 
-    private convertFromFirestore(id: string, doc: TransactionDraftDoc): TransactionDraft {
-        // Convert date fields in extractedFields
-        const extractedFields = { ...doc.extractedFields };
-        if (extractedFields.date && (extractedFields.date as any).toDate) {
-            extractedFields.date = (extractedFields.date as admin.firestore.Timestamp).toDate();
-        }
+    async permanentDelete(id: string): Promise<void> {
+        await this.firestore
+            .collection(this.collectionName)
+            .doc(id)
+            .delete();
+    }
 
+    private mapToDraft(doc: admin.firestore.DocumentSnapshot): TransactionDraft {
+        const data = doc.data()!;
         return {
-            id,
-            userId: doc.userId,
-            conversationId: doc.conversationId,
-            extractedFields,
-            confidenceMap: doc.confidenceMap,
-            missingFields: doc.missingFields,
-            status: doc.status,
-            createdAt: doc.createdAt.toDate(),
-            updatedAt: doc.updatedAt.toDate(),
-            confirmedAt: doc.confirmedAt ? doc.confirmedAt.toDate() : null,
-            cancelledAt: doc.cancelledAt ? doc.cancelledAt.toDate() : null,
-            finalizedAt: doc.finalizedAt ? doc.finalizedAt.toDate() : null,
-            transactionId: doc.transactionId,
-            isDeleted: doc.isDeleted,
+            id: doc.id,
+            type: 'TRANSACTION',
+            userId: data.userId,
+            conversationId: data.conversationId,
+            status: data.status,
+            extractedFields: data.extractedFields as Partial<TransactionData>,
+            confidenceMap: data.confidenceMap,
+            missingFields: data.missingFields,
+            isDeleted: data.isDeleted || false,
+            confirmedAt: data.confirmedAt?.toDate(),
+            cancelledAt: data.cancelledAt?.toDate(),
+            finalizedAt: data.finalizedAt?.toDate(),
+            transactionId: data.transactionId || undefined,
+            createdAt: data.createdAt?.toDate() || new Date(),
+            updatedAt: data.updatedAt?.toDate() || new Date(),
         };
     }
 }

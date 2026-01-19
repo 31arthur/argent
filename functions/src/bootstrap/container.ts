@@ -7,9 +7,12 @@ import { AgentConversationRepository } from '../data/repositories/AgentConversat
 import { TransactionDraftRepository } from '../data/repositories/TransactionDraftRepository';
 import { CashPoolRepository } from '../data/repositories/CashPoolRepository';
 import { CategoryRepository } from '../data/repositories/CategoryRepository';
+import { PersonRepository } from '../data/repositories/PersonRepository';
+import { LoanRepository } from '../data/repositories/LoanRepository';
 
 // Import domain services
 import { AgentOrchestrator } from '../domain/services/AgentOrchestrator';
+import { AddTransaction } from '../domain/usecases/transactions/AddTransaction';
 
 // Load environment variables
 dotenv.config();
@@ -25,13 +28,17 @@ export const conversationRepository = new AgentConversationRepository(firestore)
 export const draftRepository = new TransactionDraftRepository(firestore);
 export const poolRepository = new CashPoolRepository(firestore);
 export const categoryRepository = new CategoryRepository(firestore);
+export const personRepository = new PersonRepository(firestore);
+export const loanRepository = new LoanRepository(firestore);
 
 // Initialize AgentOrchestrator with real dependencies
 export const agentOrchestrator = new AgentOrchestrator(
     conversationRepository,
     draftRepository,
     poolRepository,
-    categoryRepository
+    categoryRepository,
+    personRepository,
+    loanRepository
 );
 
 // Import transaction repository
@@ -75,7 +82,11 @@ export const finalizeTransactionDraft = {
 
         try {
             // Create the actual transaction
-            const transaction = await transactionRepository.create({
+            const addTransaction = new AddTransaction(
+                transactionRepository,
+                poolRepository
+            );
+            const transaction = await addTransaction.execute({
                 userId: draft.userId,
                 poolId: draft.extractedFields.poolId!,
                 amount: draft.extractedFields.amount!,

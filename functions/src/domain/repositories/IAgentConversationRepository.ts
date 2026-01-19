@@ -9,6 +9,8 @@ export interface IAgentConversationRepository {
     getActiveByUser(userId: string): Promise<AgentConversation | null>;
     getAllByUser(userId: string): Promise<AgentConversation[]>;
     create(conversation: Omit<AgentConversation, 'id' | 'startedAt' | 'lastActivityAt'>): Promise<AgentConversation>;
+    update(id: string, updates: Partial<AgentConversation>): Promise<AgentConversation>;
+    updateAgentState(id: string, state: AgentState): Promise<void>;
     updateState(id: string, newState: AgentState): Promise<AgentConversation>;
     updateActivity(id: string): Promise<AgentConversation>;
     updateActiveDraftId(id: string, draftId: string): Promise<AgentConversation>;
